@@ -258,7 +258,18 @@ export async function handle(req: Request, deps: Deps): Promise<Response> {
 
     return done('ignored', `evento ${eventType ?? orderStatus} não altera acesso`)
   } catch (e) {
-    return done('error', `erro no banco: ${e instanceof Error ? e.message : String(e)}`, 500)
+    return done('error', `erro no banco: ${errorMessage(e)}`, 500)
+  }
+}
+
+/** Erros do supabase-js (ex.: PostgrestError) não são instâncias de Error; pega a .message deles. */
+function errorMessage(e: unknown): string {
+  if (e instanceof Error) return e.message
+  if (e && typeof e === 'object' && 'message' in e) return String((e as { message: unknown }).message)
+  try {
+    return JSON.stringify(e)
+  } catch {
+    return String(e)
   }
 }
 
@@ -292,6 +303,10 @@ if (D) {
     markSubscriptions: async (match, status) => {
       let q = db.from('subscriptions').update({ status, updated_at: new Date().toISOString() })
       q = match.kiwifySubscriptionId ? q.eq('kiwify_subscription_id', match.kiwifySubscriptionId) : q.eq('email', match.email)
+      // A Kiwify manda "order_refunded" e "subscription_canceled" quase juntos num reembolso.
+      // 'refunded' é definitivo (bloqueia na hora); não deixa um 'canceled' que chegue logo
+      // depois rebaixar o status de volta e reabrir o acesso até o fim do período.
+      if (status === 'canceled') q = q.neq('status', 'refunded')
       const { data, error } = await q.select('id')
       if (error) throw error
       return data?.length ?? 0

@@ -1,15 +1,15 @@
-// Links e endereços externos. Preencher quando a Kiwify e o domínio existirem.
+// Links e endereços externos.
 export const SUPPORT_EMAIL = 'doupsdigital@gmail.com'
 export const TERMS_URL = 'https://lashbox.app/termos'
 export const PRIVACY_URL = 'https://lashbox.app/privacidade'
 
 /**
  * Link de checkout da assinatura (mensal/anual), usado no botão "Renovar assinatura" de
- * /assinatura-vencida. Vazio até o produto existir na Kiwify.
+ * /assinatura-vencida. Mensal R$ 22,90, Anual R$ 149,00 (produto "LashBox" na Kiwify).
  */
 export const KIWIFY_SUBSCRIPTION_CHECKOUT_URLS: Record<'mensal' | 'anual', string> = {
-  mensal: '',
-  anual: '',
+  mensal: 'https://pay.kiwify.com.br/OYcIZPz',
+  anual: 'https://pay.kiwify.com.br/0oNpCfm',
 }
 
 /**
@@ -22,7 +22,7 @@ export const KIWIFY_SUBSCRIPTION_CHECKOUT_URLS: Record<'mensal' | 'anual', strin
  */
 export const KIWIFY_BUYER_AREA_URL = 'https://dashboard.kiwify.com.br'
 
-/** Link de checkout de cada kit sazonal pago (nenhum é bônus da assinatura). Vazio até existir na Kiwify. */
+/** Link de checkout de cada kit sazonal pago (nenhum é bônus da assinatura). */
 export const KIT_CHECKOUT_URLS: Record<string, string> = {
-  'fim-de-ano': '',
+  'fim-de-ano': 'https://pay.kiwify.com.br/sdTkj2H',
 }
