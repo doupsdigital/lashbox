@@ -1,0 +1,574 @@
+{
+  "key": "kit_fim_de_ano",
+  "title": "Campanha de Fim de Ano Pronta",
+  "subtitle": "Vale-presente personalizado, ofertas montadas com os seus preços, artes prontas e o plano dia a dia até janeiro.",
+  "price": "R$ 14,90",
+  "tools": [
+    "vale-presente",
+    "ofertas",
+    "artes",
+    "plano",
+    "lista-vip",
+    "mensagens"
+  ],
+  "studioTokens": {
+    "[seu nome]": "studio.ownerName",
+    "[nome do estúdio]": "studio.studioName",
+    "[bairro]": "studio.neighborhood",
+    "[cidade]": "studio.city",
+    "[endereço]": "studio.address",
+    "[whatsapp]": "studio.whatsapp",
+    "[número]": "studio.whatsapp",
+    "[instagram]": "studio.instagram",
+    "[chave]": "studio.pixKey",
+    "[link]": "studio.bookingLink",
+    "[link do seu WhatsApp]": "studio.whatsappLink"
+  },
+  "voucher": {
+    "styles": [
+      {
+        "id": "natal",
+        "name": "Natal"
+      },
+      {
+        "id": "rosa",
+        "name": "Rosa"
+      },
+      {
+        "id": "dourado",
+        "name": "Nude e dourado"
+      },
+      {
+        "id": "minimal",
+        "name": "Minimalista"
+      }
+    ],
+    "fields": [
+      "para",
+      "de",
+      "servico",
+      "validade",
+      "mensagem_opcional"
+    ],
+    "defaultMessage": "Um presente para o seu olhar ✨",
+    "sendToBuyer": "Prontinho, [nome]! 🎁 Aqui está o vale-presente. É só encaminhar para ela (ou imprimir). Para agendar, ela me chama no WhatsApp [whatsapp]. Obrigada pela confiança 💕",
+    "sendToRecipient": "Oi, [nome]! 🎁 Você ganhou um vale-presente de cílios de {de}! Quando quiser agendar, é só me chamar aqui. Válido até {validade} 💕"
+  },
+  "combos": [
+    {
+      "id": "bf_combo",
+      "season": "Black Friday",
+      "title": "Combo antecipado",
+      "how": "Aplicação + 1 manutenção, pagas juntas agora, com 10% de desconto no total.",
+      "why": "Você recebe hoje o valor de dois atendimentos e já garante a volta da cliente. O desconto vem do pagamento antecipado, não do seu preço.",
+      "formula": {
+        "base": "A+M",
+        "factor": 0.9,
+        "round": "down5"
+      },
+      "message": "Combo Black Friday 🖤 Aplicação + 1 manutenção por R$ {preco} (em vez de R$ {preco_cheio}), pago até {data_limite} e usado até {data_uso}. Só {vagas} vagas! Quer garantir o seu, [nome]?"
+    },
+    {
+      "id": "bf_bonus",
+      "season": "Black Friday",
+      "title": "Preço cheio + presente",
+      "how": "Aplicação pelo preço normal, com um kit de cuidados de presente (escovinha + espuma de limpeza).",
+      "why": "Não mexe no seu preço. O presente custa pouco para você e tem valor alto para a cliente.",
+      "formula": {
+        "base": "A",
+        "factor": 1.0,
+        "round": "none"
+      },
+      "message": "Black Friday no estúdio 🖤 Quem agendar a aplicação até {data_limite} ganha um kit de cuidados de presente 🎁 Aplicação: R$ {preco}. Vagas limitadas, [nome]. Quer garantir?"
+    },
+    {
+      "id": "natal_vale",
+      "season": "Natal",
+      "title": "Vale-presente",
+      "how": "Vale-presente de uma aplicação, pelo preço normal, com cartão personalizado.",
+      "why": "Quem compra não é a sua cliente, é quem quer presentear. É venda nova, sem desconto.",
+      "formula": {
+        "base": "A",
+        "factor": 1.0,
+        "round": "none"
+      },
+      "message": "Vale-presente de cílios 🎄 Uma aplicação por R$ {preco}, com cartão personalizado com o nome dela. Válido até {data_uso}. Quer encomendar, [nome]?"
+    },
+    {
+      "id": "natal_duplo",
+      "season": "Natal",
+      "title": "Vale-presente duplo",
+      "how": "Duas aplicações (mãe e filha, irmãs, amigas) com 10% de desconto no total.",
+      "why": "Traz duas clientes de uma vez, e uma delas quase sempre é nova.",
+      "formula": {
+        "base": "2A",
+        "factor": 0.9,
+        "round": "down5"
+      },
+      "message": "Vale-presente duplo 💕 Duas aplicações por R$ {preco} (em vez de R$ {preco_cheio}). Perfeito para mãe e filha ou para você e uma amiga! Válido até {data_uso}. Quer o seu, [nome]?"
+    },
+    {
+      "id": "reveillon_vip",
+      "season": "Réveillon",
+      "title": "Horário extra de fim de ano",
+      "how": "Horários fora do expediente (noite ou domingo) na última semana do ano, com 15% a mais.",
+      "why": "É a semana mais procurada do ano. Quem precisa do horário extra paga por ele, e você é bem paga pelo esforço.",
+      "formula": {
+        "base": "A",
+        "factor": 1.15,
+        "round": "up5"
+      },
+      "message": "Abri horários extras de fim de ano 🥂 [dia] às [hora], fora do meu expediente normal. Aplicação nesse horário: R$ {preco}. Quer garantir o seu, [nome]?"
+    },
+    {
+      "id": "janeiro_pos",
+      "season": "Janeiro",
+      "title": "Manutenção pós-festas",
+      "how": "Manutenção pelo preço normal para quem volta até {data_uso}, com um mimo simples.",
+      "why": "Traz de volta quem viajou e sumiu nas festas, antes que procure outra lash.",
+      "formula": {
+        "base": "M",
+        "factor": 1.0,
+        "round": "none"
+      },
+      "message": "Oi, [nome]! As festas passaram e seus cílios merecem um carinho 💕 Manutenção por R$ {preco} até {data_uso}, com um mimo de presente. Tenho [dia] às [hora]. Reservo para você?"
+    }
+  ],
+  "comboDefaults": {
+    "data_limite": "29/11",
+    "data_uso": "31/01",
+    "vagas": "5"
+  },
+  "arts": [
+    {
+      "id": "agenda-dezembro",
+      "title": "Agenda de dezembro aberta",
+      "headline": "Agenda de dezembro aberta 🗓️",
+      "subline": "Garanta seu horário para as festas",
+      "footer": "studio",
+      "photo": "optional"
+    },
+    {
+      "id": "vale-disponivel",
+      "title": "Vale-presente disponível",
+      "headline": "Vale-presente de cílios 🎁",
+      "subline": "O presente que ela vai usar todo dia",
+      "footer": "studio",
+      "photo": "optional"
+    },
+    {
+      "id": "bf-teaser",
+      "title": "Black Friday chegando",
+      "headline": "Black Friday chegando 👀",
+      "subline": "As clientes da lista VIP ficam sabendo primeiro. Responda com 💕 para entrar.",
+      "footer": "studio",
+      "photo": "none",
+      "palette": "black"
+    },
+    {
+      "id": "bf-oferta",
+      "title": "Oferta de Black Friday",
+      "headline": "Black Friday 🖤",
+      "subline": "{combo_titulo}: R$ {preco}",
+      "details": "Até {data_limite} · vagas limitadas",
+      "footer": "studio",
+      "photo": "optional",
+      "palette": "black",
+      "usesCombo": true
+    },
+    {
+      "id": "bf-ultima",
+      "title": "Última chamada",
+      "headline": "Últimas horas ⏰",
+      "subline": "Restam {vagas} horários da Black Friday",
+      "footer": "studio",
+      "photo": "none",
+      "palette": "black"
+    },
+    {
+      "id": "formaturas",
+      "title": "Formaturas e festas",
+      "headline": "Formatura ou confraternização? 🎓",
+      "subline": "Chegue pronta para as fotos",
+      "footer": "studio",
+      "photo": "optional"
+    },
+    {
+      "id": "natal-ultimos",
+      "title": "Últimos horários do Natal",
+      "headline": "Últimos horários antes do Natal 🎄",
+      "subline": "{horarios}",
+      "footer": "studio",
+      "photo": "optional"
+    },
+    {
+      "id": "reveillon",
+      "title": "Horários de Réveillon",
+      "headline": "Horários extras de fim de ano 🥂",
+      "subline": "{horarios}",
+      "footer": "studio",
+      "photo": "optional"
+    },
+    {
+      "id": "ano-novo",
+      "title": "Feliz Ano Novo",
+      "headline": "Feliz 2027! 🥂",
+      "subline": "Obrigada por cada olhar que eu cuidei este ano. Te espero em janeiro 💕",
+      "footer": "studio",
+      "photo": "optional"
+    },
+    {
+      "id": "janeiro",
+      "title": "Agenda de janeiro",
+      "headline": "Agenda de janeiro aberta ☀️",
+      "subline": "Volte das festas com o olhar renovado",
+      "footer": "studio",
+      "photo": "optional"
+    }
+  ],
+  "plan": [
+    {
+      "date": "2026-11-05",
+      "title": "Prepare sua campanha",
+      "todo": "Preencha o Meu Estúdio e monte sua Lista VIP com 10 a 30 clientes.",
+      "links": {
+        "tool": "lista-vip"
+      }
+    },
+    {
+      "date": "2026-11-06",
+      "title": "Anuncie a agenda de dezembro",
+      "todo": "Poste a arte nos Stories e no Status.",
+      "links": {
+        "art": "agenda-dezembro"
+      }
+    },
+    {
+      "date": "2026-11-10",
+      "title": "Lance o vale-presente",
+      "todo": "Poste a arte e mande a mensagem do vale-presente para suas clientes.",
+      "links": {
+        "art": "vale-disponivel",
+        "message": "NA02"
+      }
+    },
+    {
+      "date": "2026-11-13",
+      "title": "Monte sua oferta de Black Friday",
+      "todo": "Escolha um combo no Montador de ofertas.",
+      "links": {
+        "tool": "ofertas"
+      }
+    },
+    {
+      "date": "2026-11-17",
+      "title": "Formaturas e festas",
+      "todo": "Poste a arte e chame as clientes que costumam ter eventos.",
+      "links": {
+        "art": "formaturas",
+        "message": "FO02"
+      }
+    },
+    {
+      "date": "2026-11-22",
+      "title": "Avise a Lista VIP",
+      "todo": "Mande o aviso de Black Friday para cada cliente da Lista VIP.",
+      "links": {
+        "message": "BF01",
+        "tool": "lista-vip"
+      }
+    },
+    {
+      "date": "2026-11-24",
+      "title": "Crie suspense",
+      "todo": "Poste a arte de Black Friday chegando.",
+      "links": {
+        "art": "bf-teaser",
+        "message": "BF02"
+      }
+    },
+    {
+      "date": "2026-11-27",
+      "title": "Dia da Black Friday",
+      "todo": "Poste a oferta de manhã, no almoço e à noite. Responda todo mundo rápido.",
+      "links": {
+        "art": "bf-oferta",
+        "message": "BF03"
+      }
+    },
+    {
+      "date": "2026-11-29",
+      "title": "Última chamada",
+      "todo": "Poste a arte e mande a última chamada para quem respondeu e não fechou.",
+      "links": {
+        "art": "bf-ultima",
+        "message": "BF06"
+      }
+    },
+    {
+      "date": "2026-12-01",
+      "title": "Dezembro começou",
+      "todo": "Chame individualmente quem ainda não agendou para as festas.",
+      "links": {
+        "message": "FO02"
+      }
+    },
+    {
+      "date": "2026-12-05",
+      "title": "Reforce o vale-presente",
+      "todo": "Poste o vale-presente de novo nos Stories e no Status.",
+      "links": {
+        "art": "vale-disponivel",
+        "message": "NA03"
+      }
+    },
+    {
+      "date": "2026-12-12",
+      "title": "Vale-presente: última semana boa",
+      "todo": "Avise que os vales encomendados até dia 20 chegam a tempo do Natal.",
+      "links": {
+        "message": "NA01"
+      }
+    },
+    {
+      "date": "2026-12-15",
+      "title": "Últimos horários antes do Natal",
+      "todo": "Poste a arte com os horários que sobraram.",
+      "links": {
+        "art": "natal-ultimos"
+      }
+    },
+    {
+      "date": "2026-12-20",
+      "title": "Agradeça suas clientes",
+      "todo": "Mande a mensagem de agradecimento de fim de ano para todas.",
+      "links": {
+        "message": "NA06"
+      }
+    },
+    {
+      "date": "2026-12-26",
+      "title": "Horários extras de Réveillon",
+      "todo": "Abra horários extras e poste a arte.",
+      "links": {
+        "art": "reveillon",
+        "message": "RE02"
+      }
+    },
+    {
+      "date": "2026-12-29",
+      "title": "Lista de espera",
+      "todo": "Agenda cheia? Ofereça a lista de espera.",
+      "links": {
+        "message": "RE03"
+      }
+    },
+    {
+      "date": "2026-12-31",
+      "title": "Feliz Ano Novo",
+      "todo": "Poste a arte e mande a mensagem de Ano Novo.",
+      "links": {
+        "art": "ano-novo",
+        "message": "RE05"
+      }
+    },
+    {
+      "date": "2027-01-05",
+      "title": "Manutenção pós-festas",
+      "todo": "Chame quem fez cílios em dezembro para a manutenção.",
+      "links": {
+        "message": "JA01"
+      }
+    },
+    {
+      "date": "2027-01-08",
+      "title": "Agenda de janeiro",
+      "todo": "Poste a arte e reative quem sumiu.",
+      "links": {
+        "art": "janeiro",
+        "message": "JA03"
+      }
+    },
+    {
+      "date": "2027-01-15",
+      "title": "Prepare o Carnaval",
+      "todo": "Avise quando abre a agenda de fevereiro.",
+      "links": {
+        "message": "JA05"
+      }
+    }
+  ],
+  "listaVip": {
+    "statuses": [
+      "A chamar",
+      "Mensagem enviada",
+      "Respondeu",
+      "Agendou"
+    ],
+    "tip": "Comece pelas clientes que mais elogiam seu trabalho e pelas que fizeram cílios há mais de 30 dias."
+  },
+  "messages": [
+    {
+      "id": "BF01",
+      "group": "Black Friday",
+      "title": "Aviso para a lista VIP (5 dias antes)",
+      "text": "Oi, [nome]! 💕 Na Black Friday vou ter uma condição especial só para clientes queridas, e você está na minha lista VIP. Quer que eu te avise primeiro, antes de abrir para todo mundo?"
+    },
+    {
+      "id": "BF02",
+      "group": "Black Friday",
+      "title": "Story de suspense (3 dias antes)",
+      "text": "Black Friday chegando 👀 Minhas clientes VIP vão ficar sabendo primeiro. Quer entrar na lista? Me responde com um 💕"
+    },
+    {
+      "id": "BF03",
+      "group": "Black Friday",
+      "title": "Oferta com bônus (no dia)",
+      "text": "Black Friday no estúdio 🖤 Quem agendar até [data] ganha [bônus: kit de cuidados / manutenção com valor especial]. Vagas limitadas, porque eu atendo uma cliente por vez 💕"
+    },
+    {
+      "id": "BF04",
+      "group": "Black Friday",
+      "title": "Oferta combo (no dia)",
+      "text": "Combo Black Friday 🖤 Aplicação + 1 manutenção por R$[valor do combo], pago agora e usado até [data]. Só [número] vagas!"
+    },
+    {
+      "id": "BF05",
+      "group": "Black Friday",
+      "title": "Legenda do post",
+      "text": "Black Friday sem pressa e sem desconto que desvaloriza: aqui é [bônus] para quem agendar até [data] 🖤 Me chama no link da bio e garanta seu horário."
+    },
+    {
+      "id": "BF06",
+      "group": "Black Friday",
+      "title": "Última chamada",
+      "text": "Últimas horas da condição de Black Friday ⏰ Restam [número] horários. Quem chamar primeiro garante 💕"
+    },
+    {
+      "id": "FO01",
+      "group": "Formaturas e confraternizações",
+      "title": "Story de aviso",
+      "text": "Formatura, confraternização ou festa da firma em dezembro? 🎓✨ Minha agenda de dezembro já está abrindo. Garanta seu horário antes de lotar!"
+    },
+    {
+      "id": "FO02",
+      "group": "Formaturas e confraternizações",
+      "title": "Mensagem para clientes",
+      "text": "Oi, [nome]! Tem alguma festa ou formatura em dezembro? 🥂 Já estou reservando horários para quem quer chegar pronta. Quer que eu separe um para você?"
+    },
+    {
+      "id": "FO03",
+      "group": "Formaturas e confraternizações",
+      "title": "Legenda do post",
+      "text": "Dezembro é mês de foto 📸 Formatura, confraternização, festa de família… e você merece chegar com o olhar pronto. Agende com antecedência pelo link da bio 💕"
+    },
+    {
+      "id": "FO04",
+      "group": "Formaturas e confraternizações",
+      "title": "Grupo de formandas",
+      "text": "Oi, meninas! Sou a [seu nome], lash designer em [bairro] 💕 Para as formandas de [curso/escola], tenho uma condição especial em grupo: [condição]. Quem quiser, me chama no privado!"
+    },
+    {
+      "id": "FO05",
+      "group": "Formaturas e confraternizações",
+      "title": "Lembrete de antecedência",
+      "text": "Dica de lash: faça a extensão de 2 a 4 dias antes do evento. Assim os fios ficam acomodados e lindos nas fotos ✨"
+    },
+    {
+      "id": "NA01",
+      "group": "Natal e vale-presente",
+      "title": "Anúncio do vale-presente",
+      "text": "Presente de Natal que ela vai usar todo dia 🎄💕 Vale-presente de extensão de cílios, com cartão personalizado. Me chama para encomendar!"
+    },
+    {
+      "id": "NA02",
+      "group": "Natal e vale-presente",
+      "title": "Mensagem para clientes",
+      "text": "Oi, [nome]! 🎄 Este ano criei vale-presente de cílios. Se quiser presentear sua mãe, irmã ou amiga, eu preparo um cartão lindo com o nome dela. Quer ver?"
+    },
+    {
+      "id": "NA03",
+      "group": "Natal e vale-presente",
+      "title": "Story para quem quer presentear",
+      "text": "Não sabe o que dar de presente? 🎁 Vale-presente de extensão de cílios: prático, especial e ela escolhe a data. Me chama!"
+    },
+    {
+      "id": "NA04",
+      "group": "Natal e vale-presente",
+      "title": "Texto do cartão de vale-presente",
+      "text": "Vale-presente 🎁\nPara: [nome de quem recebe]\nDe: [nome de quem presenteia]\nServiço: [serviço]\nVálido até: [data]\nAgende pelo WhatsApp [número]"
+    },
+    {
+      "id": "NA05",
+      "group": "Natal e vale-presente",
+      "title": "Legenda do post de Natal",
+      "text": "Natal é sobre cuidar de quem a gente ama 🎄 E cuidar de você também conta! Agenda de dezembro aberta e vale-presente disponível. Link na bio 💕"
+    },
+    {
+      "id": "NA06",
+      "group": "Natal e vale-presente",
+      "title": "Agradecimento de fim de ano",
+      "text": "Oi, [nome]! 🎄 Passando para agradecer por ter confiado em mim este ano. Cada atendimento seu fez parte da minha história. Feliz Natal! 💕"
+    },
+    {
+      "id": "RE01",
+      "group": "Réveillon",
+      "title": "Story da última semana",
+      "text": "Última semana do ano 🥂 Quer virar o ano com o olhar pronto? Tenho [número] horários entre [dia] e [dia]. Me chama!"
+    },
+    {
+      "id": "RE02",
+      "group": "Réveillon",
+      "title": "Horário extra",
+      "text": "Abri horários extras de [dia] a [dia] para quem quer chegar linda no Réveillon ✨ Inclusive [horário especial: noite / domingo]. Responde aqui para reservar 💕"
+    },
+    {
+      "id": "RE03",
+      "group": "Réveillon",
+      "title": "Lista de espera",
+      "text": "Agenda de fim de ano lotada! 🙏 Se quiser, coloco seu nome na lista de espera: se alguém desmarcar, você é a primeira a saber 💕"
+    },
+    {
+      "id": "RE04",
+      "group": "Réveillon",
+      "title": "Legenda do post",
+      "text": "Ano novo, olhar novo ✨ Feche o ano se cuidando. Últimos horários de [ano] no link da bio 🥂"
+    },
+    {
+      "id": "RE05",
+      "group": "Réveillon",
+      "title": "Mensagem de Ano Novo",
+      "text": "Feliz Ano Novo, [nome]! 🥂 Que [ano novo] venha cheio de coisas boas. Obrigada por estar comigo. Te espero em janeiro! 💕"
+    },
+    {
+      "id": "JA01",
+      "group": "Janeiro: volta das festas e férias",
+      "title": "Manutenção pós-festas",
+      "text": "Oi, [nome]! As festas passaram e seus cílios merecem um carinho 💕 Tenho horários de manutenção na [dia] e na [dia]. Reservo um para você?"
+    },
+    {
+      "id": "JA02",
+      "group": "Janeiro: volta das festas e férias",
+      "title": "Para quem vai viajar",
+      "text": "Vai viajar nas férias? ✈️ Faça a extensão antes e aproveite praia, piscina e fotos sem se preocupar com maquiagem."
+    },
+    {
+      "id": "JA03",
+      "group": "Janeiro: volta das festas e férias",
+      "title": "Reativação de janeiro",
+      "text": "Oi, [nome]! Ano novo, olhar novo? 🥰 Abri a agenda de janeiro e lembrei de você. Quer que eu reserve um horário?"
+    },
+    {
+      "id": "JA04",
+      "group": "Janeiro: volta das festas e férias",
+      "title": "Legenda de verão",
+      "text": "Verão pede praticidade ☀️ Acordar pronta, sem rímel escorrendo no calor. Agenda de janeiro aberta no link da bio 💕"
+    },
+    {
+      "id": "JA05",
+      "group": "Janeiro: volta das festas e férias",
+      "title": "Agenda de fevereiro e Carnaval",
+      "text": "Carnaval chegando 🎉 A agenda de fevereiro abre [data]. Quer entrar na lista para garantir seu horário antes?"
+    }
+  ]
+}

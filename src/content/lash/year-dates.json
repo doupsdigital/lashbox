@@ -1,0 +1,5 @@
+[
+  { "date": "2026-11-27", "label": "Black Friday", "kitKey": "fim-de-ano" },
+  { "date": "2026-12-25", "label": "Natal", "kitKey": "fim-de-ano" },
+  { "date": "2026-12-31", "label": "Réveillon", "kitKey": "fim-de-ano" }
+]

@@ -1,0 +1,86 @@
+[
+  {
+    "id": "horario-livre-hoje",
+    "category": "Agenda",
+    "title": "Horário livre hoje",
+    "headline": "Horário livre hoje ✨",
+    "subline": "",
+    "kind": "list",
+    "footer": "studio",
+    "photo": "optional"
+  },
+  {
+    "id": "agenda-semana",
+    "category": "Agenda",
+    "title": "Agenda da semana",
+    "headline": "Agenda da semana aberta 🗓️",
+    "subline": "Garanta seu horário preferido",
+    "footer": "studio",
+    "photo": "optional"
+  },
+  {
+    "id": "lista-espera",
+    "category": "Agenda",
+    "title": "Lista de espera",
+    "headline": "Agenda cheia esta semana",
+    "subline": "Me chama e eu te aviso se abrir um horário",
+    "footer": "studio",
+    "photo": "none"
+  },
+  {
+    "id": "tabela-valores",
+    "category": "Valores",
+    "title": "Tabela de valores",
+    "headline": "Aplicação a partir de",
+    "subline": "",
+    "kind": "price",
+    "usesCombo": true,
+    "footer": "studio",
+    "photo": "none"
+  },
+  {
+    "id": "antes-depois",
+    "category": "Resultados",
+    "title": "Antes e depois",
+    "headline": "Olhar que transforma",
+    "subline": "Volume russo · 3 semanas depois",
+    "footer": "studio",
+    "photo": "optional"
+  },
+  {
+    "id": "cuidados-24h",
+    "category": "Cuidados",
+    "title": "Cuidados nas 24h",
+    "headline": "Cuidados nas primeiras 24h",
+    "subline": "Não molhe os cílios e evite vapor",
+    "footer": "studio",
+    "photo": "none"
+  },
+  {
+    "id": "elogio-cliente",
+    "category": "Clientes",
+    "title": "Elogio de cliente",
+    "headline": "Obrigada pela confiança 💕",
+    "subline": "Cada olhar conta uma história",
+    "footer": "studio",
+    "photo": "optional"
+  },
+  {
+    "id": "indique-amiga",
+    "category": "Clientes",
+    "title": "Indique uma amiga",
+    "headline": "Indique uma amiga 💕",
+    "subline": "Vocês duas ganham um mimo na próxima manutenção",
+    "footer": "studio",
+    "photo": "none"
+  },
+  {
+    "id": "aviso-folga",
+    "category": "Avisos",
+    "title": "Estou de folga",
+    "headline": "Aviso de recesso",
+    "subline": "Sem atendimento neste período. Volto em breve!",
+    "footer": "studio",
+    "photo": "none"
+  }
+]

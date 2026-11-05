@@ -1,0 +1,9 @@
+[
+  { "dow": 1, "label": "SEG", "title": "Mostre um resultado", "detail": "Antes e depois da última cliente", "tag": "Resultados", "links": { "art": "antes-depois" } },
+  { "dow": 2, "label": "TER", "title": "Dê uma dica de cuidados", "detail": "Como fazer a limpeza dos cílios", "tag": "Cuidados", "links": { "message": "CU02" } },
+  { "dow": 3, "label": "QUA", "title": "Mostre os bastidores", "detail": "Um vídeo curto da sua bancada", "tag": "Story", "links": {} },
+  { "dow": 4, "label": "QUI", "title": "Horário livre hoje", "detail": "Preencha a agenda da tarde", "tag": "Agenda", "links": { "art": "horario-livre-hoje" } },
+  { "dow": 5, "label": "SEX", "title": "Oferta de fim de semana", "detail": "Combo aplicação + manutenção", "tag": "Venda", "links": { "tool": "/vender/ofertas" } },
+  { "dow": 6, "label": "SÁB", "title": "Agradeça as clientes", "detail": "Poste um elogio ou depoimento recebido", "tag": "Clientes", "links": { "art": "elogio-cliente" } },
+  { "dow": 0, "label": "DOM", "title": "Planeje a semana", "detail": "Veja as datas do ano e defina seus horários", "tag": "Planejar", "links": { "tool": "/planejar?sub=year" } }
+]

@@ -1,0 +1,12 @@
+node_modules
+dist
+dev-dist
+.env
+.env.local
+.DS_Store
+supabase/.temp
+supabase/.branches
+*.tsbuildinfo
+.github-token
+# Protótipos de design de referência (ficam só no computador)
+/referencia/
