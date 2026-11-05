@@ -7,7 +7,7 @@ Este arquivo é lido automaticamente pelo Claude Code ao abrir o projeto. Resume
 - **O que é:** um app (PWA) em português, por **assinatura**, para **lash designers**. "A caixa de ferramentas da lash designer": artes prontas, vale-presente, ofertas calculadas, mensagens prontas e um plano de divulgação — tudo com o nome, a foto e os preços da própria lash, direto do celular.
 - **Plano completo do produto:** `referencia/LASHBOX-PLANO.md` (oferta, preços, conteúdo, etapas). Leia antes de mexer em preço, posicionamento ou no calendário de lançamento.
 - **Como é vendido:** Kiwify, produto de **assinatura** (mensal R$ 19,90 ou anual R$ 147), mais **kits sazonais** avulsos (R$ 14,90 cada) comprados dentro do app. **Nenhum kit é bônus da assinatura** — nem o Kit Fim de Ano, que já tem conteúdo pronto: ele é só o primeiro kit à venda, bloqueado (prévia desfocada + "R$ 14,90 · Comprar") até a compra, liberado por `my_products()`. Nada disso está configurado na Kiwify ainda — ver seção 7.
-- **Situação:** só roda neste computador. Nada foi criado no Supabase, na Vercel, no GitHub remoto ou na Kiwify. `git init` foi feito, mas **nenhum commit** (a dona pediu para só commitar quando ela mandar).
+- **Situação:** **no ar em produção** em https://lashbox.app — GitHub, Supabase, Vercel, domínio (Hostinger) e Resend configurados e testados de ponta a ponta (login por e-mail com código de 8 dígitos funcionando). Só falta a **Kiwify** (produto de assinatura, produto do kit, Edge Functions publicadas) — ver seção 8.
 - **Reaproveitado do Agenda Lotada** (`../agendalotada`, mesma dona): o motor de login (link mágico + código de 8 dígitos), o motor de artes/exportação PNG, o vale-presente, o Montador de ofertas, o conteúdo e as ferramentas do **Kit Agenda de Fim de Ano** (agora "Kit Fim de Ano" do LashBox) e os textos de referência das mensagens.
 
 ## 2. Como trabalhar com a dona do projeto
@@ -24,7 +24,7 @@ cd lashbox
 npm install
 ```
 
-- **Variáveis do Supabase:** copie `.env.example` para `.env.local` e preencha, quando o projeto existir. **Sem esse arquivo, `npm run dev` roda em modo local**: sem login, com uma assinatura anual "ativa" simulada (`state/subscription.tsx`), para testar todas as telas livremente.
+- **Variáveis do Supabase:** o projeto já existe (ref `bgtqyndumongrgowkzfs`, São Paulo). `.env.local` (fora do Git) já está preenchido neste computador com a URL e a chave anon/publishable. Em outro computador, copie `.env.example` para `.env.local` e peça esses dois valores à dona (Supabase → Project Settings → API Keys; a chave "anon public" não é segredo). **Sem esse arquivo, `npm run dev` roda em modo local**: sem login, com uma assinatura anual "ativa" simulada (`state/subscription.tsx`), para testar todas as telas livremente.
 
 ### Comandos
 
@@ -72,8 +72,8 @@ src/
                           purchases.tsx (quais kits sazonais a usuária já comprou, via my_products())
   lib/                    supabase.ts, config.ts (links externos), combo.ts, exportBoard.ts, artPalettes.ts,
                           studioTokens.ts, studioPhoto.ts, studioFooter.ts, vipList.ts, artDraft.ts, text.ts
-supabase/                 migrations/ (1 arquivo, schema completo), functions/ (kiwify-webhook, request-login),
-                          templates/link-magico.html — nada disso foi aplicado ainda
+supabase/                 migrations/ (aplicada), functions/ (request-login publicada; kiwify-webhook ainda não),
+                          templates/link-magico.html (já colado no painel do Supabase) — ver seção 8
 scripts/                  gerar-icones.mjs, screenshot.mjs, screenshot-auth.mjs, screenshot-kits.mjs
 public/                   favicon-maleta.svg (silhueta simplificada do favicon, ver seção "Regras do app")
 ```
@@ -122,9 +122,9 @@ A barra de abas (Início · Criar · Mensagens · Kits · Estúdio) aparece em `
   - `webhook_logs`: todo webhook recebido, para depuração.
   - `has_access()`: verdadeiro com status `active`/`late`/`canceled` **e** `current_period_end` no futuro. `refunded` nunca libera. Isso libera só o app (assinatura); não tem relação com os kits.
   - `my_products()`: `product_key` de todos os kits sazonais comprados — **inclui o Kit Fim de Ano**, porque ele também é comprado avulso, não é bônus da assinatura.
-- **Edge Functions** (`supabase/functions/`, código pronto, **não publicadas**):
-  - `request-login`: só envia o código se `has_access()` for verdadeiro ou houver alguma compra de kit — texto exato do plano, seção 3.
-  - `kiwify-webhook`: trata assinatura (nova/renovada/atrasada/cancelada) e compras avulsas de kit, mais reembolso/chargeback (bloqueia a assinatura e revoga as compras do pedido na hora).
+- **Edge Functions** (`supabase/functions/`):
+  - `request-login`: **publicada e funcionando em produção.** Só envia o código se `has_access()` for verdadeiro ou houver alguma compra de kit — texto exato do plano, seção 3.
+  - `kiwify-webhook`: código pronto, **ainda não publicada** (espera a Kiwify existir). Trata assinatura (nova/renovada/atrasada/cancelada) e compras avulsas de kit, mais reembolso/chargeback (bloqueia a assinatura e revoga as compras do pedido na hora).
     - ⚠️ **Os nomes exatos dos eventos de assinatura da Kiwify (renovada/atrasada/cancelada) e os campos do payload (id da assinatura, plano, próxima cobrança) são um palpite, não foram confirmados.** Estão isolados em `SUBSCRIPTION_EVENT_MAP` e `extractSubscription()`, no topo do arquivo, com um comentário bem visível. **Antes de publicar, confirme com um pagamento de teste de assinatura na Kiwify e ajuste essas duas partes** (o comentário no arquivo explica onde olhar: o `payload` completo fica em `webhook_logs`).
   - `KIWIFY_PRODUCT_MAP` precisa mapear o produto de assinatura para a chave especial `subscription`, e cada kit sazonal pago para sua chave (ex.: `id-da-kiwify:fim-de-ano`). O webhook vai receber também as vendas de outros produtos da dona (ex.: Agenda Lotada) — produto fora do mapa é ignorado, nunca grava nada.
 - **"Gerenciar assinatura" (`/estudio`, `src/lib/config.ts`):** a Kiwify **não tem um link fixo** de autoatendimento para a compradora cancelar ou trocar o cartão — confirmado na documentação oficial (`ajuda.kiwify.com.br/pt-br/article/como-cancelar-uma-assinatura-como-produtor-1wnont9/`, seção "Cancelando uma assinatura como comprador"): depois da compra e em cada renovação, a Kiwify manda um e-mail com um botão próprio para isso. Por isso, a tela mostra a explicação + um botão que abre `KIWIFY_BUYER_AREA_URL` (hoje `https://dashboard.kiwify.com.br`, para entrar com o e-mail da compra), em vez de linkar direto para a assinatura. `KIWIFY_SUBSCRIPTION_CHECKOUT_URLS` (mensal/anual) é o link de checkout usado no botão "Renovar assinatura" de `/assinatura-vencida` — ainda vazio.
@@ -141,13 +141,26 @@ A barra de abas (Início · Criar · Mensagens · Kits · Estúdio) aparece em `
 | `kits.json` | Catálogo de kits à venda | Só entra aqui o que tem conteúdo de verdade — hoje só o Fim de Ano (R$ 14,90). Os próximos (Verão e Carnaval, Dia das Mães…) entram quando tiverem artes/mensagens reais. |
 | `kit-fim-de-ano-v2.json` + `kitFimDeAno.ts` | Kit Fim de Ano completo (10 artes, 6 combos, plano de 5/11 a 15/1, 27 mensagens, vale-presente) | **Conteúdo real**, copiado do Agenda Lotada. |
 
-## 7. O que depende de você
+## 7. O que ainda depende de você
 
-1. **Domínio** `lashbox.app` (ou o que for escolhido) — nada no código depende disso ainda, mas os links de e-mail/manifesto citam `lashbox.app` como referência.
-2. **Supabase:** criar o projeto (região São Paulo), aplicar a migration (`supabase/migrations/20261105000000_inicial.sql`) pelo SQL Editor, configurar o template de e-mail (`supabase/templates/link-magico.html`, OTP de 8 dígitos) e o SMTP do Resend, publicar as duas Edge Functions e os secrets (`KIWIFY_WEBHOOK_TOKEN`, `KIWIFY_PRODUCT_MAP`). Depois, preencher `.env.local` com a URL e a chave do projeto.
-3. **Vercel:** criar o projeto (framework Vite, raiz do repositório), configurar o domínio e as variáveis de ambiente.
-4. **Resend:** domínio de envio verificado, remetente `acesso@lashbox.app` (ou o domínio escolhido).
-5. **Kiwify:** criar o produto de **assinatura** "LashBox" (2 planos) e o produto avulso **"LashBox · Kit Fim de Ano"** (R$ 14,90 — diferente do "Kit Agenda de Fim de Ano" do Agenda Lotada, outro produto da mesma dona); **testar um pagamento de assinatura de verdade** para confirmar os nomes dos eventos/campos do webhook (ver aviso na seção 5 acima) antes de publicar `kiwify-webhook`.
-6. **GitHub:** criar o repositório remoto quando quiser subir o código (ainda não foi feito nenhum commit).
-7. **Conteúdo:** os 20 modelos de arte do dia a dia, as ~60 mensagens reorganizadas, os combos do ano todo e o calendário completo (Fase 3 do plano) ainda não foram escritos — hoje tudo isso usa o conteúdo de exemplo da seção 6.
-8. **Página de vendas de verdade** (Fase 5): `/lp` hoje é só uma tela provisória com o logo e um botão.
+1. **Kiwify** (único passo de infraestrutura que falta): criar o produto de **assinatura** "LashBox" (2 planos) e o produto avulso **"LashBox · Kit Fim de Ano"** (R$ 14,90 — diferente do "Kit Agenda de Fim de Ano" do Agenda Lotada, outro produto da mesma dona); publicar as Edge Functions `request-login` e `kiwify-webhook` com os secrets `KIWIFY_WEBHOOK_TOKEN` e `KIWIFY_PRODUCT_MAP`; criar o webhook na Kiwify; **testar um pagamento de assinatura de verdade** para confirmar os nomes dos eventos/campos do webhook (ver aviso na seção 5) antes de considerar publicado; preencher `src/lib/config.ts` com os links de checkout e o de renovação.
+2. **Conteúdo:** os 20 modelos de arte do dia a dia, as ~60 mensagens reorganizadas, os combos do ano todo e o calendário completo (Fase 3 do plano) ainda não foram escritos — hoje tudo isso usa o conteúdo de exemplo da seção 6.
+3. **Página de vendas de verdade** (Fase 5): `/lp` hoje é só uma tela provisória com o logo e um botão.
+4. **Páginas legais:** `TERMS_URL`/`PRIVACY_URL` (`src/lib/config.ts`) apontam para `/termos` e `/privacidade`, que ainda não existem.
+
+## 8. Hospedagem e domínios (já configurado)
+
+- **GitHub:** `doupsdigital/lashbox` (privado), branch `main`. Acesso por token salvo no Gerenciador de Credenciais do Windows (Git Credential Manager) — nunca em arquivo do projeto. Só commit/push quando a dona pedir.
+- **Supabase:** projeto `lashbox`, ref `bgtqyndumongrgowkzfs`, região São Paulo (sa-east-1).
+  - Migration `20261105000000_inicial.sql` aplicada pelo SQL Editor.
+  - Authentication → Sign In/Providers → Email: "Allow new users to sign up" desligado, "Email OTP length" = **8** (esse campo já voltou pro padrão 6 uma vez depois de salvo sozinho — se o código do e-mail vier com 6 dígitos de novo, confira esse campo primeiro).
+  - URL Configuration: Site URL `https://lashbox.app`; Redirect URLs incluem `https://lashbox.app/`, `https://www.lashbox.app/`, `http://localhost:5190/`, `http://127.0.0.1:5190/` (e o domínio da Vercel).
+  - SMTP customizado ligado (Resend): host `smtp.resend.com`, porta 465, usuário `resend`, remetente `acesso@lashbox.app` ("LashBox"). Senha = chave de API da Resend (fica só no painel do Supabase, nunca no código).
+  - Template "Magic Link" (`Authentication → Emails → Templates`) já está com o nosso visual (mesmo conteúdo de `supabase/templates/link-magico.html`).
+  - Edge Functions: **ainda só `request-login`** está publicada (sem secrets extras — usa as variáveis padrão que o Supabase já injeta). `kiwify-webhook` ainda não foi publicada (depende da Kiwify existir, ver seção 7).
+- **Vercel:** projeto `lashbox` (conta doupsdigital, plano Hobby), ligado ao GitHub (deploy automático a cada push em `main`). Variáveis de ambiente `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY` cadastradas. Domínios: `lashbox.app` é o de Production; `www.lashbox.app` redireciona para ele (308); `lashbox.vercel.app` continua ativo como alternativa.
+- **Domínio:** `lashbox.app`, comprado na **Hostinger**, expira em 05/11/2027 (renovação automática desligada — lembrar de ativar ou renovar manualmente). DNS também na Hostinger:
+  - `A @ → 216.198.79.1` (Vercel, apex).
+  - `CNAME www →` o CNAME de verificação da Vercel (específico deste domínio).
+  - Registros do Resend: `TXT resend._domainkey` (DKIM), `CNAME rsend` e `CNAME send` (envio), `TXT _dmarc` (`v=DMARC1; p=none;`). **Não mexer nesses.**
+- **Resend:** domínio `lashbox.app` verificado, região São Paulo, integrado via Hostinger. Remetente `acesso@lashbox.app`.
