@@ -1,7 +1,7 @@
 // Links e endereços externos. Preencher quando a Kiwify e o domínio existirem.
 export const SUPPORT_EMAIL = 'doupsdigital@gmail.com'
-export const TERMS_URL = 'https://www.lashbox.app/termos'
-export const PRIVACY_URL = 'https://www.lashbox.app/privacidade'
+export const TERMS_URL = 'https://lashbox.app/termos'
+export const PRIVACY_URL = 'https://lashbox.app/privacidade'
 
 /**
  * Link de checkout da assinatura (mensal/anual), usado no botão "Renovar assinatura" de
