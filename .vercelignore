@@ -1,0 +1,9 @@
+# Arquivos que não vão para a Vercel. O "/" no início = só na raiz do projeto.
+/node_modules
+/dist
+/.env
+/.env.*
+!/.env.example
+/supabase
+/scripts
+.DS_Store
