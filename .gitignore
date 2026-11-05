@@ -10,3 +10,5 @@ supabase/.branches
 .github-token
 # Protótipos de design de referência (ficam só no computador)
 /referencia/
+# Pasta técnica do ambiente do Claude Code (não é do projeto)
+/.claude/
