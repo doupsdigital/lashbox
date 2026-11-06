@@ -15,6 +15,7 @@ function baseValue(base: Combo['formula']['base'], A: number, M: number) {
   if (base === 'A') return A
   if (base === 'M') return M
   if (base === 'A+M') return A + M
+  if (base === 'A+2M') return A + 2 * M
   return 2 * A
 }
 

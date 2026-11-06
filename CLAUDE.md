@@ -1,6 +1,6 @@
 # LashBox: contexto completo do projeto
 
-Este arquivo é lido automaticamente pelo Claude Code ao abrir o projeto. Resume o que foi feito até 05/11/2026 (Fase 2, Fundação, e os ajustes antes de colocar no ar), para continuar o trabalho em qualquer computador.
+Este arquivo é lido automaticamente pelo Claude Code ao abrir o projeto. Resume o que foi feito até 06/11/2026 (Fases 2 e 3: Fundação, os ajustes antes de colocar no ar, os 5 tipos novos de arte e o conteúdo definitivo do nicho lash), para continuar o trabalho em qualquer computador.
 
 ## 1. O produto
 
@@ -34,6 +34,7 @@ npm install
 | `npm run build` | Checa os tipos (`tsc -b`) e gera o build em `dist/` |
 | `npm run preview` | Build final em http://localhost:4190 |
 | `npm run icons` | Gera os ícones (PWA, apple-touch, favicons, `icone-64/128/256.webp`) a partir de `public/icone-lashbox.png` |
+| `npm run verify-content` | Confere que todo link do conteúdo (arte/mensagem/kit, em `week-plan.json`/`home-suggestions.json`/`year-dates.json`) aponta para algo que existe de verdade |
 
 Para tirar prints das telas (390×844), sem Supabase:
 ```bash
@@ -66,7 +67,7 @@ src/
   components/             ui.tsx, TabBar.tsx, Messages.tsx, StudioNotice.tsx
                            art/StoryBoard.tsx, GiftBoard.tsx, ScaledBoard.tsx (motor de artes, do Agenda Lotada)
   content/lash/           Conteúdo do nicho "lash" — trocar esta pasta inteira é o bastante para uma "Nail Box"
-                           arts.json, messages.json, week-plan.json, year-dates.json, kits.json,
+                           arts.json, messages.json, combos.json, week-plan.json, year-dates.json, kits.json,
                            home-suggestions.json, kit-fim-de-ano-v2.json (+ kitFimDeAno.ts), index.ts
   state/                  auth.tsx (login), studio.tsx (Meu Estúdio), subscription.tsx (situação da assinatura),
                           purchases.tsx (quais kits sazonais a usuária já comprou, via my_products())
@@ -101,11 +102,16 @@ A barra de abas (Início · Criar · Mensagens · Kits · Estúdio) aparece em `
 ### Regras do app
 
 - **Onboarding:** `RequireStudioOnboarding` (em `App.tsx`) manda para `/boas-vindas` quem nunca viu o onboarding e ainda não preencheu nome/estúdio. Depois disso, nunca mais força — o `StudioNotice` (banner "Complete seu estúdio") é só um lembrete nas telas do Kit.
-- **Galeria "Criar":** mistura as artes genéricas de exemplo (`content/lash/arts.json`, 9 modelos) com as 10 artes do Kit Fim de Ano (`kit-fim-de-ano-v2.json`), filtráveis pelas categorias do design (Todas/Agenda/Resultados/Valores/Cuidados/Clientes/Avisos) + um chip extra "Fim de Ano". `getAnyArt()` em `content/lash/index.ts` busca em ambos os catálogos por id, então `/criar/:modeloId` funciona para as duas origens.
+- **Galeria "Criar":** mistura as 20 artes do dia a dia (`content/lash/arts.json`) com as 10 artes do Kit Fim de Ano (`kit-fim-de-ano-v2.json`), filtráveis pelas categorias (Todas/Agenda/Valores/Resultados/Cuidados/Clientes/Avisos) + um chip extra "Fim de Ano". `getAnyArt()` em `content/lash/index.ts` busca em ambos os catálogos por id, então `/criar/:modeloId` funciona para as duas origens.
+- **7 tipos de arte.** Além dos 4 originais (`text`, `urgent`, `price`, `list`, em `ClassicArtBoard` dentro de `components/art/StoryBoard.tsx`), existem 5 tipos novos — `beforeAfter`, `menu`, `quote`, `bullets`, `photo` — portados fiéis de `referencia/artes-novas/LashBox Art2.dc.html` e renderizados por `NewArtBoard` (mesmo arquivo), com paleta própria (`PAL2`, em `lib/artPalettes.ts`) e fontes Playfair Display + Jost. A conversão de unidade do protótipo (`cqw`, 1% da largura do board) para px é direta e constante: `CQW = 10.8` (board sempre tem 1080px de largura). Linhas de tabela/tópicos nunca ficam menores que 40px (Story) / 36px (Post); o subtítulo nunca fica menor que 36px — abaixo disso o texto quebra linha, não encolhe mais.
+  - `menu`: tabela de nome+preço editável no `ArtEditor` (até 6 linhas); o preço de uma linha nova é preenchido sozinho com o preço do Meu Estúdio quando o nome contém "aplica" ou "manuten".
+  - `quote` e `bullets`: depoimento+assinatura e lista de tópicos (3 a 6) editáveis diretamente no `ArtEditor`.
+  - `beforeAfter` e `photo` exigem foto (duas e uma, respectivamente) — sem elas, a exportação é **bloqueada** com uma explicação, sem toggle de "usar foto" (que só existe para os 4 tipos antigos com `photo: 'optional'`).
+- **Marcadores nos textos:** `[mês]` se preenche sozinho (mês atual, minúsculo) via `applyStudioTokens` (`lib/studioTokens.ts`). Qualquer outro marcador entre colchetes que não seja um dado do Meu Estúdio (`[dia]`, `[estilo]`, `[mimo]`, `[valor]`, `[data]`, `[X]`, `[sua novidade]`, `[nome da cliente]`…) vira um campo editável no `ArtEditor` (`findGenericMarkers`/`applyGenericMarkers`), com o próprio texto do marcador como placeholder. Deixar em branco não bloqueia a exportação, só avisa antes (confirmar/cancelar).
 - **Nenhum kit é bônus.** Todos (hoje só o Fim de Ano, que tem conteúdo de verdade) são comprados avulso, R$ 14,90, e liberados por `my_products()` (`state/purchases.tsx`, chave `fim-de-ano`). Bloqueado: prévia das artes desfocada (`blur(5px)`) + "R$ 14,90 · Comprar" (link de `KIT_CHECKOUT_URLS` em `src/lib/config.ts`, já preenchido) + "Já comprei, atualizar" (chama `my_products()` de novo). `/kits`, `/kits/:key`, o carrossel do Início e "Datas do ano" em `/planejar` só mostram kits com conteúdo real — **nenhuma tela mostra "em breve"**; um kit sem conteúdo simplesmente não entra em `kits.json`/`year-dates.json`.
 - **Preço justo** (`/vender/preco-justo`): preço mínimo = material + horas × valor da hora; sugerido = mínimo × 1,3, arredondado para múltiplo de 5 — fórmula exata do plano (seção 3), diferente do número solto do mock do Claude Design.
 - **Correções do plano aplicadas** (seção 5 do `LASHBOX-PLANO.md`):
-  - `ArtEditor.tsx`: exportar uma arte do tipo "preço" (`kind==='price'`, ex. `bf-oferta`) sem título/preço preenchidos mostra um aviso e **bloqueia a exportação**, em vez de gerar um PNG com "R$" vazio.
+  - `ArtEditor.tsx`: exportar uma arte do tipo "preço" (`kind==='price'`, ex. `bf-oferta`) sem título/preço preenchidos mostra um aviso e **bloqueia a exportação**, em vez de gerar um PNG com "R$" vazio. Mesma ideia nos tipos novos: `beforeAfter`/`photo` sem foto e `menu`/`bullets` sem nenhuma linha/tópico também bloqueiam.
   - `ArtEditor.tsx`: a foto só é considerada "ligada" (`effectivePhotoOn`) quando realmente existe uma URL de foto (do estúdio ou escolhida); sem foto, o fundo listrado nunca aparece — nem na prévia, nem na exportação — e um aviso pede para escolher uma foto ou desligar.
   - **Favicon:** `public/favicon-maleta.svg` é a silhueta simplificada (só a maleta, ameixa sobre blush), usada para 16/32/48px; o ícone completo (`icone-lashbox.png`) só entra a partir de 64px. Gerado por `npm run icons` (constante `FAVICON_SRC` em `scripts/gerar-icones.mjs`).
 - **Minhas clientes:** generalização da Lista VIP do Agenda Lotada (`lib/vipList.ts`, chave `lashbox:vip:v1`, só no localStorage).
@@ -133,25 +139,27 @@ A barra de abas (Início · Criar · Mensagens · Kits · Estúdio) aparece em `
 
 ## 6. Conteúdo (`src/content/lash/`)
 
-| Arquivo | O que é | Status |
-|---|---|---|
-| `arts.json` | 9 artes genéricas de exemplo (Agenda/Resultados/Valores/Cuidados/Clientes/Avisos) | **Exemplo.** Os 20 modelos do dia a dia definitivos (seção 5 do plano) ainda não foram desenhados nem escritos — é a próxima fase (Fase 3). |
-| `messages.json` | 24 mensagens genéricas de exemplo, 4 por categoria | **Exemplo.** O plano prevê ~60, reorganizadas da biblioteca do Agenda Lotada. |
-| `week-plan.json` | Rotina semanal (Seg a Dom) do "Planejar → Esta semana" | **Exemplo**, repete toda semana. |
-| `year-dates.json` | Calendário de datas comerciais do "Planejar → Datas do ano" | **Exemplo** (datas reais de 2026/2027, mas a lista de kits futuros é só ilustrativa). |
-| `home-suggestions.json` | 7 sugestões rotativas do "Para postar hoje" | **Exemplo.** O plano pede 30; a escolha do dia é determinística (dia do ano % tamanho da lista), não um sorteio de verdade. |
-| `kits.json` | Catálogo de kits à venda | Só entra aqui o que tem conteúdo de verdade — hoje só o Fim de Ano (R$ 14,90). Os próximos (Verão e Carnaval, Dia das Mães…) entram quando tiverem artes/mensagens reais. |
-| `kit-fim-de-ano-v2.json` + `kitFimDeAno.ts` | Kit Fim de Ano completo (10 artes, 6 combos, plano de 5/11 a 15/1, 27 mensagens, vale-presente) | **Conteúdo real**, copiado do Agenda Lotada. |
+Todo o conteúdo abaixo é **definitivo** (Fase 3 concluída) — nada neste app usa texto de exemplo.
+
+| Arquivo | O que é |
+|---|---|
+| `arts.json` | 20 artes do dia a dia (Agenda/Valores/Resultados/Cuidados/Clientes/Avisos), nos 7 tipos (seção 4). |
+| `messages.json` | 70 mensagens prontas, em 10 categorias (Reativação, Divulgação, Preço, Agenda, Dúvidas, Pós-atendimento, Manutenção, Indicação, Parcerias, Avisos) — os chips de `/mensagens` vêm dessas categorias, não de uma lista fixa. |
+| `combos.json` | 6 combos do dia a dia (ano todo) para o Montador de ofertas (`/vender/ofertas`) — `defaults` (data limite/uso, vagas) + `combos`, cada um com `formula.base` (`A`, `M`, `A+M`, `2A` ou `A+2M`), `factor` e `round`. O Kit Fim de Ano continua com os seus próprios combos de Black Friday (`kitFimDeAno.combos`), separados. |
+| `week-plan.json` | Rotina semanal (Seg a Dom) do "Planejar → Esta semana", com link para uma arte, mensagem ou ferramenta por dia. |
+| `year-dates.json` | Calendário de datas comerciais do "Planejar → Datas do ano" (2026/2027), cada uma com uma `tip`; `kitKey` só existe nas datas com kit à venda (hoje: Black Friday, Natal e Réveillon → Fim de Ano) — as outras não mostram chip de kit. |
+| `home-suggestions.json` | 30 sugestões do "Para postar hoje" (uma por dia, escolha determinística: dia do ano % 30). |
+| `kits.json` | Catálogo de kits à venda — só entra aqui o que tem conteúdo de verdade, hoje só o Fim de Ano (R$ 14,90). Os próximos (Verão e Carnaval, Dia das Mães…) entram quando tiverem artes/mensagens reais. |
+| `kit-fim-de-ano-v2.json` + `kitFimDeAno.ts` | Kit Fim de Ano completo (10 artes, 6 combos, plano de 5/11 a 15/1, 27 mensagens, vale-presente), copiado do Agenda Lotada. |
 
 ## 7. O que ainda depende de você
 
-Toda a infraestrutura está pronta e testada (ver seção 8). O que falta agora é conteúdo e produto:
+Toda a infraestrutura e o conteúdo do dia a dia estão prontos (ver seção 8 e seção 6). O que falta agora é produto:
 
-1. **Conteúdo:** os 20 modelos de arte do dia a dia, as ~60 mensagens reorganizadas, os combos do ano todo e o calendário completo (Fase 3 do plano) ainda não foram escritos — hoje tudo isso usa o conteúdo de exemplo da seção 6.
-2. **Página de vendas de verdade** (Fase 5): `/lp` hoje é só uma tela provisória com o logo e um botão.
-3. **Páginas legais:** `TERMS_URL`/`PRIVACY_URL` (`src/lib/config.ts`) apontam para `/termos` e `/privacidade`, que ainda não existem.
-4. **Próximos kits sazonais** (Verão e Carnaval, Dia da Mulher, Dia das Mães…): quando tiverem conteúdo real, criar o produto avulso na Kiwify, adicionar o id dele em `KIWIFY_PRODUCT_MAP` (secret do `kiwify-webhook`), o link de checkout em `KIT_CHECKOUT_URLS` e entrar em `kits.json`/`year-dates.json`.
-5. **Eventos de assinatura ainda não vistos de verdade:** `subscription_renewed` (só acontece numa renovação futura) e `subscription_late` (pagamento atrasado). Os nomes batem com o esperado, mas vale conferir em `webhook_logs` quando o primeiro acontecer.
+1. **Página de vendas de verdade** (Fase 5): `/lp` hoje é só uma tela provisória com o logo e um botão.
+2. **Páginas legais:** `TERMS_URL`/`PRIVACY_URL` (`src/lib/config.ts`) apontam para `/termos` e `/privacidade`, que ainda não existem.
+3. **Próximos kits sazonais** (Verão e Carnaval, Dia da Mulher, Dia das Mães…): quando tiverem conteúdo real, criar o produto avulso na Kiwify, adicionar o id dele em `KIWIFY_PRODUCT_MAP` (secret do `kiwify-webhook`), o link de checkout em `KIT_CHECKOUT_URLS` e entrar em `kits.json`/`year-dates.json`.
+4. **Eventos de assinatura ainda não vistos de verdade:** `subscription_renewed` (só acontece numa renovação futura) e `subscription_late` (pagamento atrasado). Os nomes batem com o esperado, mas vale conferir em `webhook_logs` quando o primeiro acontecer.
 
 ## 8. Hospedagem e domínios (já configurado)
 

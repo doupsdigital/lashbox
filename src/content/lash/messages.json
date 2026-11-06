@@ -1,26 +1,422 @@
 [
-  { "id": "AG01", "category": "Agenda", "title": "Agenda aberta", "text": "Oi, [nome]! Abri a agenda de [mês] no [nome do estúdio] ([bairro], [cidade]). Quer garantir seu horário? Me chama no [whatsapp]." },
-  { "id": "AG02", "category": "Agenda", "title": "Horário livre hoje", "text": "Hoje tenho um horário livre às [horário] ✨ Quer garantir o seu olhar? Me chama aqui no direct ou no WhatsApp [whatsapp]." },
-  { "id": "AG03", "category": "Agenda", "title": "Lista de espera", "text": "Minha agenda está cheia esta semana, [nome]! Posso te colocar na lista de espera e te chamar se abrir um horário?" },
-  { "id": "AG04", "category": "Agenda", "title": "Confirmação de horário", "text": "Oi, [nome]! Confirmando seu horário [dia] às [horário] no [nome do estúdio]. Te espero 💕" },
-  { "id": "RE01", "category": "Resultados", "title": "Pedir depoimento", "text": "Oi, [nome]! Amei te atender hoje 💕 Posso compartilhar seu resultado no meu Instagram [instagram]?" },
-  { "id": "RE02", "category": "Resultados", "title": "Legenda de antes e depois", "text": "Olhar que transforma ✨ Volume [tipo] aplicado hoje no [nome do estúdio]. Agende o seu pelo WhatsApp [whatsapp]." },
-  { "id": "RE03", "category": "Resultados", "title": "Pedir indicação", "text": "[nome], que bom ver você tão feliz com o resultado! Conhece alguém que também ia adorar? Ela ganha um mimo na primeira aplicação." },
-  { "id": "RE04", "category": "Resultados", "title": "Legenda de bastidores", "text": "Um pouquinho da bancada de hoje 👀 Cada fio no lugar certo. Agende o seu olhar pelo link da bio." },
-  { "id": "VA01", "category": "Valores", "title": "Tabela de valores", "text": "A aplicação fica em [valor] e a manutenção em [valor]. Pix [chave] para reservar o horário." },
-  { "id": "VA02", "category": "Valores", "title": "Explicar o preço", "text": "[nome], meu preço cobre o material importado, o tempo de aplicação e os cuidados pós. Garanto durabilidade e um resultado que vale o investimento 💕" },
-  { "id": "VA03", "category": "Valores", "title": "Oferta do mês", "text": "Esse mês, quem fecha aplicação + manutenção de uma vez ganha [bônus]. Quer aproveitar, [nome]?" },
-  { "id": "VA04", "category": "Valores", "title": "Pacote fechado", "text": "Fechando o pacote de [quantidade] manutenções de uma vez, o valor fica em [valor] (em vez de [valor cheio]). Quer garantir o seu?" },
-  { "id": "CU01", "category": "Cuidados", "title": "Cuidados nas 24h", "text": "Lembrete, [nome]: nas primeiras 24h não molhe os cílios e evite vapor (banho quente, sauna). Qualquer dúvida, me chama!" },
-  { "id": "CU02", "category": "Cuidados", "title": "Cuidados no dia a dia", "text": "Para seus cílios durarem mais: evite produtos oleosos perto dos olhos e pentei a escovinha todos os dias 🪄" },
-  { "id": "CU03", "category": "Cuidados", "title": "Quando fazer manutenção", "text": "[nome], a manutenção ideal é entre 15 e 21 dias. Quer que eu já reserve o seu horário?" },
-  { "id": "CU04", "category": "Cuidados", "title": "O que evitar", "text": "Uma dica rápida: dormir de bruços pode derrubar os fios mais rápido. Tente dormir de barriga para cima nos primeiros dias 😉" },
-  { "id": "CL01", "category": "Clientes", "title": "Reativar cliente", "text": "Oi, [nome]! Faz um tempinho que não te vejo. Tenho horário na [dia]. Agende em [link]." },
-  { "id": "CL02", "category": "Clientes", "title": "Indique uma amiga", "text": "[nome], que tal indicar uma amiga? Vocês duas ganham um mimo na próxima manutenção 💕" },
-  { "id": "CL03", "category": "Clientes", "title": "Aniversário da cliente", "text": "Feliz aniversário, [nome]! 🎉 Para celebrar, separei um mimo especial na sua próxima visita." },
-  { "id": "CL04", "category": "Clientes", "title": "Boas-vindas à nova cliente", "text": "Seja bem-vinda ao [nome do estúdio], [nome]! Qualquer dúvida antes do seu horário, pode me chamar aqui 💕" },
-  { "id": "AV01", "category": "Avisos", "title": "Aviso de folga", "text": "Gente, estarei de folga de [data] a [data]. Voltamos com tudo no [nome do estúdio]! ✨" },
-  { "id": "AV02", "category": "Avisos", "title": "Mudança de endereço", "text": "Novidade: o [nome do estúdio] agora atende em [endereço], [bairro]. Te espero no novo espaço!" },
-  { "id": "AV03", "category": "Avisos", "title": "Fechado no feriado", "text": "No feriado de [data] não teremos atendimento. Retomamos normalmente em [data]." },
-  { "id": "AV04", "category": "Avisos", "title": "Nova política de agendamento", "text": "A partir de [data], peço um sinal de [valor] para confirmar o horário. Isso me ajuda a organizar a agenda para todas 💕" }
+  {
+    "id": "RE01",
+    "category": "Reativação",
+    "title": "Sumiu há 1 ou 2 meses",
+    "text": "Oi, [nome]! Tudo bem? 💕 Estava organizando minha agenda e lembrei de você! Abri alguns horários essa semana para clientes queridas. Quer que eu reserve um pra você?"
+  },
+  {
+    "id": "RE02",
+    "category": "Reativação",
+    "title": "Sumiu há muito tempo",
+    "text": "Oi, [nome]! Quanto tempo! 🥰 Passando pra te contar que estou com novidades no estúdio e lembrei de você. Se bater vontade de renovar o olhar, me chama que eu encaixo você com carinho."
+  },
+  {
+    "id": "RE03",
+    "category": "Reativação",
+    "title": "Se ela responder que está sem dinheiro agora",
+    "text": "Imagina, linda, super entendo! Quer que eu te avise quando abrir a agenda do começo do mês? Assim você garante seu horário 😊"
+  },
+  {
+    "id": "DV01",
+    "category": "Divulgação",
+    "title": "Modelo de bio: estúdio",
+    "text": "Lash Designer em [bairro], [cidade] 📍\nVolume brasileiro, fio a fio e lash lifting\nOlhar natural que dura semanas, sem pesar\n👇 Agende pelo WhatsApp"
+  },
+  {
+    "id": "DV02",
+    "category": "Divulgação",
+    "title": "Modelo de bio: atendimento em casa",
+    "text": "Lash Designer | Atendo em [bairro] 🏡\nAmbiente reservado e confortável\nTécnica que preserva seus cílios naturais\n💬 Horários desta semana no link"
+  },
+  {
+    "id": "DV03",
+    "category": "Divulgação",
+    "title": "Texto do link do WhatsApp (chega pronto para a cliente)",
+    "text": "Oi! Vi seu Instagram e quero saber sobre horários para extensão de cílios 💕"
+  },
+  {
+    "id": "DV04",
+    "category": "Divulgação",
+    "title": "Legenda do post fixado Como agendar",
+    "text": "Quer agendar seus cílios? É simples 💕\n1. Me chama no WhatsApp pelo link da bio\n2. Escolhe o estilo (te ajudo se tiver dúvida!)\n3. Garante seu horário com um sinal de R$[valor]\nAtendo em [bairro], [dias e horários]. Te espero! ✨"
+  },
+  {
+    "id": "DV05",
+    "category": "Divulgação",
+    "title": "Story para o destaque Cuidados",
+    "text": "Cuidados com seus cílios 💕\n• Nas primeiras 24h, evite molhar\n• Lave com espuma própria para extensão\n• Penteie com a escovinha todo dia\n• Evite demaquilante oleoso nos olhos\n• Manutenção a cada 15 a 21 dias"
+  },
+  {
+    "id": "DV06",
+    "category": "Divulgação",
+    "title": "Descrição do Perfil de Empresa",
+    "text": "Lash designer em [bairro], [cidade]. Extensão de cílios fio a fio, volume brasileiro, volume russo e lash lifting, com técnica que preserva seus cílios naturais. Atendimento com hora marcada, em ambiente confortável e higienizado. Agende pelo WhatsApp."
+  },
+  {
+    "id": "DV07",
+    "category": "Divulgação",
+    "title": "Story avisando que você está no Google",
+    "text": "Agora vocês também me encontram no Google! 📍 Pesquisa “lash em [bairro]” e me acha lá 💕 Se já foi minha cliente, sua avaliação me ajuda demais 🥰"
+  },
+  {
+    "id": "DV08",
+    "category": "Divulgação",
+    "title": "Pedido de autorização",
+    "text": "[nome], seus cílios ficaram lindos! 😍 Posso postar as fotos no meu Instagram? Se preferir, mostro só os olhos, sem o rosto todo."
+  },
+  {
+    "id": "DV09",
+    "category": "Divulgação",
+    "title": "Legenda do antes e depois",
+    "text": "Antes e depois de um volume brasileiro pensado para o formato do olho dela 💕 Olhar marcado, leve e natural. Quer um resultado assim? Me chama no link da bio ✨"
+  },
+  {
+    "id": "DV10",
+    "category": "Divulgação",
+    "title": "Status de chamada",
+    "text": "Abri 2 horários pra quinta ✨ Quem quiser renovar o olhar, me responde aqui 💕"
+  },
+  {
+    "id": "DV11",
+    "category": "Divulgação",
+    "title": "Status de bastidor",
+    "text": "Preparando tudo pra receber a cliente das [hora] 🤍 Cada detalhe pensado pra você relaxar e sair se sentindo linda."
+  },
+  {
+    "id": "DV12",
+    "category": "Divulgação",
+    "title": "Pedir para salvar seu número",
+    "text": "[nome], salva meu número aí? 💕 Posto meus horários livres e novidades no Status, assim você fica sabendo primeiro!"
+  },
+  {
+    "id": "DV13",
+    "category": "Divulgação",
+    "title": "Amigas e conhecidas",
+    "text": "Oi, [nome]! Tudo bem? 💕 Passando pra te contar uma novidade: estou trabalhando como lash designer aqui em [bairro]! Se um dia quiser fazer, ou souber de alguém que esteja procurando, vou amar atender 🥰"
+  },
+  {
+    "id": "DV14",
+    "category": "Divulgação",
+    "title": "Quem você não fala há tempos",
+    "text": "Oi, [nome]! Quanto tempo! Lembrei de você 😊 Te conto que agora trabalho com extensão de cílios. Se você ou alguma amiga quiser, me chama que eu te mostro meus trabalhos 💕"
+  },
+  {
+    "id": "DV15",
+    "category": "Divulgação",
+    "title": "Grupo da família",
+    "text": "Gente, quem puder me ajudar a divulgar, eu agradeço demais! 💕 Estou atendendo com extensão de cílios em [bairro]. Encaminhem meu contato pra quem gosta de se cuidar 🥰"
+  },
+  {
+    "id": "PR01",
+    "category": "Preço",
+    "title": "Primeira vez",
+    "text": "Oi, linda! Que bom que você me chamou 💕 O volume brasileiro está R$[valor] e dura em média de 3 a 4 semanas, com manutenção. Me conta: você já usou extensão antes ou seria a primeira vez? Assim te indico o estilo que mais combina com seu olhar 😊"
+  },
+  {
+    "id": "PR02",
+    "category": "Preço",
+    "title": "Manutenção",
+    "text": "Oi, [nome]! A manutenção está R$[valor] para até [X] dias após a aplicação. Quer que eu veja um horário pra você essa semana?"
+  },
+  {
+    "id": "PR03",
+    "category": "Preço",
+    "title": "Se ela sumiu depois do preço (enviar 24h depois)",
+    "text": "Oi, [nome]! Conseguiu ver? Essa semana tenho horário na quinta à tarde e no sábado de manhã. Quer que eu segure um pra você? 😊"
+  },
+  {
+    "id": "AG01",
+    "category": "Agenda",
+    "title": "Mensagem de saudação",
+    "text": "Oi! Que bom ter você aqui 💕 Sou a [seu nome], lash designer em [bairro]. Me conta: você quer fazer extensão pela primeira vez ou é manutenção? Já te respondo!"
+  },
+  {
+    "id": "AG02",
+    "category": "Agenda",
+    "title": "Mensagem de ausência",
+    "text": "Oi! Agora estou atendendo uma cliente e não consigo responder 💕 Assim que terminar, te respondo com carinho. Se quiser adiantar, me conta qual serviço você procura!"
+  },
+  {
+    "id": "AG03",
+    "category": "Agenda",
+    "title": "Endereço e orientações",
+    "text": "Oi, [nome]! Meu endereço é [endereço]. [ponto de referência]. Chega uns 5 minutinhos antes e vem sem maquiagem nos olhos, tá? Te espero! 😊"
+  },
+  {
+    "id": "DU01",
+    "category": "Dúvidas",
+    "title": "Vou pensar",
+    "text": "Claro, [nome], fica à vontade! 😊 Ficou alguma dúvida que eu possa te ajudar? Às vezes é sobre durabilidade, cuidados ou o estilo, e eu explico rapidinho 💕"
+  },
+  {
+    "id": "DU02",
+    "category": "Dúvidas",
+    "title": "Achei caro",
+    "text": "Entendo, [nome]! Uso fios de qualidade e uma técnica que respeita seus cílios naturais, por isso o resultado dura e não pesa. Se preferir, posso te indicar um estilo mais leve, que fica num valor menor. Quer ver?"
+  },
+  {
+    "id": "DU03",
+    "category": "Dúvidas",
+    "title": "Dói?",
+    "text": "Não dói, [nome]! 😊 Você fica deitada, de olhos fechados, e muitas clientes até cochilam. Eu cuido de cada detalhe pra você ficar confortável o tempo todo."
+  },
+  {
+    "id": "DU04",
+    "category": "Dúvidas",
+    "title": "Estraga o cílio natural?",
+    "text": "Ótima pergunta! Quando a aplicação é bem feita, com o fio no peso que o seu cílio aguenta e cada fio separado, ela não estraga seus cílios naturais. Eu avalio os seus antes e escolho o fio ideal pra você 💕"
+  },
+  {
+    "id": "DU05",
+    "category": "Dúvidas",
+    "title": "Não tenho tempo",
+    "text": "Te entendo! A aplicação leva em média [X] horas e você fica deitada relaxando. Depois, você ganha tempo todo dia: acorda com o olhar pronto, sem rímel 😍 Quer que eu veja um horário que encaixe na sua rotina?"
+  },
+  {
+    "id": "AG04",
+    "category": "Agenda",
+    "title": "Oferecendo dois horários",
+    "text": "Que ótimo, [nome]! 😍 Tenho [dia] às [hora] ou [dia] às [hora]. Qual fica melhor pra você?"
+  },
+  {
+    "id": "AG05",
+    "category": "Agenda",
+    "title": "Confirmação do agendamento",
+    "text": "Prontinho, [nome]! ✨ Agendado: [serviço], [dia] às [hora]. Valor: R$[valor]. Meu endereço é [endereço]. Qualquer imprevisto, me avisa com antecedência, tá? Te espero! 💕"
+  },
+  {
+    "id": "AG06",
+    "category": "Agenda",
+    "title": "Confirmação na véspera",
+    "text": "Oi, [nome]! Passando pra confirmar seu horário amanhã às [hora] 💕 Pode me responder com um “confirmado”? Lembra de vir sem maquiagem nos olhos 😊"
+  },
+  {
+    "id": "AG07",
+    "category": "Agenda",
+    "title": "Pedido de sinal",
+    "text": "Pra garantir seu horário, peço um sinal de R$[valor], que é descontado no dia 💕 Meu Pix é [chave]. Assim que receber, seu horário fica reservado só pra você!"
+  },
+  {
+    "id": "AG08",
+    "category": "Agenda",
+    "title": "Política de remarcação",
+    "text": "Pequenos combinados pra cuidar da nossa agenda 💕\n• O sinal garante seu horário e é descontado no dia\n• Pode remarcar uma vez, avisando com [24h] de antecedência\n• Faltas sem aviso não têm devolução do sinal\nObrigada por entender! Isso me ajuda a atender todas com carinho 🥰"
+  },
+  {
+    "id": "AG09",
+    "category": "Agenda",
+    "title": "Quando a cliente falta",
+    "text": "Oi, [nome], senti sua falta hoje! Espero que esteja tudo bem 🙏 Como combinamos, o sinal fica para o horário reservado. Se quiser, me fala que eu vejo um novo horário pra você 💕"
+  },
+  {
+    "id": "DV16",
+    "category": "Divulgação",
+    "title": "Story de horário livre",
+    "text": "Abriu 1 horário amanhã às [hora] ✨ Quem responder primeiro garante 💕"
+  },
+  {
+    "id": "DV17",
+    "category": "Divulgação",
+    "title": "Story com benefício extra",
+    "text": "Último horário da semana: [dia] às [hora] 🗓️ Quem agendar hoje ganha [mimo] de presente 🎁 Me chama!"
+  },
+  {
+    "id": "DV18",
+    "category": "Divulgação",
+    "title": "Horário preenchido",
+    "text": "Horário de amanhã preenchido! 💕 Obrigada, meninas. Próximos horários livres no meu Status e aqui no direct ✨"
+  },
+  {
+    "id": "PO01",
+    "category": "Pós-atendimento",
+    "title": "No mesmo dia",
+    "text": "Oi, [nome]! Amei fazer seu olhar hoje 💕 Lembrete dos cuidados: evite molhar nas primeiras 24h, lave com a espuma própria e penteie todo dia com a escovinha. Qualquer dúvida, me chama!"
+  },
+  {
+    "id": "PO02",
+    "category": "Pós-atendimento",
+    "title": "Dois dias depois",
+    "text": "Oi, [nome]! Como estão seus cílios? 🥰 Está se adaptando bem? Se sentir qualquer coisa diferente, me fala que eu te ajudo!"
+  },
+  {
+    "id": "PO03",
+    "category": "Pós-atendimento",
+    "title": "Quando ela elogiar",
+    "text": "Ai, que alegria ler isso! 😍 Se postar uma foto, me marca? Vou amar repostar! 💕"
+  },
+  {
+    "id": "MA01",
+    "category": "Manutenção",
+    "title": "Lembrete de manutenção",
+    "text": "Oi, [nome]! Já faz 2 semanas da sua aplicação 🥰 Que tal garantir sua manutenção? Tenho [dia] às [hora] ou [dia] às [hora]. Reservo pra você?"
+  },
+  {
+    "id": "MA02",
+    "category": "Manutenção",
+    "title": "Agendar antes de ela sair",
+    "text": "[nome], pra seus cílios continuarem lindos, o ideal é fazer a manutenção em até [X] dias. Já quer deixar agendado? Tenho [dia] às [hora] 💕"
+  },
+  {
+    "id": "MA03",
+    "category": "Manutenção",
+    "title": "Passou do prazo",
+    "text": "Oi, [nome]! Sei que a rotina corre 😊 Mesmo passando do prazo, consigo avaliar seus fios e ver se dá pra fazer manutenção ou se é melhor uma nova aplicação. Quer que eu veja um horário?"
+  },
+  {
+    "id": "IN01",
+    "category": "Indicação",
+    "title": "Pedido na hora do elogio",
+    "text": "Que bom que você amou, [nome]! 😍 Se tiver uma amiga que também ia gostar, me indica? Indicação de cliente querida é o que mais faz meu trabalho crescer 💕"
+  },
+  {
+    "id": "IN02",
+    "category": "Indicação",
+    "title": "Texto pronto para ela encaminhar",
+    "text": "Amiga, olha que lash maravilhosa! Fiz meus cílios com ela e amei 😍 Ela atende em [bairro]: [link do seu WhatsApp]"
+  },
+  {
+    "id": "IN03",
+    "category": "Indicação",
+    "title": "Agradecimento pela indicação",
+    "text": "[nome], a [amiga] veio por sua indicação! Muito obrigada pelo carinho 🥰 Separei um mimo pra você na sua próxima manutenção 💕"
+  },
+  {
+    "id": "IN04",
+    "category": "Indicação",
+    "title": "Anúncio do programa",
+    "text": "Novidade pra você, [nome]! 💕 Agora, a cada amiga que você indicar e fizer a primeira aplicação comigo, você ganha [recompensa] na sua próxima manutenção. E sua amiga ganha [mimo] 🎁 Bora espalhar beleza?"
+  },
+  {
+    "id": "IN05",
+    "category": "Indicação",
+    "title": "Story do programa",
+    "text": "Indicou, ganhou! 🎁 Cada amiga que você trouxer para a primeira aplicação = [recompensa] pra você + [mimo] pra ela 💕 Me chama pra saber mais!"
+  },
+  {
+    "id": "IN06",
+    "category": "Indicação",
+    "title": "Avisar que ela ganhou",
+    "text": "[nome], sua amiga [amiga] fez a aplicação hoje! 🥳 Sua recompensa já está garantida na próxima manutenção. Obrigada por confiar em mim 💕"
+  },
+  {
+    "id": "PA01",
+    "category": "Parcerias",
+    "title": "Convite para parceria",
+    "text": "Oi! Sou a [seu nome], lash designer aqui em [bairro] 💕 Adoro o trabalho de vocês! Pensei numa parceria: eu indico vocês para as minhas clientes e vocês me indicam para as suas, com um mimo para quem vier por indicação. Podemos conversar?"
+  },
+  {
+    "id": "PA02",
+    "category": "Parcerias",
+    "title": "Maquiadoras e noivas",
+    "text": "Oi, [nome]! Sou lash designer em [bairro] e vi seu trabalho com noivas, lindo demais 😍 Muitas noivas fazem cílios antes do casamento. Que tal a gente se indicar? Posso oferecer uma condição especial para as suas clientes."
+  },
+  {
+    "id": "PA03",
+    "category": "Parcerias",
+    "title": "Depois de fechar a parceria",
+    "text": "Obrigada pela parceria! 🥰 Te mandei os cartões com meu QR Code. Quando alguma cliente sua vier, vou te avisar e contar como foi 💕"
+  },
+  {
+    "id": "IN07",
+    "category": "Indicação",
+    "title": "Pedido de avaliação",
+    "text": "[nome], fiquei tão feliz que você amou seus cílios! 💕 Você me ajudaria muito deixando uma avaliação no Google? Leva 1 minutinho: [link]. Obrigada de coração 🥰"
+  },
+  {
+    "id": "IN08",
+    "category": "Indicação",
+    "title": "Lembrete gentil (uma vez só)",
+    "text": "Oi, [nome]! Lembrei de você 😊 Se conseguir deixar aquela avaliação, me ajuda demais: [link] 💕"
+  },
+  {
+    "id": "IN09",
+    "category": "Indicação",
+    "title": "Resposta à avaliação",
+    "text": "Muito obrigada, [nome]! 💕 Foi um prazer cuidar do seu olhar. Te espero na próxima!"
+  },
+  {
+    "id": "AG10",
+    "category": "Agenda",
+    "title": "Agenda do mês aberta",
+    "text": "Agenda de [mês] aberta! 🗓️ Os primeiros horários costumam acabar rápido. Quer garantir o seu, [nome]?"
+  },
+  {
+    "id": "AG11",
+    "category": "Agenda",
+    "title": "Dia das Mães",
+    "text": "Presente de Dia das Mães que ela vai usar todo dia: um olhar lindo 💕 Tenho vale-presente de extensão de cílios. Me chama pra garantir o seu!"
+  },
+  {
+    "id": "AG12",
+    "category": "Agenda",
+    "title": "Horário livre hoje",
+    "text": "Oi, [nome]! Abriu um horário hoje às [hora] ✨ Quer aproveitar para renovar o olhar? Me responde que eu reservo pra você 💕"
+  },
+  {
+    "id": "AG13",
+    "category": "Agenda",
+    "title": "Lista de espera",
+    "text": "Oi, [nome]! Essa semana está cheinha 🥰 Quer que eu coloque seu nome na lista de espera? Se alguém desmarcar, você é a primeira a saber!"
+  },
+  {
+    "id": "AG14",
+    "category": "Agenda",
+    "title": "Avisar quem estava na lista de espera",
+    "text": "[nome], abriu uma vaga! 🎉 [dia] às [hora]. Ainda quer? Me confirma que é sua 💕"
+  },
+  {
+    "id": "AG15",
+    "category": "Agenda",
+    "title": "Antes do atendimento",
+    "text": "Oi, [nome]! Amanhã é o nosso horário 💕 Lembrete: venha sem maquiagem nos olhos e, se usar lente de contato, traga o estojo. Te espero às [hora]!"
+  },
+  {
+    "id": "AG16",
+    "category": "Agenda",
+    "title": "Cliente atrasada",
+    "text": "Oi, [nome]! Tudo bem? Estou te esperando 💕 Se for atrasar mais de 15 minutos, me avisa para eu ver como ajustar o atendimento, tá?"
+  },
+  {
+    "id": "AV01",
+    "category": "Avisos",
+    "title": "Fechado no feriado",
+    "text": "Oi, [nome]! Passando para avisar que no dia [data] não vou atender 🌴 Se precisar de manutenção, já quer garantir um horário para a volta?"
+  },
+  {
+    "id": "AV02",
+    "category": "Avisos",
+    "title": "Novidade no estúdio",
+    "text": "Oi, [nome]! Tenho novidade no estúdio ✨ [sua novidade]. Quer saber mais? Te conto tudo!"
+  },
+  {
+    "id": "AV03",
+    "category": "Avisos",
+    "title": "Reajuste de valores (com antecedência)",
+    "text": "Oi, [nome]! Quero te avisar com carinho e antecedência: a partir de [data], meus valores serão atualizados para R$ [valor] 💕 Até lá, os horários seguem pelo valor atual. Quer garantir o seu?"
+  },
+  {
+    "id": "AV04",
+    "category": "Avisos",
+    "title": "Aniversário do estúdio",
+    "text": "[nome], meu estúdio está completando [X] anos 🎉 Obrigada por fazer parte dessa história! Para comemorar, quem agendar até [data] ganha [mimo] 💕"
+  },
+  {
+    "id": "PO04",
+    "category": "Pós-atendimento",
+    "title": "Pedir foto para depoimento",
+    "text": "[nome], fico tão feliz que você amou 😍 Posso usar seu elogio (sem seu nome, se preferir) para mostrar para outras clientes? Me ajuda demais 💕"
+  },
+  {
+    "id": "PO05",
+    "category": "Pós-atendimento",
+    "title": "Aniversário da cliente",
+    "text": "Feliz aniversário, [nome]! 🎂 Que seu ano seja tão lindo quanto o seu olhar. Tenho um mimo para você na próxima manutenção 💕"
+  },
+  {
+    "id": "RE04",
+    "category": "Reativação",
+    "title": "Boas-vindas para nova cliente",
+    "text": "Oi, [nome]! Seja muito bem-vinda 💕 Sou a [seu nome], lash designer em [bairro]. Qualquer dúvida sobre estilos, cuidados ou valores, é só me chamar aqui!"
+  }
 ]

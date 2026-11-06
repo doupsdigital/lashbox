@@ -1,10 +1,152 @@
 [
-  { "art": "horario-livre-hoje", "caption": "Hoje tenho um horário livre às 15h30 ✨ Quer garantir o seu olhar? Me chama aqui no direct ou no WhatsApp.", "tag": "Story · Agenda" },
-  { "art": "agenda-semana", "caption": "Agenda da semana aberta! Garanta seu horário preferido antes que lote 🗓️", "tag": "Story · Agenda" },
-  { "art": "elogio-cliente", "caption": "Obrigada pela confiança 💕 Cada olhar conta uma história.", "tag": "Post · Clientes" },
-  { "art": "antes-depois", "caption": "Olhar que transforma ✨ Agende o seu pelo link da bio.", "tag": "Post · Resultados" },
-  { "art": "cuidados-24h", "caption": "Lembrete: nas primeiras 24h não molhe os cílios e evite vapor.", "tag": "Story · Cuidados" },
-  { "art": "indique-amiga", "caption": "Indique uma amiga 💕 Vocês duas ganham um mimo na próxima manutenção.", "tag": "Post · Clientes" },
-  { "art": "lista-espera", "caption": "Agenda cheia esta semana! Me chama para entrar na lista de espera.", "tag": "Story · Agenda" },
-  { "art": "aviso-folga", "caption": "Avise suas clientes com antecedência sobre a sua próxima folga.", "tag": "Story · Avisos" }
+  {
+    "art": "horario-livre-hoje",
+    "caption": "Abriu um horário hoje ✨ Quem chamar primeiro garante! Me responde aqui ou no WhatsApp 💕",
+    "tag": "Story · Agenda"
+  },
+  {
+    "art": "antes-depois",
+    "caption": "Antes e depois que fala por si 😍 Mapping pensado para o formato do olho dela: marcado, leve e confortável.",
+    "tag": "Post · Resultados"
+  },
+  {
+    "art": "cuidados",
+    "caption": "Salva para não esquecer 💾 Esses cuidados fazem seus cílios durarem muito mais.",
+    "tag": "Post · Cuidados"
+  },
+  {
+    "art": "me-conheca",
+    "caption": "Prazer! Sou a [seu nome], lash designer em [bairro] 💕 Me conta: há quanto tempo você me acompanha?",
+    "tag": "Post · Clientes"
+  },
+  {
+    "art": "agenda-semana",
+    "caption": "Horários desta semana 🗓️ Me chama para garantir o seu antes que acabe!",
+    "tag": "Story · Agenda"
+  },
+  {
+    "art": "estilos-cilios",
+    "caption": "Fio a fio, brasileiro, russo ou lifting? Comenta qual é o seu estilo 👇",
+    "tag": "Post · Resultados"
+  },
+  {
+    "art": "elogio-cliente",
+    "caption": "Quando a cliente manda isso depois do atendimento 🥹 É por isso que eu amo o que faço!",
+    "tag": "Post · Clientes"
+  },
+  {
+    "art": "tabela-valores",
+    "caption": "Valores atualizados ✨ Ficou com dúvida sobre qual estilo escolher? Me chama que eu te ajudo!",
+    "tag": "Story · Valores"
+  },
+  {
+    "art": "resultado-do-dia",
+    "caption": "Resultado de hoje 😍 Leve, natural e cheio de personalidade. Quer um assim?",
+    "tag": "Story · Resultados"
+  },
+  {
+    "art": "manutencao-em-dia",
+    "caption": "Lembrete amigo: manutenção a cada 15 a 21 dias deixa o olhar sempre cheio 🔁 Já marcou a sua?",
+    "tag": "Story · Agenda"
+  },
+  {
+    "art": "indique-amiga",
+    "caption": "Indicou, ganhou 💕 Marca aqui aquela amiga que vive dizendo que quer fazer os cílios!",
+    "tag": "Post · Clientes"
+  },
+  {
+    "art": "politica-agenda",
+    "caption": "Pequenos combinados que me ajudam a cuidar de todas com carinho 💕 Obrigada por entender!",
+    "tag": "Story · Cuidados"
+  },
+  {
+    "art": "avaliacao-google",
+    "caption": "Já foi minha cliente? Sua avaliação no Google me ajuda demais ⭐ Leva 1 minutinho!",
+    "tag": "Story · Clientes"
+  },
+  {
+    "art": "agenda-mes",
+    "caption": "Agenda do mês aberta 🗓️ Os primeiros horários costumam acabar rápido!",
+    "tag": "Post · Agenda"
+  },
+  {
+    "art": "obrigada-confianca",
+    "caption": "Obrigada a cada cliente que confia o olhar a mim 💕 Vocês são o motivo de tudo!",
+    "tag": "Post · Clientes"
+  },
+  {
+    "art": "bonus-semana",
+    "caption": "Bônus da semana 🎁 Quem agendar até [dia] ganha um mimo. Corre!",
+    "tag": "Story · Valores"
+  },
+  {
+    "art": "antes-depois",
+    "caption": "Do rímel todo dia ao acordar pronta 🙌 Arrasta para o lado e vê o antes 👉",
+    "tag": "Post · Resultados"
+  },
+  {
+    "art": "horario-livre-hoje",
+    "caption": "Sobrou um horário hoje 💕 Quer sair daqui com o olhar renovado?",
+    "tag": "Story · Agenda"
+  },
+  {
+    "art": "cuidados",
+    "caption": "Lave seus cílios! 🫧 Parece estranho, mas a limpeza certa faz a extensão durar mais.",
+    "tag": "Story · Cuidados"
+  },
+  {
+    "art": "novidade-estudio",
+    "caption": "Tem novidade no estúdio ✨ Me pergunta que eu te conto tudo!",
+    "tag": "Story · Avisos"
+  },
+  {
+    "art": "resultado-do-dia",
+    "caption": "Mais um olhar transformado hoje 🥰 Qual estilo você escolheria?",
+    "tag": "Post · Resultados"
+  },
+  {
+    "art": "lista-espera",
+    "caption": "Agenda cheinha esta semana 🥰 Me chama que eu te coloco na lista de espera!",
+    "tag": "Story · Agenda"
+  },
+  {
+    "art": "estilos-cilios",
+    "caption": "Não sabe qual estilo combina com você? Me manda uma foto do seu olho que eu te indico 💕",
+    "tag": "Story · Resultados"
+  },
+  {
+    "art": "elogio-cliente",
+    "caption": "Feedback que aquece o coração 💕 Obrigada pela confiança!",
+    "tag": "Story · Clientes"
+  },
+  {
+    "art": "agenda-semana",
+    "caption": "Últimos horários da semana 👀 Me chama no direct!",
+    "tag": "Story · Agenda"
+  },
+  {
+    "art": "me-conheca",
+    "caption": "Por trás de cada olhar tem muito estudo e carinho 🤍 Prazer, sou a [seu nome]!",
+    "tag": "Story · Clientes"
+  },
+  {
+    "art": "tabela-valores",
+    "caption": "Quanto custa? Aqui estão meus valores 💕 Todos com técnica que preserva seus cílios naturais.",
+    "tag": "Post · Valores"
+  },
+  {
+    "art": "indique-amiga",
+    "caption": "Sua amiga ganha, você ganha 🎁 Indique uma amiga essa semana!",
+    "tag": "Story · Clientes"
+  },
+  {
+    "art": "manutencao-em-dia",
+    "caption": "Seus fios caíram? É normal! Por isso a manutenção existe 🔁 Te espero!",
+    "tag": "Post · Agenda"
+  },
+  {
+    "art": "obrigada-confianca",
+    "caption": "Fim de semana chegando e o coração cheio 💕 Obrigada por mais uma semana linda!",
+    "tag": "Story · Clientes"
+  }
 ]

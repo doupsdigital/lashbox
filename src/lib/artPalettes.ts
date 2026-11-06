@@ -26,3 +26,24 @@ export function fit(s: string | undefined, base: number, min: number, threshold:
   const n = (s || '').length
   return n <= threshold ? base : Math.max(min, Math.round(base * Math.sqrt(threshold / n)))
 }
+
+// ───────────── 5 tipos novos de arte (antes/depois, tabela, depoimento, tópicos, foto) ─────────────
+// Portados fiéis do protótipo referencia/artes-novas/LashBox Art2.dc.html. O protótipo usa "cqw"
+// (1% da largura do container); como o board sempre tem 1080px de largura (Story e Post), a
+// conversão é direta: 1cqw = 10.8px, em qualquer formato.
+export const CQW = 10.8
+
+/** Cores desses 5 tipos (ligeiramente diferentes da paleta antiga — fiel ao protótipo novo). */
+export const PAL2: Record<PaletteId, { bg: string; fg: string; acc: string; pb: number }> = {
+  rosa: { bg: '#FBE4EB', fg: '#5B2A4E', acc: '#E07A9B', pb: 0.8 },
+  nude: { bg: '#EFDFD0', fg: '#4A3426', acc: '#B08840', pb: 0.85 },
+  preto: { bg: '#0E0C0B', fg: '#D8B572', acc: '#D8B572', pb: 1 },
+}
+
+/** fit() do protótipo, mas devolvendo px (cqw × fator do formato × CQW), já arredondado. */
+export function fit2(len: number, table: [number, number][], k: number) {
+  for (const [max, size] of table) {
+    if (len <= max) return Math.round(size * k * CQW)
+  }
+  return Math.round(table[table.length - 1][1] * k * CQW)
+}

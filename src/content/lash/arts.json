@@ -3,18 +3,37 @@
     "id": "horario-livre-hoje",
     "category": "Agenda",
     "title": "Horário livre hoje",
-    "headline": "Horário livre hoje ✨",
-    "subline": "",
     "kind": "list",
+    "headline": "Horário livre hoje ✨",
+    "subline": "Quem chamar primeiro garante 💕",
     "footer": "studio",
-    "photo": "optional"
+    "photo": "optional",
+    "items": [
+      "Hoje · 15h30"
+    ]
   },
   {
     "id": "agenda-semana",
     "category": "Agenda",
     "title": "Agenda da semana",
-    "headline": "Agenda da semana aberta 🗓️",
-    "subline": "Garanta seu horário preferido",
+    "kind": "list",
+    "headline": "Horários desta semana 🗓️",
+    "subline": "Me chama no WhatsApp para garantir o seu",
+    "footer": "studio",
+    "photo": "optional",
+    "items": [
+      "Ter · 14h",
+      "Qua · 10h",
+      "Sex · 16h"
+    ]
+  },
+  {
+    "id": "agenda-mes",
+    "category": "Agenda",
+    "title": "Agenda do mês aberta",
+    "kind": "text",
+    "headline": "Agenda de [mês] aberta 🗓️",
+    "subline": "Os primeiros horários costumam acabar rápido. Garanta o seu!",
     "footer": "studio",
     "photo": "optional"
   },
@@ -22,65 +41,218 @@
     "id": "lista-espera",
     "category": "Agenda",
     "title": "Lista de espera",
-    "headline": "Agenda cheia esta semana",
-    "subline": "Me chama e eu te aviso se abrir um horário",
+    "kind": "text",
+    "headline": "Agenda cheia esta semana 🥰",
+    "subline": "Me chama que eu coloco seu nome na lista de espera e te aviso se abrir um horário",
     "footer": "studio",
     "photo": "none"
+  },
+  {
+    "id": "manutencao-em-dia",
+    "category": "Agenda",
+    "title": "Manutenção em dia",
+    "kind": "text",
+    "headline": "Manutenção em dia 🔁",
+    "subline": "Cílios lindos o mês inteiro. O ideal é a cada 15 a 21 dias",
+    "footer": "studio",
+    "photo": "optional"
   },
   {
     "id": "tabela-valores",
     "category": "Valores",
     "title": "Tabela de valores",
-    "headline": "Aplicação a partir de",
-    "subline": "",
-    "kind": "price",
-    "usesCombo": true,
+    "kind": "menu",
+    "headline": "Valores ✨",
+    "subline": "Agende pelo WhatsApp",
     "footer": "studio",
-    "photo": "none"
+    "photo": "none",
+    "rows": [
+      [
+        "Fio a fio",
+        "R$ 150"
+      ],
+      [
+        "Volume brasileiro",
+        "R$ 180"
+      ],
+      [
+        "Volume russo",
+        "R$ 220"
+      ],
+      [
+        "Lash lifting",
+        "R$ 120"
+      ],
+      [
+        "Manutenção",
+        "R$ 100"
+      ]
+    ],
+    "note": "Valores válidos para [mês]"
+  },
+  {
+    "id": "bonus-semana",
+    "category": "Valores",
+    "title": "Bônus da semana",
+    "kind": "text",
+    "headline": "Bônus da semana 🎁",
+    "subline": "Quem agendar até [dia] ganha [mimo]. Vagas limitadas!",
+    "footer": "studio",
+    "photo": "optional"
   },
   {
     "id": "antes-depois",
     "category": "Resultados",
     "title": "Antes e depois",
-    "headline": "Olhar que transforma",
-    "subline": "Volume russo · 3 semanas depois",
+    "kind": "beforeAfter",
+    "headline": "Antes e depois 😍",
+    "subline": "[estilo]",
     "footer": "studio",
-    "photo": "optional"
+    "photo": "required",
+    "labels": [
+      "Antes",
+      "Depois"
+    ]
   },
   {
-    "id": "cuidados-24h",
-    "category": "Cuidados",
-    "title": "Cuidados nas 24h",
-    "headline": "Cuidados nas primeiras 24h",
-    "subline": "Não molhe os cílios e evite vapor",
+    "id": "resultado-do-dia",
+    "category": "Resultados",
+    "title": "Resultado do dia",
+    "kind": "photo",
+    "headline": "Resultado de hoje 😍",
+    "subline": "[estilo] feito com carinho",
     "footer": "studio",
-    "photo": "none"
+    "photo": "required"
+  },
+  {
+    "id": "estilos-cilios",
+    "category": "Resultados",
+    "title": "Estilos de cílios",
+    "kind": "bullets",
+    "headline": "Qual é o seu estilo? ✨",
+    "subline": "",
+    "footer": "studio",
+    "photo": "none",
+    "items": [
+      "Fio a fio · natural, parece seu",
+      "Volume brasileiro · marcado e leve",
+      "Volume russo · cheio e poderoso",
+      "Lash lifting · seus próprios cílios, curvados"
+    ]
+  },
+  {
+    "id": "cuidados",
+    "category": "Cuidados",
+    "title": "Cuidados pós-aplicação",
+    "kind": "bullets",
+    "headline": "Cuidados com seus cílios 💕",
+    "subline": "",
+    "footer": "studio",
+    "photo": "none",
+    "items": [
+      "Nas primeiras 24h, não molhe",
+      "Lave com espuma própria para cílios",
+      "Penteie todo dia com a escovinha",
+      "Nada de demaquilante oleoso",
+      "Manutenção a cada 15 a 21 dias"
+    ]
+  },
+  {
+    "id": "politica-agenda",
+    "category": "Cuidados",
+    "title": "Política de agendamento",
+    "kind": "bullets",
+    "headline": "Combinados da agenda 💕",
+    "subline": "Isso me ajuda a atender todas com carinho",
+    "footer": "studio",
+    "photo": "none",
+    "items": [
+      "Sinal de R$ [valor] garante seu horário",
+      "Remarcação com 24h de antecedência",
+      "Atraso de mais de 15 min pode reduzir o atendimento",
+      "Falta sem aviso não devolve o sinal"
+    ]
+  },
+  {
+    "id": "me-conheca",
+    "category": "Clientes",
+    "title": "Me conheça",
+    "kind": "photo",
+    "headline": "Prazer, eu sou a [seu nome] 💕",
+    "subline": "Lash designer em [bairro], apaixonada por realçar olhares",
+    "footer": "studio",
+    "photo": "required"
   },
   {
     "id": "elogio-cliente",
     "category": "Clientes",
     "title": "Elogio de cliente",
-    "headline": "Obrigada pela confiança 💕",
-    "subline": "Cada olhar conta uma história",
+    "kind": "quote",
+    "headline": "O que elas dizem 💕",
+    "subline": "",
     "footer": "studio",
-    "photo": "optional"
+    "photo": "none",
+    "quote": "Amei meus cílios! Ficaram leves, naturais e duraram muito. Já marquei a manutenção 😍",
+    "author": "[nome da cliente]"
   },
   {
     "id": "indique-amiga",
     "category": "Clientes",
     "title": "Indique uma amiga",
-    "headline": "Indique uma amiga 💕",
-    "subline": "Vocês duas ganham um mimo na próxima manutenção",
+    "kind": "text",
+    "headline": "Indicou, ganhou 💕",
+    "subline": "Indique uma amiga: ela ganha [mimo] na primeira aplicação e você ganha [mimo] na sua manutenção",
     "footer": "studio",
     "photo": "none"
   },
   {
-    "id": "aviso-folga",
-    "category": "Avisos",
-    "title": "Estou de folga",
-    "headline": "Aviso de recesso",
-    "subline": "Sem atendimento neste período. Volto em breve!",
+    "id": "avaliacao-google",
+    "category": "Clientes",
+    "title": "Avaliação no Google",
+    "kind": "text",
+    "headline": "Sua opinião vale ouro ⭐⭐⭐⭐⭐",
+    "subline": "Já foi minha cliente? Deixe sua avaliação no Google. Leva 1 minutinho e me ajuda demais!",
     "footer": "studio",
     "photo": "none"
+  },
+  {
+    "id": "obrigada-confianca",
+    "category": "Clientes",
+    "title": "Obrigada pela confiança",
+    "kind": "text",
+    "headline": "Obrigada pela confiança 💕",
+    "subline": "Cada olhar que eu cuido conta uma história",
+    "footer": "studio",
+    "photo": "optional"
+  },
+  {
+    "id": "novidade-estudio",
+    "category": "Avisos",
+    "title": "Novidade no estúdio",
+    "kind": "photo",
+    "headline": "Novidade no estúdio ✨",
+    "subline": "[sua novidade]",
+    "footer": "studio",
+    "photo": "optional"
+  },
+  {
+    "id": "fechado-feriado",
+    "category": "Avisos",
+    "title": "Fechado no feriado",
+    "kind": "text",
+    "headline": "Fechado no feriado 🌴",
+    "subline": "[data]: sem atendimento. Já garanta seu horário para a volta!",
+    "footer": "studio",
+    "photo": "none"
+  },
+  {
+    "id": "aniversario-estudio",
+    "category": "Avisos",
+    "title": "Aniversário do estúdio",
+    "kind": "text",
+    "headline": "[X] anos de estúdio 🎉",
+    "subline": "Obrigada a cada cliente que confiou o olhar a mim. Vem comemorar comigo!",
+    "footer": "studio",
+    "photo": "optional"
   }
 ]

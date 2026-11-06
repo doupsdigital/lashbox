@@ -17,11 +17,34 @@ function fieldValue(studio: Studio, path: string): string {
   return typeof v === 'string' ? v : ''
 }
 
+/** Nome do mês atual em português, minúsculo (ex.: "novembro"). Único marcador que se preenche sozinho, sem depender do Meu Estúdio. */
+export function currentMonthName(): string {
+  return new Date().toLocaleDateString('pt-BR', { month: 'long' })
+}
+
 export function applyStudioTokens(text: string, studio: Studio): string {
-  let out = text
+  let out = text.split('[mês]').join(currentMonthName())
   for (const [token, path] of Object.entries(kitFimDeAno.studioTokens)) {
     const value = fieldValue(studio, path)
     if (value) out = out.split(token).join(value)
+  }
+  return out
+}
+
+const MARKER_RE = /\[[^\]]+\]/g
+
+/** Marcadores livres de um texto (ex.: [dia], [mimo], [estilo]) — tudo que não é dado do estúdio nem [mês], que já se preenchem sozinhos. */
+export function findGenericMarkers(text: string): string[] {
+  const known = new Set([...Object.keys(kitFimDeAno.studioTokens), '[mês]'])
+  const found = text.match(MARKER_RE) ?? []
+  return Array.from(new Set(found.filter((m) => !known.has(m))))
+}
+
+/** Troca cada marcador livre pelo valor preenchido (ou mantém o texto do marcador, se vazio). */
+export function applyGenericMarkers(text: string, values: Record<string, string>): string {
+  let out = text
+  for (const [marker, value] of Object.entries(values)) {
+    if (value) out = out.split(marker).join(value)
   }
   return out
 }

@@ -7,7 +7,7 @@ export interface VoucherStyle {
 }
 
 export interface ComboFormula {
-  base: 'A' | 'M' | 'A+M' | '2A'
+  base: 'A' | 'M' | 'A+M' | '2A' | 'A+2M'
   factor: number
   round: 'down5' | 'up5' | 'none'
 }
@@ -29,13 +29,24 @@ export interface KitArt {
   subline: string
   details?: string
   footer: 'studio'
-  photo: 'optional' | 'none'
+  photo: 'optional' | 'none' | 'required'
   palette?: 'black'
   usesCombo?: boolean
   /** Categoria usada nos chips da galeria "Criar" (arts genéricas); as do Kit não têm. */
   category?: string
   /** Miolo explícito da arte. Quando ausente, cai na heurística antiga (ver artKind). */
-  kind?: 'text' | 'urgent' | 'price' | 'list'
+  kind?: 'text' | 'urgent' | 'price' | 'list' | 'beforeAfter' | 'menu' | 'quote' | 'bullets' | 'photo'
+  /** "list": horários; "bullets": tópicos (string ou {t:string}). */
+  items?: (string | { t: string })[]
+  /** "menu": linhas da tabela, [nome, preço]. */
+  rows?: [string, string][]
+  /** "menu": nota embaixo da tabela (ex.: "Valores válidos para [mês]"). */
+  note?: string
+  /** "quote": depoimento e autora. */
+  quote?: string
+  author?: string
+  /** "beforeAfter": rótulos das 2 fotos (ex.: ["Antes","Depois"]). */
+  labels?: [string, string]
 }
 
 export interface PlanItem {
@@ -89,8 +100,8 @@ export function getKitMessage(id: string | undefined): KitMessageItem | undefine
   return kitFimDeAno.messages.find((m) => m.id === id)
 }
 
-/** Que "kind" de miolo a arte usa: texto simples, urgência (vagas), preço (combo) ou lista (horários). */
-export function artKind(art: KitArt): 'text' | 'urgent' | 'price' | 'list' {
+/** Que "kind" de miolo a arte usa: texto simples, urgência (vagas), preço (combo), lista (horários), ou um dos 5 tipos novos. */
+export function artKind(art: KitArt): NonNullable<KitArt['kind']> {
   if (art.kind) return art.kind
   if (art.id === 'bf-ultima') return 'urgent'
   if (art.usesCombo) return 'price'

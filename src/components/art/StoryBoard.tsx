@@ -1,6 +1,6 @@
 // Arte de Story (1080×1920) ou Post (1080×1350), portada fiel do protótipo de referência
 // (referencia/lash-artes/Lash Artes.dc.html, Parte B/C).
-import { fit, PAL, type PaletteId } from '../../lib/artPalettes'
+import { fit, fit2, PAL, PAL2, CQW, type PaletteId } from '../../lib/artPalettes'
 import type { KitArt } from '../../content/lash/kitFimDeAno'
 import { artKind } from '../../content/lash/kitFimDeAno'
 
@@ -18,10 +18,25 @@ export interface StoryBoardProps {
   preco?: string
   pillText?: string
   horarios?: string[]
+  /** "beforeAfter": a 2ª foto ("Depois"). A 1ª usa `photoUrl`. */
+  photoUrl2?: string | null
   guides?: boolean
 }
 
-export function StoryBoard({
+const NEW_KINDS = ['beforeAfter', 'menu', 'quote', 'bullets', 'photo'] as const
+type NewKind = (typeof NEW_KINDS)[number]
+
+function isNewKind(k: string): k is NewKind {
+  return (NEW_KINDS as readonly string[]).includes(k)
+}
+
+export function StoryBoard(props: StoryBoardProps) {
+  const kind = artKind(props.art)
+  if (isNewKind(kind)) return <NewArtBoard {...props} kind={kind} />
+  return <ClassicArtBoard {...props} />
+}
+
+function ClassicArtBoard({
   art,
   palette,
   post,
@@ -282,6 +297,320 @@ export function StoryBoard({
           <div style={{ fontSize: foot2Fs, lineHeight: 1.25, color: p.accent, fontWeight: 500, overflowWrap: 'anywhere' }}>{foot2}</div>
         </div>
       </div>
+      {guides && !post && (
+        <>
+          <div
+            style={{
+              position: 'absolute',
+              left: 0,
+              right: 0,
+              top: 0,
+              height: 250,
+              background: 'repeating-linear-gradient(45deg, rgba(220,40,60,.28) 0 12px, rgba(220,40,60,.1) 12px 24px)',
+              pointerEvents: 'none',
+            }}
+          />
+          <div
+            style={{
+              position: 'absolute',
+              left: 0,
+              right: 0,
+              bottom: 0,
+              height: 340,
+              background: 'repeating-linear-gradient(45deg, rgba(220,40,60,.28) 0 12px, rgba(220,40,60,.1) 12px 24px)',
+              pointerEvents: 'none',
+            }}
+          />
+        </>
+      )}
+    </div>
+  )
+}
+
+/**
+ * Os 5 tipos novos (antes/depois, tabela, depoimento, tópicos, foto), portados fiéis do protótipo
+ * referencia/artes-novas/LashBox Art2.dc.html — layout e paleta (PAL2) bem diferentes do board clássico,
+ * por isso vivem num componente próprio em vez de ramificar o de cima.
+ */
+function NewArtBoard({
+  art,
+  palette,
+  post,
+  photoUrl,
+  photoUrl2,
+  foot1,
+  foot2,
+  kind,
+  guides,
+}: StoryBoardProps & { kind: NewKind }) {
+  const c = PAL2[palette]
+  const k = post ? 0.82 : 1
+  const H = post ? 1350 : 1920
+  const title = art.headline
+  const sub = art.subline || ''
+  const hasSub = !!sub
+  const rows = art.rows ?? []
+  const bulletItems = (art.items ?? []).map((it) => (typeof it === 'string' ? it : it.t))
+  const quote = art.quote ?? ''
+  const author = art.author ?? ''
+  const labels = art.labels ?? ['Antes', 'Depois']
+
+  const titleTable: [number, number][] =
+    kind === 'quote' ? [[24, 5], [40, 4.2], [999, 3.6]] : [[18, 9], [28, 7.6], [44, 6.4], [999, 5.4]]
+  const tSize = fit2(title.length, titleTable, k)
+  // Mínimo de 36px pedido para o subtítulo, em qualquer formato — abaixo disso ele quebra linha, não encolhe mais.
+  const sSize = Math.max(36, fit2(sub.length, [[28, 4.8], [60, 4.2], [999, 3.6]], k))
+
+  const rowItemsForSize = kind === 'menu' ? rows.map((r) => r[0]) : bulletItems
+  const n = rowItemsForSize.length || 1
+  const longest = Math.max(0, ...rowItemsForSize.map((s) => s.length))
+  // Mínimo de 40px (Story) / 36px (Post) para linhas de tabela e tópicos — mesma lógica: quebra, não encolhe mais.
+  const rowMin = post ? 36 : 40
+  const rSize =
+    kind === 'menu'
+      ? Math.max(rowMin, fit2(longest + (n > 5 ? 12 : 0), [[16, 5.2], [26, 4.6], [999, 4]], k))
+      : Math.max(rowMin, fit2(longest + (n > 4 ? 10 : 0), [[26, 4.8], [40, 4.2], [999, 3.6]], k))
+  const noteSize = art.note ? Math.max(36, fit2(art.note.length, [[28, 4.8], [60, 4.2], [999, 3.6]], k)) : 0
+
+  const mSize = Math.round((palette === 'nude' ? 4 : 3.6) * CQW)
+  const qSize = fit2(quote.length, [[70, 6.6], [110, 5.8], [170, 5], [999, 4.1]], k)
+
+  const top = Math.round((post ? 8 : 14) * CQW)
+  const bot = Math.round((post ? 22 : 32) * CQW)
+  const fBot = Math.round((post ? 6 : 9) * CQW)
+  const gap = Math.round((post ? 2.6 : 4) * CQW)
+  const rowGap = Math.round((post ? 3 : 4.6) * CQW)
+  const phW = Math.round((post ? 62 : 76) * CQW)
+  const phH = Math.round((post ? 56 : 96) * CQW)
+  const baH = Math.round((post ? (hasSub ? 50 : 56) : 82) * CQW)
+
+  const mk = (i: number) => (palette === 'preto' ? '★' : palette === 'rosa' ? '♥' : String(i + 1))
+
+  const baPhotos = [
+    { l: labels[0], src: photoUrl, bg: 'rgba(255,255,255,.88)', fg: '#4A3426' },
+    { l: labels[1], src: photoUrl2 ?? null, bg: c.acc, fg: palette === 'preto' ? '#0E0C0B' : '#fff' },
+  ]
+
+  const placeholderBg = `repeating-linear-gradient(135deg, rgba(128,100,100,.16) 0 ${Math.round(3 * CQW)}px, transparent ${Math.round(3 * CQW)}px ${Math.round(6 * CQW)}px)`
+
+  return (
+    <div
+      style={{
+        width: 1080,
+        height: H,
+        position: 'relative',
+        overflow: 'hidden',
+        background: c.bg,
+        color: c.fg,
+        fontFamily: "'Playfair Display', serif",
+      }}
+    >
+      <div
+        style={{
+          position: 'absolute',
+          right: Math.round(-22 * CQW),
+          top: Math.round(-14 * CQW),
+          width: Math.round(62 * CQW),
+          height: Math.round(62 * CQW),
+          borderRadius: '50%',
+          background: c.acc,
+          opacity: 0.16,
+        }}
+      />
+      <div
+        style={{
+          position: 'absolute',
+          left: Math.round(-18 * CQW),
+          bottom: Math.round(-18 * CQW),
+          width: Math.round(50 * CQW),
+          height: Math.round(50 * CQW),
+          borderRadius: '50%',
+          background: c.acc,
+          opacity: 0.12,
+        }}
+      />
+      <div style={{ position: 'absolute', inset: Math.round(4 * CQW), border: `1px solid ${c.acc}`, opacity: 0.5 }} />
+
+      <div
+        style={{
+          position: 'absolute',
+          left: Math.round(10 * CQW),
+          right: Math.round(10 * CQW),
+          top,
+          bottom: bot,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap,
+          textAlign: 'center',
+          color: c.fg,
+        }}
+      >
+        {kind === 'photo' && (
+          <div
+            style={{
+              width: phW,
+              height: phH,
+              borderRadius: `${phW}px ${phW}px ${Math.round(3 * CQW)}px ${Math.round(3 * CQW)}px`,
+              borderTopLeftRadius: Math.round(40 * CQW),
+              borderTopRightRadius: Math.round(40 * CQW),
+              overflow: 'hidden',
+              border: `1px solid ${c.acc}`,
+              flex: 'none',
+              background: placeholderBg,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontFamily: 'monospace',
+              fontSize: Math.round(2.8 * CQW),
+            }}
+          >
+            {photoUrl ? <img src={photoUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <span>foto da lash</span>}
+          </div>
+        )}
+
+        {kind !== 'photo' && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: Math.round(2 * CQW), color: c.acc, flex: 'none' }}>
+            <div style={{ width: Math.round(9 * CQW), height: 1, background: 'currentColor' }} />
+            <div style={{ fontSize: Math.round(3.4 * CQW), lineHeight: 1 }}>✦</div>
+            <div style={{ width: Math.round(9 * CQW), height: 1, background: 'currentColor' }} />
+          </div>
+        )}
+
+        <div style={{ fontSize: tSize, lineHeight: 1.12, fontWeight: 500, textWrap: 'balance', overflowWrap: 'anywhere', maxWidth: '100%' }}>
+          {title}
+        </div>
+        {hasSub && (
+          <div
+            style={{ fontStyle: 'italic', fontSize: sSize, lineHeight: 1.3, opacity: 0.88, textWrap: 'balance', overflowWrap: 'anywhere', maxWidth: '100%' }}
+          >
+            {sub}
+          </div>
+        )}
+
+        {kind === 'beforeAfter' && (
+          <div style={{ display: 'flex', gap: Math.round(3 * CQW), width: '100%', justifyContent: 'center' }}>
+            {baPhotos.map((ph, i) => (
+              <div
+                key={i}
+                style={{
+                  position: 'relative',
+                  width: Math.round(40 * CQW),
+                  height: baH,
+                  borderRadius: `${Math.round(20 * CQW)}px ${Math.round(20 * CQW)}px ${Math.round(3 * CQW)}px ${Math.round(3 * CQW)}px`,
+                  overflow: 'hidden',
+                  border: `1px solid ${c.acc}`,
+                  background: placeholderBg,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontFamily: 'monospace',
+                  fontSize: Math.round(2.6 * CQW),
+                }}
+              >
+                {ph.src ? <img src={ph.src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <span>foto {ph.l}</span>}
+                <div
+                  style={{
+                    position: 'absolute',
+                    left: '50%',
+                    bottom: Math.round(3 * CQW),
+                    transform: 'translateX(-50%)',
+                    padding: `${Math.round(1 * CQW)}px ${Math.round(4 * CQW)}px`,
+                    borderRadius: Math.round(6 * CQW),
+                    background: ph.bg,
+                    color: ph.fg,
+                    fontFamily: 'var(--font-kit-sans)',
+                    fontSize: Math.round(2.8 * CQW),
+                    fontWeight: 600,
+                    letterSpacing: '.14em',
+                    textTransform: 'uppercase',
+                  }}
+                >
+                  {ph.l}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {kind === 'menu' && (
+          <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: rowGap }}>
+            {rows.map((r, i) => (
+              <div key={i} style={{ display: 'flex', alignItems: 'baseline', gap: Math.round(1.6 * CQW), fontSize: rSize }}>
+                <span style={{ textAlign: 'left', overflowWrap: 'anywhere', maxWidth: '60%' }}>{r[0]}</span>
+                <span style={{ flex: 1, minWidth: Math.round(4 * CQW), borderBottom: `1.5px dotted ${c.acc}`, transform: 'translateY(-.5ch)' }} />
+                <span style={{ color: c.acc, fontWeight: 500, whiteSpace: 'nowrap', filter: `brightness(${c.pb})` }}>{r[1]}</span>
+              </div>
+            ))}
+            {art.note && (
+              <div style={{ marginTop: Math.round(2 * CQW), fontStyle: 'italic', fontSize: noteSize, opacity: 0.8 }}>{art.note}</div>
+            )}
+          </div>
+        )}
+
+        {kind === 'quote' && (
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: Math.round(2.5 * CQW), width: '100%' }}>
+            <div style={{ fontSize: Math.round(30 * CQW), lineHeight: 0.6, height: Math.round(14 * CQW), color: c.acc }}>“</div>
+            <div style={{ fontStyle: 'italic', fontSize: qSize, lineHeight: 1.32, textWrap: 'pretty', overflowWrap: 'anywhere' }}>{quote}</div>
+            <div style={{ color: c.acc, fontSize: Math.round(4 * CQW), letterSpacing: `${Math.round(0.5 * CQW)}px` }}>★★★★★</div>
+            <div style={{ fontFamily: 'var(--font-kit-sans)', fontSize: Math.round(3.6 * CQW), fontWeight: 500, letterSpacing: '.06em' }}>
+              — {author}
+            </div>
+          </div>
+        )}
+
+        {kind === 'bullets' && (
+          <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: rowGap, textAlign: 'left' }}>
+            {bulletItems.map((t, i) => (
+              <div key={i} style={{ display: 'flex', gap: Math.round(3 * CQW), alignItems: 'center', fontSize: rSize, lineHeight: 1.25 }}>
+                <div
+                  style={{
+                    flex: 'none',
+                    width: Math.round(8.4 * CQW),
+                    height: Math.round(8.4 * CQW),
+                    borderRadius: '50%',
+                    border: `1.5px solid ${c.acc}`,
+                    color: c.acc,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: mSize,
+                    fontFamily: 'var(--font-kit-sans)',
+                    fontWeight: 500,
+                  }}
+                >
+                  {mk(i)}
+                </div>
+                <div style={{ flex: 1, minWidth: 0, overflowWrap: 'anywhere' }}>{t}</div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div
+        style={{
+          position: 'absolute',
+          left: Math.round(8 * CQW),
+          right: Math.round(8 * CQW),
+          bottom: fBot,
+          textAlign: 'center',
+          fontFamily: 'var(--font-kit-sans)',
+          color: c.fg,
+        }}
+      >
+        <div style={{ width: Math.round(12 * CQW), height: 1, background: c.acc, margin: `0 auto ${Math.round(2.4 * CQW)}px` }} />
+        <div
+          style={{ fontSize: Math.round(2.7 * CQW), fontWeight: 600, letterSpacing: '.08em', textTransform: 'uppercase', overflowWrap: 'anywhere' }}
+        >
+          {foot1}
+        </div>
+        <div style={{ fontSize: Math.round(2.7 * CQW), color: c.acc, marginTop: Math.round(1 * CQW), fontWeight: 500, overflowWrap: 'anywhere' }}>
+          {foot2}
+        </div>
+      </div>
+
       {guides && !post && (
         <>
           <div

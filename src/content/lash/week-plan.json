@@ -1,9 +1,78 @@
 [
-  { "dow": 1, "label": "SEG", "title": "Mostre um resultado", "detail": "Antes e depois da última cliente", "tag": "Resultados", "links": { "art": "antes-depois" } },
-  { "dow": 2, "label": "TER", "title": "Dê uma dica de cuidados", "detail": "Como fazer a limpeza dos cílios", "tag": "Cuidados", "links": { "message": "CU02" } },
-  { "dow": 3, "label": "QUA", "title": "Mostre os bastidores", "detail": "Um vídeo curto da sua bancada", "tag": "Story", "links": {} },
-  { "dow": 4, "label": "QUI", "title": "Horário livre hoje", "detail": "Preencha a agenda da tarde", "tag": "Agenda", "links": { "art": "horario-livre-hoje" } },
-  { "dow": 5, "label": "SEX", "title": "Oferta de fim de semana", "detail": "Combo aplicação + manutenção", "tag": "Venda", "links": { "tool": "/vender/ofertas" } },
-  { "dow": 6, "label": "SÁB", "title": "Agradeça as clientes", "detail": "Poste um elogio ou depoimento recebido", "tag": "Clientes", "links": { "art": "elogio-cliente" } },
-  { "dow": 0, "label": "DOM", "title": "Planeje a semana", "detail": "Veja as datas do ano e defina seus horários", "tag": "Planejar", "links": { "tool": "/planejar?sub=year" } }
+  {
+    "dow": 1,
+    "label": "SEG",
+    "title": "Mostre um resultado",
+    "detail": "Poste um antes e depois e chame quem está com a manutenção vencendo",
+    "tag": "Resultados",
+    "links": {
+      "art": "antes-depois",
+      "message": "MA01"
+    }
+  },
+  {
+    "dow": 2,
+    "label": "TER",
+    "title": "Dica de cuidado",
+    "detail": "Poste os cuidados e mande a mensagem de 2 dias para quem atendeu",
+    "tag": "Cuidados",
+    "links": {
+      "art": "cuidados",
+      "message": "PO02"
+    }
+  },
+  {
+    "dow": 3,
+    "label": "QUA",
+    "title": "Agenda da semana",
+    "detail": "Poste os horários livres e reative 3 clientes sumidas",
+    "tag": "Agenda",
+    "links": {
+      "art": "agenda-semana",
+      "message": "RE01"
+    }
+  },
+  {
+    "dow": 4,
+    "label": "QUI",
+    "title": "Prova de carinho",
+    "detail": "Poste um elogio de cliente e peça uma avaliação no Google",
+    "tag": "Clientes",
+    "links": {
+      "art": "elogio-cliente",
+      "message": "IN07"
+    }
+  },
+  {
+    "dow": 5,
+    "label": "SEX",
+    "title": "Feche a semana",
+    "detail": "Poste o horário livre de sábado e chame quem perguntou o preço e sumiu",
+    "tag": "Venda",
+    "links": {
+      "art": "horario-livre-hoje",
+      "message": "PR03"
+    }
+  },
+  {
+    "dow": 6,
+    "label": "SÁB",
+    "title": "Bastidores e indicação",
+    "detail": "Poste um resultado do dia e peça uma indicação para quem amou",
+    "tag": "Clientes",
+    "links": {
+      "art": "resultado-do-dia",
+      "message": "IN01"
+    }
+  },
+  {
+    "dow": 0,
+    "label": "DOM",
+    "title": "Planeje a semana",
+    "detail": "Confira a agenda, monte um combo se tiver buracos e descanse 💕",
+    "tag": "Planejar",
+    "links": {
+      "tool": "ofertas"
+    }
+  }
 ]

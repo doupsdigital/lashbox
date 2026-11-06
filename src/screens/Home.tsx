@@ -3,6 +3,7 @@ import { ScaledBoard } from '../components/art/ScaledBoard'
 import { StoryBoard } from '../components/art/StoryBoard'
 import { copyText } from '../lib/text'
 import { studioFootStory } from '../lib/studioFooter'
+import { applyStudioTokens } from '../lib/studioTokens'
 import { useStudio } from '../state/studio'
 import { getAnyArt, kitsCatalog, suggestionOfTheDay } from '../content/lash'
 import { usePurchases } from '../state/purchases'
@@ -35,6 +36,7 @@ export function Home() {
   const { isUnlocked } = usePurchases()
   const suggestion = suggestionOfTheDay()
   const art = getAnyArt(suggestion.art)
+  const caption = applyStudioTokens(suggestion.caption, studio)
   const foot = studioFootStory(studio)
   const initials = (studio.ownerName || 'LB').trim().slice(0, 2).toUpperCase()
   const today = new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: '2-digit', month: 'long' }).toUpperCase()
@@ -82,7 +84,7 @@ export function Home() {
             </div>
             <div className="flex min-w-0 flex-col gap-2">
               <div className="text-[21px] font-bold leading-[1.15] tracking-tight">{art.title}</div>
-              <div className="text-[13px] leading-[1.4] text-muted">{suggestion.caption}</div>
+              <div className="text-[13px] leading-[1.4] text-muted">{caption}</div>
               <div className="self-start rounded-[10px] bg-blush px-2.5 py-1 text-[12px] font-semibold text-plum">{suggestion.tag}</div>
             </div>
           </div>
@@ -96,7 +98,7 @@ export function Home() {
             </button>
             <button
               type="button"
-              onClick={() => copyText(suggestion.caption)}
+              onClick={() => copyText(caption)}
               className="press flex h-12 flex-1 cursor-pointer items-center justify-center rounded-full bg-blush text-[15.5px] font-semibold text-plum"
             >
               Copiar legenda

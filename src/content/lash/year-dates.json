@@ -1,5 +1,98 @@
 [
-  { "date": "2026-11-27", "label": "Black Friday", "kitKey": "fim-de-ano" },
-  { "date": "2026-12-25", "label": "Natal", "kitKey": "fim-de-ano" },
-  { "date": "2026-12-31", "label": "Réveillon", "kitKey": "fim-de-ano" }
+  {
+    "date": "2026-11-27",
+    "label": "Black Friday",
+    "kitKey": "fim-de-ano",
+    "kit": "Kit Fim de Ano",
+    "free": false,
+    "tip": "Avise sua lista VIP 5 dias antes e prefira bônus a desconto."
+  },
+  {
+    "date": "2026-12-25",
+    "label": "Natal",
+    "kitKey": "fim-de-ano",
+    "kit": "Kit Fim de Ano",
+    "free": false,
+    "tip": "Vale-presente é a estrela: quem compra é quem quer presentear."
+  },
+  {
+    "date": "2026-12-31",
+    "label": "Réveillon",
+    "kitKey": "fim-de-ano",
+    "kit": "Kit Fim de Ano",
+    "free": false,
+    "tip": "Abra horários extras na última semana do ano."
+  },
+  {
+    "date": "2027-01-05",
+    "label": "Volta das festas",
+    "kitKey": null,
+    "kit": "",
+    "free": false,
+    "tip": "Chame para a manutenção quem fez cílios em dezembro."
+  },
+  {
+    "date": "2027-02-09",
+    "label": "Carnaval",
+    "kitKey": null,
+    "kit": "",
+    "free": false,
+    "tip": "Divulgue a agenda de fevereiro com 3 semanas de antecedência."
+  },
+  {
+    "date": "2027-03-08",
+    "label": "Dia da Mulher",
+    "kitKey": null,
+    "kit": "",
+    "free": false,
+    "tip": "Homenageie suas clientes e ofereça o combo amigas."
+  },
+  {
+    "date": "2027-03-15",
+    "label": "Dia do Consumidor",
+    "kitKey": null,
+    "kit": "",
+    "free": false,
+    "tip": "Bom momento para um bônus da semana (sem baixar o preço)."
+  },
+  {
+    "date": "2027-05-09",
+    "label": "Dia das Mães",
+    "kitKey": null,
+    "kit": "",
+    "free": false,
+    "tip": "Vale-presente e combo mãe e filha. Comece a divulgar no fim de abril."
+  },
+  {
+    "date": "2027-06-12",
+    "label": "Dia dos Namorados",
+    "kitKey": null,
+    "kit": "",
+    "free": false,
+    "tip": "Olhar pronto para o encontro: divulgue 2 semanas antes."
+  },
+  {
+    "date": "2027-08-08",
+    "label": "Dia dos Pais",
+    "kitKey": null,
+    "kit": "",
+    "free": false,
+    "tip": "Data mais fraca para lash: aproveite para reativar clientes."
+  },
+  {
+    "date": "2027-09-15",
+    "label": "Dia do Cliente",
+    "kitKey": null,
+    "kit": "",
+    "free": false,
+    "tip": "Agradeça suas clientes e peça avaliações no Google."
+  },
+  {
+    "date": "2027-11-26",
+    "label": "Black Friday",
+    "kitKey": null,
+    "kit": "",
+    "free": false,
+    "tip": "Prepare a lista VIP desde o começo de novembro."
+  }
 ]

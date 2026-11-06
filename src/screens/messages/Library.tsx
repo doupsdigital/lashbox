@@ -3,7 +3,7 @@ import { CopyButton, MessageText, useMessageResolver } from '../../components/Me
 import { normalize } from '../../lib/text'
 import { whatsAppLinkTo } from '../../lib/studioTokens'
 import { useVipList, type VipClient } from '../../lib/vipList'
-import { ART_CATEGORIES, messages } from '../../content/lash'
+import { MESSAGE_CATEGORIES, messages } from '../../content/lash'
 
 const STATUS_COLORS: Record<string, [string, string]> = {
   'A chamar': ['#FFF1B8', '#7A5A00'],
@@ -32,7 +32,7 @@ function MessagesTab() {
         <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Buscar mensagem" className="flex-1 bg-transparent text-[16px] text-ink outline-none" />
       </div>
       <div className="-mx-5 flex gap-2 overflow-x-auto px-5">
-        {ART_CATEGORIES.map((c) => (
+        {MESSAGE_CATEGORIES.map((c) => (
           <button
             key={c}
             type="button"

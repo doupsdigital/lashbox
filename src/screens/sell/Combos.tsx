@@ -2,9 +2,8 @@ import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { CopyButton, MessageText, useMessageResolver } from '../../components/Messages'
 import { BackButton } from '../../components/ui'
-import { kitFimDeAno } from '../../content/lash'
+import { combos, comboDefaults } from '../../content/lash'
 import { computeCombo, fillComboMessage, money } from '../../lib/combo'
-import { setArtDraft } from '../../lib/artDraft'
 import { useStudio } from '../../state/studio'
 
 const num = (v: string) => parseInt(v.replace(/\D/g, ''), 10) || 0
@@ -13,7 +12,7 @@ export function CombosTool() {
   const navigate = useNavigate()
   const { studio, setField } = useStudio()
   const resolve = useMessageResolver()
-  const [fields, setFields] = useState(kitFimDeAno.comboDefaults)
+  const [fields, setFields] = useState(comboDefaults)
   const A = num(studio.servicePrice)
   const M = num(studio.maintenancePrice)
   const missingPrices = !A && !M
@@ -79,7 +78,7 @@ export function CombosTool() {
       </div>
 
       <div className="flex flex-col gap-3">
-        {kitFimDeAno.combos.map((c) => {
+        {combos.map((c) => {
           const price = computeCombo(c, A, M)
           const msg = resolve(fillComboMessage(c, price, fields))
           return (
@@ -97,19 +96,7 @@ export function CombosTool() {
                 <div className="mt-1 text-[14px] leading-[1.4]">{c.how}</div>
               </div>
               <MessageText text={msg} name="" className="text-[15px] leading-[1.5]" />
-              <div className="flex gap-2.5">
-                <CopyButton text={msg} size="sm" />
-                <button
-                  type="button"
-                  onClick={() => {
-                    setArtDraft({ artId: 'bf-oferta', comboTitulo: c.title, preco: money(price.preco) })
-                    navigate('/criar/bf-oferta')
-                  }}
-                  className="press flex h-10 flex-1 cursor-pointer items-center justify-center rounded-full bg-blush text-sm font-semibold text-plum"
-                >
-                  Usar na arte
-                </button>
-              </div>
+              <CopyButton text={msg} size="sm" />
             </div>
           )
         })}

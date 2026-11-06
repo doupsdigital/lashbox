@@ -9,6 +9,13 @@ function formatDate(iso: string) {
   return `${d}/${m}`
 }
 
+/** `links.tool` do plano da semana é uma palavra-chave da ferramenta, não uma rota. */
+const TOOL_ROUTES: Record<string, string> = {
+  ofertas: '/vender/ofertas',
+  'preco-justo': '/vender/preco-justo',
+  meta: '/vender/meta',
+}
+
 export function PlanScreen() {
   const navigate = useNavigate()
   const [params] = useSearchParams()
@@ -36,7 +43,11 @@ export function PlanScreen() {
         <div className="flex flex-col gap-2.5">
           {weekPlan.map((d) => {
             const isToday = d.dow === todayDow
-            const to = d.links.art ? `/criar/${d.links.art}` : d.links.message ? '/mensagens' : d.links.tool ?? '/planejar'
+            const to = d.links.art
+              ? `/criar/${d.links.art}`
+              : d.links.message
+                ? '/mensagens'
+                : (d.links.tool && TOOL_ROUTES[d.links.tool]) || '/planejar'
             return (
               <button
                 key={d.dow}
@@ -65,29 +76,33 @@ export function PlanScreen() {
       ) : (
         <div className="flex flex-col pl-1.5">
           {yearDates.map((d, i) => {
-            const catalog = getKitCatalog(d.kitKey)
-            const owned = isUnlocked(d.kitKey)
+            const catalog = d.kitKey ? getKitCatalog(d.kitKey) : undefined
+            const owned = d.kitKey ? isUnlocked(d.kitKey) : false
             const tagText = catalog ? `${catalog.name} · ${owned ? 'Comprado' : catalog.price}` : ''
+            const Wrapper = d.kitKey ? 'button' : 'div'
             return (
               <div key={d.date} className="flex gap-4">
                 <div className="flex w-[14px] shrink-0 flex-col items-center">
                   <div className="mt-5 h-[14px] w-[14px] rounded-full border-[3px] border-white" style={{ background: owned ? '#C9A15B' : '#E07A9B' }} />
                   {i < yearDates.length - 1 && <div className="w-[2px] flex-1 bg-line" />}
                 </div>
-                <button
-                  type="button"
-                  onClick={() => navigate(`/kits/${d.kitKey}`)}
-                  className="mb-3 flex-1 rounded-[20px] bg-white p-[14px] text-left shadow-[0_8px_22px_rgba(91,42,78,.06)]"
+                <Wrapper
+                  type={d.kitKey ? 'button' : undefined}
+                  onClick={d.kitKey ? () => navigate(`/kits/${d.kitKey}`) : undefined}
+                  className={`mb-3 flex-1 rounded-[20px] bg-white p-[14px] text-left shadow-[0_8px_22px_rgba(91,42,78,.06)] ${d.kitKey ? 'cursor-pointer' : ''}`}
                 >
                   <div className="text-[12.5px] font-semibold text-muted">{formatDate(d.date)}</div>
                   <div className="mt-0.5 text-[17px] font-bold">{d.label}</div>
-                  <div
-                    className="mt-2 inline-block rounded-[10px] px-2.5 py-1 text-[12.5px] font-semibold"
-                    style={{ background: owned ? '#F6EBD3' : '#FBE8EE', color: owned ? '#8A6A24' : '#5B2A4E' }}
-                  >
-                    {tagText}
-                  </div>
-                </button>
+                  <div className="mt-1.5 text-[13.5px] leading-[1.35] text-ink/80">{d.tip}</div>
+                  {catalog && (
+                    <div
+                      className="mt-2 inline-block rounded-[10px] px-2.5 py-1 text-[12.5px] font-semibold"
+                      style={{ background: owned ? '#F6EBD3' : '#FBE8EE', color: owned ? '#8A6A24' : '#5B2A4E' }}
+                    >
+                      {tagText}
+                    </div>
+                  )}
+                </Wrapper>
               </div>
             )
           })}

@@ -1,0 +1,87 @@
+{
+  "defaults": {
+    "data_limite": "[data]",
+    "data_uso": "[data]",
+    "vagas": "5"
+  },
+  "combos": [
+    {
+      "id": "pacote-antecipado",
+      "season": "Ano todo",
+      "title": "Pacote antecipado",
+      "how": "Aplicação + 2 manutenções pagas juntas, com 10% de desconto no total.",
+      "why": "Você recebe hoje o valor de três atendimentos e garante que ela volte duas vezes. O desconto vem do pagamento antecipado.",
+      "formula": {
+        "base": "A+2M",
+        "factor": 0.9,
+        "round": "down5"
+      },
+      "message": "Pacote especial 💕 Aplicação + 2 manutenções por R$ {preco} (em vez de R$ {preco_cheio}), pago até {data_limite}. Só {vagas} vagas, [nome]. Quer garantir o seu?"
+    },
+    {
+      "id": "combo-amigas",
+      "season": "Ano todo",
+      "title": "Combo amigas",
+      "how": "Duas aplicações agendadas juntas (amigas, irmãs, mãe e filha), com 10% de desconto no total.",
+      "why": "Traz duas clientes de uma vez, e uma delas quase sempre é nova.",
+      "formula": {
+        "base": "2A",
+        "factor": 0.9,
+        "round": "down5"
+      },
+      "message": "Combo amigas 👯‍♀️ Duas aplicações por R$ {preco} (em vez de R$ {preco_cheio}). Chama sua amiga e venham juntas, [nome]! Válido até {data_limite}."
+    },
+    {
+      "id": "primeira-vez",
+      "season": "Ano todo",
+      "title": "Primeira aplicação com presente",
+      "how": "Aplicação pelo preço normal, com um kit de cuidados de presente para quem nunca veio.",
+      "why": "Não mexe no seu preço, e o presente faz a cliente nova se sentir especial logo de cara.",
+      "formula": {
+        "base": "A",
+        "factor": 1.0,
+        "round": "none"
+      },
+      "message": "Primeira vez comigo? 💕 Aplicação por R$ {preco} e você ganha um kit de cuidados de presente 🎁 Quer agendar, [nome]?"
+    },
+    {
+      "id": "horario-relampago",
+      "season": "Ano todo",
+      "title": "Horário relâmpago",
+      "how": "Horário vago de última hora, pelo preço normal, com um bônus para quem fechar hoje.",
+      "why": "Preenche o buraco da agenda sem ensinar a cliente a esperar desconto.",
+      "formula": {
+        "base": "A",
+        "factor": 1.0,
+        "round": "none"
+      },
+      "message": "Abriu um horário amanhã ✨ Aplicação por R$ {preco} e, fechando hoje, você ganha [mimo]. Quer, [nome]?"
+    },
+    {
+      "id": "manutencao-fiel",
+      "season": "Ano todo",
+      "title": "Manutenção em dia",
+      "how": "Manutenção com 10% de desconto para quem volta em até 15 dias.",
+      "why": "Incentiva a cliente a voltar no tempo certo, e manutenção curta é mais rápida para você.",
+      "formula": {
+        "base": "M",
+        "factor": 0.9,
+        "round": "down5"
+      },
+      "message": "[nome], sua manutenção em até 15 dias sai por R$ {preco} (em vez de R$ {preco_cheio}) 💕 Quer que eu reserve? Tenho [dia] às [hora]."
+    },
+    {
+      "id": "indique-ganhe",
+      "season": "Ano todo",
+      "title": "Indique e ganhe",
+      "how": "Quem indica uma amiga que faz a primeira aplicação ganha a próxima manutenção com 50% de desconto.",
+      "why": "Sua cliente vira divulgadora, e a amiga chega já confiando em você.",
+      "formula": {
+        "base": "M",
+        "factor": 0.5,
+        "round": "down5"
+      },
+      "message": "Indicou, ganhou 💕 Cada amiga que você indicar e fizer a primeira aplicação = sua próxima manutenção por R$ {preco} (em vez de R$ {preco_cheio}). Bora indicar, [nome]?"
+    }
+  ]
+}
