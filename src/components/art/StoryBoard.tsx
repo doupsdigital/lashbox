@@ -20,6 +20,8 @@ export interface StoryBoardProps {
   horarios?: string[]
   /** "beforeAfter": a 2ª foto ("Depois"). A 1ª usa `photoUrl`. */
   photoUrl2?: string | null
+  /** "photo" sem foto: não mostra o fundo listrado de "esperando foto" (usado na prévia do Início, que não é o editor). */
+  hidePhotoPlaceholder?: boolean
   guides?: boolean
 }
 
@@ -336,11 +338,13 @@ function NewArtBoard({
   art,
   palette,
   post,
+  photoOn,
   photoUrl,
   photoUrl2,
   foot1,
   foot2,
   kind,
+  hidePhotoPlaceholder,
   guides,
 }: StoryBoardProps & { kind: NewKind }) {
   const c = PAL2[palette]
@@ -447,7 +451,7 @@ function NewArtBoard({
           color: c.fg,
         }}
       >
-        {kind === 'photo' && (
+        {kind === 'photo' && (art.photo === 'required' || photoOn) && (photoUrl || !hidePhotoPlaceholder) && (
           <div
             style={{
               width: phW,

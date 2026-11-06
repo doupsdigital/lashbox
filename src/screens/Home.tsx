@@ -3,10 +3,27 @@ import { ScaledBoard } from '../components/art/ScaledBoard'
 import { StoryBoard } from '../components/art/StoryBoard'
 import { copyText } from '../lib/text'
 import { studioFootStory } from '../lib/studioFooter'
-import { applyStudioTokens } from '../lib/studioTokens'
+import { applyStudioTokens, resolveArtPreview } from '../lib/studioTokens'
+import { useStudioPhotoUrl } from '../lib/studioPhoto'
 import { useStudio } from '../state/studio'
-import { getAnyArt, kitsCatalog, suggestionOfTheDay } from '../content/lash'
+import { artKind, getAnyArt, homeSuggestions, kitsCatalog, type HomeSuggestion, type KitArt } from '../content/lash'
 import { usePurchases } from '../state/purchases'
+
+/**
+ * Sugestão de hoje, pulando "antes e depois" (duas fotos — a do estúdio sozinha não dá pra usar
+ * nos dois lados) até achar uma que dê pra mostrar sem foto nenhuma ou com a foto do estúdio.
+ */
+function pickTodaySuggestion(): { suggestion: HomeSuggestion; art: KitArt } {
+  const day = Math.floor(Date.now() / 86_400_000)
+  const n = homeSuggestions.length
+  for (let i = 0; i < n; i++) {
+    const suggestion = homeSuggestions[(day + i) % n]
+    const art = getAnyArt(suggestion.art)
+    if (art && artKind(art) !== 'beforeAfter') return { suggestion, art }
+  }
+  const suggestion = homeSuggestions[day % n]
+  return { suggestion, art: getAnyArt(suggestion.art)! }
+}
 
 const ICONS: Record<string, string> = {
   spark: 'M12 3l2.2 5.8L20 11l-5.8 2.2L12 19l-2.2-5.8L4 11l5.8-2.2z',
@@ -34,10 +51,12 @@ export function Home() {
   const navigate = useNavigate()
   const { studio } = useStudio()
   const { isUnlocked } = usePurchases()
-  const suggestion = suggestionOfTheDay()
-  const art = getAnyArt(suggestion.art)
+  const { url: studioPhotoUrl } = useStudioPhotoUrl()
+  const { suggestion, art } = pickTodaySuggestion()
   const caption = applyStudioTokens(suggestion.caption, studio)
   const foot = studioFootStory(studio)
+  const isPhotoKind = artKind(art) === 'photo'
+  const needsPhotoWarning = isPhotoKind && art.photo === 'required' && !studioPhotoUrl
   const initials = (studio.ownerName || 'LB').trim().slice(0, 2).toUpperCase()
   const today = new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: '2-digit', month: 'long' }).toUpperCase()
 
@@ -70,12 +89,13 @@ export function Home() {
             <div className="w-32 shrink-0 overflow-hidden rounded-[16px] shadow-[0_8px_20px_rgba(91,42,78,.18)]">
               <ScaledBoard width={1080} height={1920} scale={128 / 1080}>
                 <StoryBoard
-                  art={art}
+                  art={resolveArtPreview(art, studio)}
                   palette={art.palette === 'black' ? 'preto' : studio.palette}
                   post={false}
-                  photoOn={false}
-                  photoUrl={null}
+                  photoOn={isPhotoKind && !!studioPhotoUrl}
+                  photoUrl={isPhotoKind ? studioPhotoUrl : null}
                   photoPosY={40}
+                  hidePhotoPlaceholder
                   foot1={foot.foot1 || 'Seu estúdio'}
                   foot2={foot.foot2}
                   horarios={['Hoje · 15h30']}
@@ -86,6 +106,9 @@ export function Home() {
               <div className="text-[21px] font-bold leading-[1.15] tracking-tight">{art.title}</div>
               <div className="text-[13px] leading-[1.4] text-muted">{caption}</div>
               <div className="self-start rounded-[10px] bg-blush px-2.5 py-1 text-[12px] font-semibold text-plum">{suggestion.tag}</div>
+              {needsPhotoWarning && (
+                <div className="text-[12px] font-medium text-gold-ink">Adicione sua foto no Meu Estúdio</div>
+              )}
             </div>
           </div>
           <div className="flex gap-2.5">

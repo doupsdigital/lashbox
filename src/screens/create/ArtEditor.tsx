@@ -161,11 +161,11 @@ export function ArtEditor() {
       setFormError('Preencha o título e o preço antes de exportar.')
       return
     }
-    if (kind === 'photo' && !rawPhotoUrl) {
+    if (kind === 'photo' && art.photo === 'required' && !rawPhotoUrl) {
       setFormError('Escolha uma foto antes de exportar.')
       return
     }
-    if (kind === 'beforeAfter' && (!rawPhotoUrl || !rawPhotoUrl2)) {
+    if (kind === 'beforeAfter' && art.photo === 'required' && (!rawPhotoUrl || !rawPhotoUrl2)) {
       setFormError(`Escolha as duas fotos (${labels[0]} e ${labels[1]}) antes de exportar.`)
       return
     }
@@ -338,7 +338,7 @@ export function ArtEditor() {
         </label>
       )}
 
-      {kind === 'photo' && (
+      {kind === 'photo' && art.photo === 'required' && (
         <div className="flex flex-col gap-2.5 rounded-[20px] bg-white p-3.5">
           <span className="text-[16px] font-medium">Foto (obrigatória)</span>
           <div className="flex gap-2">
@@ -366,7 +366,7 @@ export function ArtEditor() {
         </div>
       )}
 
-      {kind === 'beforeAfter' && (
+      {kind === 'beforeAfter' && art.photo === 'required' && (
         <div className="flex flex-col gap-3.5 rounded-[20px] bg-white p-3.5">
           <span className="text-[16px] font-medium">Fotos antes/depois (obrigatórias)</span>
           <div className="flex flex-col gap-2">

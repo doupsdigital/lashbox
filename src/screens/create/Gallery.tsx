@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { ScaledBoard } from '../../components/art/ScaledBoard'
 import { StoryBoard } from '../../components/art/StoryBoard'
 import { studioFootStory } from '../../lib/studioFooter'
+import { resolveArtPreview } from '../../lib/studioTokens'
 import { useStudio } from '../../state/studio'
 import { ART_CATEGORIES, genericArts, kitFimDeAno } from '../../content/lash'
 
@@ -64,7 +65,7 @@ export function Gallery() {
             <div className="overflow-hidden rounded-[18px] shadow-[0_8px_22px_rgba(91,42,78,.14)]">
               <ScaledBoard width={1080} height={1920} scale={0.16}>
                 <StoryBoard
-                  art={a}
+                  art={resolveArtPreview(a, studio)}
                   palette={a.palette === 'black' ? 'preto' : studio.palette}
                   post={false}
                   photoOn={false}

@@ -31,6 +31,25 @@ export function applyStudioTokens(text: string, studio: Studio): string {
   return out
 }
 
+/**
+ * Resolve [mês] e os dados do Meu Estúdio no headline/subline/note/quote/author de uma arte, para
+ * prévias (galeria "Criar", "Para postar hoje", kits) que não têm campo editável para os outros
+ * marcadores livres — esses continuam aparecendo como [estilo], [dia] etc. até a lash abrir o editor.
+ */
+export function resolveArtPreview<T extends { headline: string; subline: string; note?: string; quote?: string; author?: string }>(
+  art: T,
+  studio: Studio,
+): T {
+  return {
+    ...art,
+    headline: applyStudioTokens(art.headline, studio),
+    subline: applyStudioTokens(art.subline, studio),
+    note: art.note ? applyStudioTokens(art.note, studio) : art.note,
+    quote: art.quote ? applyStudioTokens(art.quote, studio) : art.quote,
+    author: art.author ? applyStudioTokens(art.author, studio) : art.author,
+  }
+}
+
 const MARKER_RE = /\[[^\]]+\]/g
 
 /** Marcadores livres de um texto (ex.: [dia], [mimo], [estilo]) — tudo que não é dado do estúdio nem [mês], que já se preenchem sozinhos. */

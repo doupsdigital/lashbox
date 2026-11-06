@@ -7,6 +7,7 @@ import { BackButton, SoftButton } from '../../components/ui'
 import { getKitCatalog, kitFimDeAno } from '../../content/lash'
 import { KIT_CHECKOUT_URLS } from '../../lib/config'
 import { studioFootStory } from '../../lib/studioFooter'
+import { resolveArtPreview } from '../../lib/studioTokens'
 import { useAuth } from '../../state/auth'
 import { usePurchases } from '../../state/purchases'
 import { useStudio } from '../../state/studio'
@@ -98,7 +99,7 @@ export function KitDetail() {
             {previewArts.map((a) => (
               <div key={a.id} className="flex-1 overflow-hidden rounded-[14px]" style={{ filter: 'blur(5px)' }}>
                 <ScaledBoard width={1080} height={1920} scale={0.1}>
-                  <StoryBoard art={a} palette={a.palette === 'black' ? 'preto' : studio.palette} post={false} photoOn={false} photoUrl={null} photoPosY={40} foot1={foot.foot1 || 'Seu estúdio'} foot2={foot.foot2} />
+                  <StoryBoard art={resolveArtPreview(a, studio)} palette={a.palette === 'black' ? 'preto' : studio.palette} post={false} photoOn={false} photoUrl={null} photoPosY={40} foot1={foot.foot1 || 'Seu estúdio'} foot2={foot.foot2} />
                 </ScaledBoard>
               </div>
             ))}

@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { ScaledBoard } from '../../components/art/ScaledBoard'
 import { StoryBoard } from '../../components/art/StoryBoard'
 import { studioFootStory } from '../../lib/studioFooter'
+import { resolveArtPreview } from '../../lib/studioTokens'
 import { usePurchases } from '../../state/purchases'
 import { useStudio } from '../../state/studio'
 import { kitFimDeAno, kitsCatalog } from '../../content/lash'
@@ -49,7 +50,7 @@ export function Kits() {
                 {previewArts.map((a) => (
                   <div key={a.id} className="flex-1 overflow-hidden rounded-[10px]" style={{ filter: unlocked ? 'none' : 'blur(5px)' }}>
                     <ScaledBoard width={1080} height={1920} scale={0.09}>
-                      <StoryBoard art={a} palette={a.palette === 'black' ? 'preto' : studio.palette} post={false} photoOn={false} photoUrl={null} photoPosY={40} foot1={foot.foot1 || 'Seu estúdio'} foot2={foot.foot2} />
+                      <StoryBoard art={resolveArtPreview(a, studio)} palette={a.palette === 'black' ? 'preto' : studio.palette} post={false} photoOn={false} photoUrl={null} photoPosY={40} foot1={foot.foot1 || 'Seu estúdio'} foot2={foot.foot2} />
                     </ScaledBoard>
                   </div>
                 ))}
