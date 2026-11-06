@@ -154,12 +154,22 @@ Todo o conteúdo abaixo é **definitivo** (Fase 3 concluída) — nada neste app
 
 ## 7. O que ainda depende de você
 
-Toda a infraestrutura e o conteúdo do dia a dia estão prontos (ver seção 8 e seção 6). O que falta agora é produto:
+Toda a infraestrutura e o conteúdo do dia a dia estão prontos (ver seção 8 e seção 6). A `/lp` e as páginas legais também já estão no ar (seção 9). O que falta agora:
 
-1. **Página de vendas de verdade** (Fase 5): `/lp` hoje é só uma tela provisória com o logo e um botão.
-2. **Páginas legais:** `TERMS_URL`/`PRIVACY_URL` (`src/lib/config.ts`) apontam para `/termos` e `/privacidade`, que ainda não existem.
-3. **Próximos kits sazonais** (Verão e Carnaval, Dia da Mulher, Dia das Mães…): quando tiverem conteúdo real, criar o produto avulso na Kiwify, adicionar o id dele em `KIWIFY_PRODUCT_MAP` (secret do `kiwify-webhook`), o link de checkout em `KIT_CHECKOUT_URLS` e entrar em `kits.json`/`year-dates.json`.
-4. **Eventos de assinatura ainda não vistos de verdade:** `subscription_renewed` (só acontece numa renovação futura) e `subscription_late` (pagamento atrasado). Os nomes batem com o esperado, mas vale conferir em `webhook_logs` quando o primeiro acontecer.
+1. **Pixel da Meta na Kiwify:** nos dois produtos ("LashBox" e "LashBox · Kit Fim de Ano"), em Configurações → Pixels, cadastrar o pixel `1042165951490026`, domínio `lashbox.app`, com **"Disparar Purchase ao gerar Pix" DESLIGADO** (senão conta venda antes de confirmar o pagamento). Em cada produto, a página de vendas também precisa apontar para `https://lashbox.app/lp`.
+2. **Verificação de domínio da Meta:** `index.html` tem `<meta name="facebook-domain-verification" content="COLE_AQUI">` — trocar `COLE_AQUI` pelo código que o Business Manager da Meta dá em Configurações da Empresa → Segurança da Marca → Domínios, depois publicar de novo.
+3. **Vídeo da `/lp`:** a seção "Em 3 toques" já tem o espaço pronto para um vídeo vertical em `public/lp/demo.mp4` (mudo, com legenda). Sem esse arquivo, mostra só a imagem de capa, sem botão de play — pode subir o vídeo quando tiver um gravado.
+4. **Próximos kits sazonais** (Verão e Carnaval, Dia da Mulher, Dia das Mães…): quando tiverem conteúdo real, criar o produto avulso na Kiwify, adicionar o id dele em `KIWIFY_PRODUCT_MAP` (secret do `kiwify-webhook`), o link de checkout em `KIT_CHECKOUT_URLS` e entrar em `kits.json`/`year-dates.json`.
+5. **Eventos de assinatura ainda não vistos de verdade:** `subscription_renewed` (só acontece numa renovação futura) e `subscription_late` (pagamento atrasado). Os nomes batem com o esperado, mas vale conferir em `webhook_logs` quando o primeiro acontecer.
+
+## 9. Página de vendas, pixel e páginas legais
+
+- **`/lp` é um bundle separado do app logado.** `src/main.tsx` decide, pela URL (`/lp`, `/termos`, `/privacidade` → leve; qualquer outra → o app de verdade, com Supabase etc.) **antes** de importar qualquer um dos dois lados, então a `/lp` nunca baixa o código do app (nem registra o service worker — isso só acontece em `src/AppRoot.tsx`). `src/marketing/` tem os três: `LandingPage.tsx`, `Terms.tsx`, `Privacy.tsx`, mais `MarketingRoot.tsx` (as rotas), `MarketingLayout.tsx` (liga o pixel + aviso de cookies) e `pixel.ts`.
+- **Pixel da Meta** (`src/marketing/pixel.ts`, id em `META_PIXEL_ID` no `src/lib/config.ts`): `PageView` ao carregar qualquer uma das 3 páginas; `ViewContent` uma vez, via `IntersectionObserver`, quando a seção `#planos` da `/lp` entra na tela; `AddToCart` (com `value`/`currency`) ao clicar em "Assinar mensal"/"Assinar anual", com no máximo 250ms de espera antes do redirecionamento pro checkout. **Não dispara `InitiateCheckout` nem `Purchase`** — isso é com a Kiwify. Para testar: Gerenciador de Eventos da Meta → aba "Testar eventos" → colar `https://lashbox.app/lp` → navegar e clicar nos botões na própria aba; os 3 eventos devem aparecer na hora.
+- Os links de checkout (`KIWIFY_SUBSCRIPTION_CHECKOUT_URLS`) saem com a query string da página de vendas colada no final (UTMs, `fbclid` etc.) — mesma lógica do Agenda Lotada, em `lib/checkoutUrl.ts`.
+- **Aviso de cookies:** `CookieNotice.tsx`, guardado em `localStorage` (`lashbox:cookie-notice:v1`), nunca bloqueia a página.
+- **Imagens da `/lp`** (`public/lp/*.webp` + `public/og-image.jpg`): todas geradas a partir do próprio app, com um estúdio de demonstração (Studio Juliana Lash) e fotos de banco de imagens com licença livre (Pexels) — nenhum marcador `[entre colchetes]` aparece nelas. Script usado: `scripts/generate-lp-assets.mjs` (recebe `LP_PHOTOS_DIR` com `antes.jpg`/`depois.jpg`/`studio-photo.jpg`); o `og-image.jpg` foi montado à parte (HTML+Playwright, não tem script salvo) a partir do `screen-inicio` gerado por esse script.
+- **Páginas legais** (`/termos`, `/privacidade`): adaptadas das do Agenda Lotada para o modelo de assinatura (planos mensal/anual, renovação automática, cancelamento pela Kiwify, garantia de 7 dias, kits avulsos liberados para sempre, mudança de preço só vale para assinatura nova) e para a privacidade (foto e "Minhas clientes" só no aparelho, operadores Kiwify/Supabase/Vercel/Resend/Meta/Google Fonts). Linkadas no rodapé da `/lp`, em `/estudio` e em `/entrar`.
 
 ## 8. Hospedagem e domínios (já configurado)
 

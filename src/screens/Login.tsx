@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Logo } from '../components/ui'
+import { PRIVACY_URL, TERMS_URL } from '../lib/config'
 import { useAuth } from '../state/auth'
 
 export function Login() {
@@ -104,6 +105,10 @@ export function Login() {
           <div className="text-center text-sm text-muted">Use o mesmo e-mail da sua assinatura.</div>
         </div>
       )}
+      </div>
+      <div className="flex justify-center gap-4 pt-6 text-[12.5px] font-semibold text-muted">
+        <a href={TERMS_URL}>Termos de uso</a>
+        <a href={PRIVACY_URL}>Privacidade</a>
       </div>
     </div>
   )

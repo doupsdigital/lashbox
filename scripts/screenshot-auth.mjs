@@ -4,7 +4,7 @@ const BASE = 'http://127.0.0.1:5191'
 const OUT = 'referencia/prints'
 
 const PAGES = [
-  ['00-lp', '/?preview=lp'],
+  ['00-lp', '/lp'],
   ['00-entrar', '/?preview=entrar'],
   ['17-assinatura-vencida', '/?preview=expired'],
 ]

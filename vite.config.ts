@@ -12,6 +12,9 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
+      // Só o app logado registra o service worker (AppRoot.tsx) — a /lp e as páginas legais não devem
+      // baixar o app inteiro em segundo plano assim que abrem.
+      injectRegister: false,
       includeAssets: ['favicon.ico', 'favicon-32.png', 'favicon-48.png', 'apple-touch-icon.png'],
       manifest: {
         name: 'LashBox',
@@ -32,8 +35,9 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,woff2,svg,png,webp,ico}'],
-        // As imagens originais só servem para gerar os ícones; não precisam ir para o cache do app
-        globIgnores: ['**/icone-lashbox.png', '**/logo-lashbox.png'],
+        // As imagens originais só servem para gerar os ícones; e as da /lp são só da página de vendas —
+        // nenhuma das duas precisa ir para o cache do app logado.
+        globIgnores: ['**/icone-lashbox.png', '**/logo-lashbox.png', '**/lp/**', '**/og-image.jpg'],
       },
     }),
   ],

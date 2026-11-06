@@ -1,7 +1,7 @@
 import { useRef, useState, type ChangeEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { BackButton } from '../components/ui'
-import { KIWIFY_BUYER_AREA_URL } from '../lib/config'
+import { KIWIFY_BUYER_AREA_URL, PRIVACY_URL, TERMS_URL } from '../lib/config'
 import { removeStudioPhoto, saveStudioPhoto, useStudioPhotoUrl } from '../lib/studioPhoto'
 import { useAuth } from '../state/auth'
 import { useStudio, type Studio } from '../state/studio'
@@ -205,6 +205,10 @@ export function StudioScreen() {
       <button type="button" onClick={() => navigate('/kits')} className="text-center text-[13px] text-muted underline">
         Ver todos os kits
       </button>
+      <div className="flex justify-center gap-4 text-[12.5px] font-semibold text-muted">
+        <a href={TERMS_URL}>Termos de uso</a>
+        <a href={PRIVACY_URL}>Privacidade</a>
+      </div>
     </div>
   )
 }

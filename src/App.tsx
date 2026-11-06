@@ -1,11 +1,11 @@
 import type { ReactNode } from 'react'
+import { useEffect } from 'react'
 import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { TabBar } from './components/TabBar'
 import { Logo } from './components/ui'
 import { missingConfigInProd } from './lib/supabase'
 import { useAuth } from './state/auth'
 import { useStudio } from './state/studio'
-import { LandingPage } from './screens/LandingPage'
 import { Login } from './screens/Login'
 import { Onboarding, hasSeenOnboarding } from './screens/Onboarding'
 import { ExpiredSubscription } from './screens/ExpiredSubscription'
@@ -43,8 +43,10 @@ function Splash({ text }: { text?: string }) {
 
 function Start() {
   const { status } = useAuth()
+  // Esta rota só é alcançada com status local/ready (Gate() já tratou os outros casos antes de
+  // chegar em AppRoutes), mas a troca pela /lp seria uma navegação de verdade de qualquer forma.
   if (status === 'local' || status === 'ready') return <Navigate to="/inicio" replace />
-  return <Navigate to="/lp" replace />
+  return <RedirectToSalesPage />
 }
 
 function RequireStudioOnboarding({ children }: { children: ReactNode }) {
@@ -76,14 +78,21 @@ function AppRoutes() {
   )
 }
 
-/** Só em desenvolvimento: ?preview=lp|entrar|expired força uma tela sem depender do Supabase (prints). */
+/** Só em desenvolvimento: ?preview=entrar|expired força uma tela sem depender do Supabase (prints). */
 function devPreview() {
   if (!import.meta.env.DEV) return null
   const v = new URLSearchParams(window.location.search).get('preview')
-  if (v === 'lp') return <LandingPage />
   if (v === 'entrar') return <Login />
   if (v === 'expired') return <ExpiredSubscription />
   return null
+}
+
+/** A /lp é outro bundle (ver main.tsx): navegação de verdade, não Router, para carregá-la sozinha. */
+function RedirectToSalesPage() {
+  useEffect(() => {
+    window.location.replace('/lp')
+  }, [])
+  return <Splash />
 }
 
 /** Decide entre a página de vendas, o login, o carregamento, a assinatura vencida e o app. */
@@ -96,9 +105,8 @@ function Gate() {
   if (status === 'signedOut') {
     return (
       <Routes>
-        <Route path="/lp" element={<LandingPage />} />
         <Route path="/entrar" element={<Login />} />
-        <Route path="*" element={<Navigate to="/lp" replace />} />
+        <Route path="*" element={<RedirectToSalesPage />} />
       </Routes>
     )
   }

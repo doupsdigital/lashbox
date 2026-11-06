@@ -1,38 +1,20 @@
-import { StrictMode } from 'react'
+import { StrictMode, Suspense, lazy } from 'react'
 import { createRoot } from 'react-dom/client'
-import '@fontsource/inter/latin-400.css'
-import '@fontsource/inter/latin-500.css'
-import '@fontsource/inter/latin-600.css'
-import '@fontsource/inter/latin-700.css'
-import '@fontsource/bodoni-moda/latin-400.css'
-import '@fontsource/bodoni-moda/latin-500.css'
-import '@fontsource/bodoni-moda/latin-600.css'
-import '@fontsource/bodoni-moda/latin-400-italic.css'
-import '@fontsource/bodoni-moda/latin-500-italic.css'
-import '@fontsource/bodoni-moda/latin-600-italic.css'
-import '@fontsource/jost/latin-300.css'
-import '@fontsource/jost/latin-400.css'
-import '@fontsource/jost/latin-500.css'
-import '@fontsource/jost/latin-600.css'
-import '@fontsource/playfair-display/latin-500.css'
-import '@fontsource/playfair-display/latin-400-italic.css'
 import './index.css'
-import App from './App'
-import { AuthProvider } from './state/auth'
-import { StudioProvider } from './state/studio'
-import { SubscriptionProvider } from './state/subscription'
-import { PurchasesProvider } from './state/purchases'
+
+// /lp, /termos e /privacidade carregam um bundle leve próprio (sem Supabase, sem o motor de
+// artes, sem as fontes do app) — essencial porque é a página que recebe tráfego de anúncio.
+// Qualquer outra rota carrega o app logado de verdade. A escolha é feita aqui, antes de importar
+// qualquer um dos dois, para o código do outro nunca entrar no bundle da rota atual.
+const MARKETING_PATHS = ['/lp', '/termos', '/privacidade']
+const isMarketing = MARKETING_PATHS.includes(window.location.pathname)
+
+const Root = lazy(() => (isMarketing ? import('./marketing/MarketingRoot') : import('./AppRoot')))
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <AuthProvider>
-      <StudioProvider>
-        <SubscriptionProvider>
-          <PurchasesProvider>
-            <App />
-          </PurchasesProvider>
-        </SubscriptionProvider>
-      </StudioProvider>
-    </AuthProvider>
+    <Suspense fallback={null}>
+      <Root />
+    </Suspense>
   </StrictMode>,
 )

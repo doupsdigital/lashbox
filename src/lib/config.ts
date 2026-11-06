@@ -3,6 +3,9 @@ export const SUPPORT_EMAIL = 'doupsdigital@gmail.com'
 export const TERMS_URL = 'https://lashbox.app/termos'
 export const PRIVACY_URL = 'https://lashbox.app/privacidade'
 
+/** Pixel da Meta, só na /lp e nas páginas legais (nunca no app logado) — ver src/marketing/. */
+export const META_PIXEL_ID = '1042165951490026'
+
 /**
  * Link de checkout da assinatura (mensal/anual), usado no botão "Renovar assinatura" de
  * /assinatura-vencida. Mensal R$ 22,90, Anual R$ 149,00 (produto "LashBox" na Kiwify).
