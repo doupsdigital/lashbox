@@ -3,6 +3,9 @@ import { KIWIFY_SUBSCRIPTION_CHECKOUT_URLS } from '../lib/config'
 import { withForwardedParams } from '../lib/checkoutUrl'
 import { trackAddToCart, trackViewContentOnceVisible } from './pixel'
 
+/** Mude para true quando public/lp/demo.mp4 existir de verdade. */
+const SHOW_VIDEO_SECTION = false
+
 const ICONS: Record<string, string> = {
   spark: 'M12 3l2.2 5.8L20 11l-5.8 2.2L12 19l-2.2-5.8L4 11l5.8-2.2z',
   user: 'M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21c0-4 4-6 8-6s8 2 8 6',
@@ -104,9 +107,10 @@ export function LandingPage() {
   useEffect(() => trackViewContentOnceVisible(plansRef.current), [])
 
   useEffect(() => {
+    if (!SHOW_VIDEO_SECTION) return
     let alive = true
     fetch('/lp/demo.mp4', { method: 'HEAD' })
-      .then((r) => alive && setVideoAvailable(r.ok))
+      .then((r) => alive && setVideoAvailable(r.ok && (r.headers.get('content-type') ?? '').startsWith('video/')))
       .catch(() => {})
     return () => {
       alive = false
@@ -123,7 +127,10 @@ export function LandingPage() {
           <img src="/icone-64.webp" alt="LashBox" width={38} height={38} className="rounded-[22%]" />
           <span className="text-[19px] font-bold">LashBox</span>
         </div>
-        <a href="/entrar" className="text-[15px] font-semibold text-[#5B2A4E] no-underline">
+        <a
+          href="/entrar"
+          className="press rounded-full border border-[#E0CBD7] px-4 py-2 text-[14.5px] font-semibold text-[#5B2A4E] no-underline"
+        >
           Já sou assinante
         </a>
       </div>
@@ -179,49 +186,51 @@ export function LandingPage() {
         </div>
       </div>
 
-      {/* 3 toques */}
-      <div className="mx-auto flex max-w-[1120px] flex-col gap-10 px-5 py-20">
-        <h2 className="text-center text-[clamp(28px,4.4vw,42px)] font-extrabold tracking-[-.03em]">Em 3 toques, pronto para postar</h2>
-        <div className="flex flex-wrap items-center justify-center gap-9">
-          <div className="flex min-w-0 flex-[1_1_360px] flex-col gap-3.5">
-            {STEPS.map((s) => (
-              <div key={s.n} className="flex items-center gap-4 rounded-[26px] bg-[#F6F2F4] p-5">
-                <div className="flex h-[54px] w-[54px] shrink-0 items-center justify-center rounded-[18px] bg-[#5B2A4E]">
-                  <Icon d={s.ic} width={26} height={26} stroke="#fff" />
-                </div>
-                <div>
-                  <div className="text-[19px] font-bold">
-                    <span className="mr-1.5 text-[#8A6A24]">{s.n}.</span>
-                    {s.t}
+      {/* 3 toques — escondido até public/lp/demo.mp4 existir de verdade (ver SHOW_VIDEO_SECTION) */}
+      {SHOW_VIDEO_SECTION && (
+        <div className="mx-auto flex max-w-[1120px] flex-col gap-10 px-5 py-20">
+          <h2 className="text-center text-[clamp(28px,4.4vw,42px)] font-extrabold tracking-[-.03em]">Em 3 toques, pronto para postar</h2>
+          <div className="flex flex-wrap items-center justify-center gap-9">
+            <div className="flex min-w-0 flex-[1_1_360px] flex-col gap-3.5">
+              {STEPS.map((s) => (
+                <div key={s.n} className="flex items-center gap-4 rounded-[26px] bg-[#F6F2F4] p-5">
+                  <div className="flex h-[54px] w-[54px] shrink-0 items-center justify-center rounded-[18px] bg-[#5B2A4E]">
+                    <Icon d={s.ic} width={26} height={26} stroke="#fff" />
                   </div>
-                  <div className="mt-[3px] text-[15.5px] leading-[1.4] text-[#6B5C66]">{s.d}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div
-            className="relative aspect-[9/16] w-[280px] max-w-full flex-[0_1_280px] cursor-pointer overflow-hidden rounded-[28px] bg-[#5B2A4E] shadow-[0_24px_50px_rgba(91,42,78,.28)]"
-            onClick={() => videoAvailable && setPlaying(true)}
-          >
-            {playing && videoAvailable ? (
-              <video src="/lp/demo.mp4" className="block h-full w-full object-cover" autoPlay muted playsInline controls>
-                <track kind="captions" src="/lp/demo.vtt" srcLang="pt" label="Português" />
-              </video>
-            ) : (
-              <>
-                <img src="/lp/screen-editor.webp" className="block h-full w-full object-cover object-top" style={{ filter: 'brightness(.82)' }} alt="Capa do vídeo" />
-                {videoAvailable && (
-                  <div className="absolute top-1/2 left-1/2 flex h-[76px] w-[76px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white/92 shadow-[0_8px_24px_rgba(0,0,0,.25)]">
-                    <svg width="30" height="30" viewBox="0 0 24 24" fill="#5B2A4E" style={{ marginLeft: 4 }}>
-                      <path d="M7 4l13 8-13 8z" />
-                    </svg>
+                  <div>
+                    <div className="text-[19px] font-bold">
+                      <span className="mr-1.5 text-[#8A6A24]">{s.n}.</span>
+                      {s.t}
+                    </div>
+                    <div className="mt-[3px] text-[15.5px] leading-[1.4] text-[#6B5C66]">{s.d}</div>
                   </div>
-                )}
-              </>
-            )}
+                </div>
+              ))}
+            </div>
+            <div
+              className="relative aspect-[9/16] w-[280px] max-w-full flex-[0_1_280px] cursor-pointer overflow-hidden rounded-[28px] bg-[#5B2A4E] shadow-[0_24px_50px_rgba(91,42,78,.28)]"
+              onClick={() => videoAvailable && setPlaying(true)}
+            >
+              {playing && videoAvailable ? (
+                <video src="/lp/demo.mp4" className="block h-full w-full object-cover" autoPlay muted playsInline controls>
+                  <track kind="captions" src="/lp/demo.vtt" srcLang="pt" label="Português" />
+                </video>
+              ) : (
+                <>
+                  <img src="/lp/screen-editor.webp" className="block h-full w-full object-cover object-top" style={{ filter: 'brightness(.82)' }} alt="Capa do vídeo" />
+                  {videoAvailable && (
+                    <div className="absolute top-1/2 left-1/2 flex h-[76px] w-[76px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white/92 shadow-[0_8px_24px_rgba(0,0,0,.25)]">
+                      <svg width="30" height="30" viewBox="0 0 24 24" fill="#5B2A4E" style={{ marginLeft: 4 }}>
+                        <path d="M7 4l13 8-13 8z" />
+                      </svg>
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Tudo o que você precisa */}
       <div className="bg-[#F6F2F4]">
@@ -244,7 +253,7 @@ export function LandingPage() {
             <Icon d={ICONS.spark} width={30} height={30} stroke="#E5C17E" strokeWidth={1.6} style={{ flex: 'none' }} />
             <div className="text-[19px] leading-[1.35] font-semibold">E todo dia, uma sugestão de "Para postar hoje", com a arte e a legenda prontas.</div>
           </div>
-          <div className="flex justify-center gap-[clamp(14px,4vw,40px)] pt-2.5">
+          <div className="flex items-start justify-center gap-[clamp(14px,4vw,40px)] pt-2.5">
             <div className="w-[min(44%,240px)] overflow-hidden rounded-[30px] border-[6px] border-[#1d1519] bg-[#F6F2F4] shadow-[0_24px_50px_rgba(42,30,39,.25)]" style={{ aspectRatio: '390/844' }}>
               <img src="/lp/screen-galeria.webp" className="block h-full w-full object-cover object-top" alt="Galeria de modelos" loading="lazy" />
             </div>
@@ -306,7 +315,7 @@ export function LandingPage() {
         <h2 className="text-center text-[clamp(28px,4.4vw,42px)] font-extrabold tracking-[-.03em]">Escolha seu plano</h2>
         <div className="mx-auto grid w-full max-w-[840px] items-stretch gap-[18px]" style={{ gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,300px),1fr))' }}>
           {/* Anual: 1º no celular (order-1), à direita no desktop (md:order-2) */}
-          <div className="order-1 flex flex-col gap-[18px] rounded-[32px] bg-[#5B2A4E] p-[30px] text-white shadow-[0_24px_50px_rgba(91,42,78,.35)] md:order-2 md:relative">
+          <div className="relative order-1 flex flex-col gap-[18px] rounded-[32px] bg-[#5B2A4E] p-[30px] text-white shadow-[0_24px_50px_rgba(91,42,78,.35)] md:order-2">
             <div className="absolute top-[-14px] right-[22px] rounded-[14px] bg-[#E5C17E] px-3.5 py-1.5 text-[13px] font-bold text-[#3a2a00]">
               Melhor custo
             </div>
@@ -433,20 +442,16 @@ export function LandingPage() {
 
       {/* Rodapé */}
       <div className="mx-auto flex max-w-[1120px] flex-col items-center gap-3.5 px-5 pt-9 pb-10 text-center text-[14px] text-[#6B5C66]">
-        <img src="/icone-64.webp" alt="" width={44} height={44} className="rounded-[11px]" />
-        <div className="flex flex-wrap justify-center gap-x-5 gap-y-2 font-medium">
-          <a href="/entrar" className="no-underline">
-            Já sou assinante · Entrar
-          </a>
-          <a href="/termos" className="no-underline">
-            Termos de uso
-          </a>
-          <a href="/privacidade" className="no-underline">
-            Política de privacidade
-          </a>
+        <div className="flex flex-wrap justify-center gap-x-5 gap-y-2 font-semibold [&_a]:text-[#5B2A4E] [&_a]:no-underline [&_a]:hover:underline">
+          <a href="/entrar">Já sou assinante · Entrar</a>
+          <a href="/termos">Termos de uso</a>
+          <a href="/privacidade">Política de privacidade</a>
         </div>
         <div>
-          Suporte: <a href="mailto:doupsdigital@gmail.com">doupsdigital@gmail.com</a>
+          Suporte:{' '}
+          <a href="mailto:doupsdigital@gmail.com" className="font-semibold text-[#5B2A4E] no-underline hover:underline">
+            doupsdigital@gmail.com
+          </a>
         </div>
         <div className="text-[13px]">LashBox · Um produto Doup - Soluções Digitais</div>
       </div>
