@@ -8,10 +8,11 @@
   "pagina_facebook": {
     "id": "1184875188046307",
     "nome": "Vida de Lash Designer",
+    "instagram_user_id_da_pagina": "17841446712499043",
     "observacao": "Não há conta de Instagram vinculada. Nos posicionamentos do Instagram (Stories/Reels), a página do Facebook é usada como identidade do anúncio."
   },
   "pixel": {
-    "id": "1042165951490026",
+    "id": "1514627327214218",
     "conjunto_de_dados": "lash"
   },
 
@@ -36,8 +37,9 @@
 
   "publico": {
     "mesmo_nos_3_conjuntos": true,
-    "estrategia_preferida": "Copiar, no computador com token, o público do conjunto de MENOR custo por resultado (com pelo menos 3 resultados) da campanha \"[STUDIOMENU] - CAMPANHA WHATSAPP X1\" (mesma conta de anúncios), removendo qualquer exclusão de clientes do StudioMenu (ex.: públicos personalizados de clientes/compradores do StudioMenu). O script só LÊ essa campanha (GET), nunca grava nela.",
+    "estrategia_preferida": "Copiar o público (e a janela de atribuição) do conjunto \"[STUDIOMENU] Lash (Imagem -> Landing Page)\" — escolhido pela dona como o melhor conjunto (210 cliques no link, CPC R$ 0,87) — da campanha \"[STUDIOMENU] - CAMPANHA WHATSAPP X1\" (mesma conta de anúncios), removendo qualquer exclusão de clientes do StudioMenu. O script só LÊ essa campanha (GET), nunca grava nela.",
     "campanha_referencia": "[STUDIOMENU] - CAMPANHA WHATSAPP X1",
+    "conjunto_referencia": "[STUDIOMENU] Lash (Imagem -> Landing Page)",
     "alternativa_se_nao_for_possivel": {
       "geo_locations": { "countries": ["BR"] },
       "genders": [2],

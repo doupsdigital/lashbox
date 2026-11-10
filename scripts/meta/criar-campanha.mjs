@@ -71,7 +71,11 @@ async function graphPost(edgePath, body = {}) {
   params.set('access_token', TOKEN)
   const res = await fetch(`${GRAPH_BASE}/${edgePath}`, { method: 'POST', body: params })
   const json = await res.json()
-  if (json.error) throw new Error(`POST ${edgePath}: ${json.error.message} (código ${json.error.code})`)
+  if (json.error) {
+    const e = json.error
+    const detail = [e.error_user_title, e.error_user_msg].filter(Boolean).join(' — ')
+    throw new Error(`POST ${edgePath}: ${e.message} (código ${e.code}${e.error_subcode ? `/${e.error_subcode}` : ''})${detail ? ` · ${detail}` : ''}`)
+  }
   return json
 }
 
@@ -139,8 +143,17 @@ async function checkAccess(cfg) {
   console.log('[1] Conferindo acesso à conta de anúncios, página e pixel…')
   const account = await graphGet(cfg.conta_de_anuncios.id, { fields: 'name,currency,timezone_name,account_status' })
   console.log(`  Conta: ${account.name} · moeda ${account.currency} · fuso ${account.timezone_name} · status ${account.account_status}`)
-  const page = await graphGet(cfg.pagina_facebook.id, { fields: 'name' })
-  console.log(`  Página: ${page.name}`)
+  // A página é pessoal da dona: o token não lê os dados dela (falta pages_read_engagement), mas
+  // consegue anunciar com ela só pelo ID. Se a leitura falhar, testa gerando uma prévia de anúncio
+  // (generatepreviews não cria nada) — se a Meta aceitar a página ali, aceita na criação também.
+  const page = await graphGet(cfg.pagina_facebook.id, { fields: 'name' }).catch(() => null)
+  if (page) {
+    console.log(`  Página: ${page.name}`)
+  } else {
+    const spec = { object_story_spec: { page_id: cfg.pagina_facebook.id, link_data: { link: cfg.link_final, message: 'teste' } } }
+    await graphGet(`${cfg.conta_de_anuncios.id}/generatepreviews`, { ad_format: 'MOBILE_FEED_STANDARD', creative: spec })
+    console.log(`  Página: ${cfg.pagina_facebook.nome || cfg.pagina_facebook.id} — sem leitura dos dados, mas a Meta aceita anunciar com ela pelo ID (prévia de teste OK)`)
+  }
   const pixel = await graphGet(cfg.pixel.id, { fields: 'name' })
   console.log(`  Pixel: ${pixel.name}`)
   return account
@@ -155,7 +168,11 @@ async function checkPixelRecentEvents(cfg) {
 
   try {
     const stats = await graphGet(`${cfg.pixel.id}/stats`, { aggregation: 'event', start_time: since, end_time: now })
-    const total = (stats.data || []).reduce((sum, row) => sum + (row.count ?? row.value ?? 0), 0)
+    // A resposta vem agrupada por hora: [{ start_time, data: [{ value: 'PageView', count: 3 }, …] }, …]
+    const total = (stats.data || []).reduce(
+      (sum, row) => sum + (Array.isArray(row.data) ? row.data.reduce((s, ev) => s + Number(ev.count || 0), 0) : Number(row.count || 0)),
+      0,
+    )
     if (total > 0) {
       console.log(`  OK — ${total} evento(s) nas últimas 48h (via /stats).`)
       return true
@@ -184,13 +201,15 @@ async function checkPixelRecentEvents(cfg) {
 async function resolveAudience(cfg) {
   console.log('\n[3] Procurando o público de referência (somente leitura, nada é alterado)…')
   const campaignsResp = await graphGet(`${cfg.conta_de_anuncios.id}/campaigns`, { fields: 'id,name', limit: 500 })
-  const ref = (campaignsResp.data || []).find((c) => c.name === cfg.publico.campanha_referencia)
+  // O nome real na Meta pode ter um emoji no final (ex.: "… WHATSAPP X1 🚀").
+  const refName = cfg.publico.campanha_referencia
+  const ref = (campaignsResp.data || []).find((c) => c.name === refName || c.name.startsWith(`${refName} `))
   if (!ref) {
     console.log(`  Campanha "${cfg.publico.campanha_referencia}" não encontrada — usando a alternativa do campanha.json.`)
     return { source: 'alternativa (campanha de referência não encontrada)', targeting: cfg.publico.alternativa_se_nao_for_possivel }
   }
 
-  const adsetsResp = await graphGet(`${ref.id}/adsets`, { fields: 'id,name,targeting', limit: 500 })
+  const adsetsResp = await graphGet(`${ref.id}/adsets`, { fields: 'id,name,targeting,attribution_spec', limit: 500 })
   const adsets = adsetsResp.data || []
   if (adsets.length === 0) {
     console.log('  Campanha de referência sem conjuntos — usando a alternativa.')
@@ -198,7 +217,18 @@ async function resolveAudience(cfg) {
   }
 
   let best = null
-  for (const adset of adsets) {
+  // Se o campanha.json indica um conjunto específico (escolhido pela dona), usa ele direto.
+  const chosen = cfg.publico.conjunto_referencia && adsets.find((a) => a.name === cfg.publico.conjunto_referencia)
+  if (cfg.publico.conjunto_referencia && !chosen) {
+    console.log(`  Conjunto "${cfg.publico.conjunto_referencia}" não encontrado — escolhendo pelo menor custo por resultado.`)
+  }
+  if (chosen) {
+    const insightsResp = await graphGet(`${chosen.id}/insights`, { fields: 'spend,inline_link_clicks,cost_per_inline_link_click', date_preset: 'maximum' }).catch(() => null)
+    const row = insightsResp?.data?.[0] || {}
+    console.log(`  Conjunto indicado no campanha.json: "${chosen.name}" (${row.inline_link_clicks ?? '?'} cliques no link, CPC ${row.cost_per_inline_link_click ? Number(row.cost_per_inline_link_click).toFixed(2) : '?'}, gasto ${row.spend ?? '?'})`)
+    best = { adset: chosen }
+  }
+  for (const adset of best ? [] : adsets) {
     const insightsResp = await graphGet(`${adset.id}/insights`, { fields: 'spend,actions,cost_per_action_type', date_preset: 'maximum' }).catch(() => null)
     const row = insightsResp?.data?.[0]
     if (!row) continue
@@ -215,7 +245,7 @@ async function resolveAudience(cfg) {
     return { source: 'alternativa (nenhum conjunto de referência com 3+ resultados)', targeting: cfg.publico.alternativa_se_nao_for_possivel }
   }
 
-  console.log(`  Conjunto escolhido: "${best.adset.name}" (${best.resultados} resultados, custo/resultado ${best.custoPorResultado.toFixed(2)})`)
+  if (!chosen) console.log(`  Conjunto escolhido: "${best.adset.name}" (${best.resultados} resultados, custo/resultado ${best.custoPorResultado.toFixed(2)})`)
 
   const targeting = JSON.parse(JSON.stringify(best.adset.targeting || {}))
   const excluded = targeting.excluded_custom_audiences || []
@@ -231,7 +261,11 @@ async function resolveAudience(cfg) {
   }
   if (!targeting.targeting_automation) targeting.targeting_automation = { advantage_audience: 1 }
 
-  return { source: `conjunto "${best.adset.name}" da campanha "${cfg.publico.campanha_referencia}"`, targeting }
+  return {
+    source: `conjunto "${best.adset.name}" da campanha "${cfg.publico.campanha_referencia}"`,
+    targeting,
+    attribution_spec: best.adset.attribution_spec,
+  }
 }
 
 // --- Passo 4: subir as 14 imagens (adimages), uma por anúncio -------------------------------
@@ -251,13 +285,15 @@ async function ensureImages(cfg, result) {
       console.log(`  "${adName}": já enviadas — pulando.`)
       continue
     }
-    const resp = await graphPost(`${cfg.conta_de_anuncios.id}/adimages`, pending)
-    for (const key of Object.keys(pending)) {
-      const info = resp.images?.[key]
-      if (!info) throw new Error(`Upload de "${key}" não retornou hash.`)
+    // Uma imagem por chamada, no parâmetro "bytes" (a Meta não aceita várias imagens em base64
+    // como chaves soltas). A resposta vem como { images: { bytes: { hash, url } } }.
+    for (const [key, base64] of Object.entries(pending)) {
+      const resp = await graphPost(`${cfg.conta_de_anuncios.id}/adimages`, { bytes: base64, name: key })
+      const info = Object.values(resp.images || {})[0]
+      if (!info?.hash) throw new Error(`Upload de "${key}" não retornou hash.`)
       result.images[key] = { hash: info.hash, url: info.url }
+      saveResult(result)
     }
-    saveResult(result)
     console.log(`  "${adName}": enviado.`)
   }
   return result.images
@@ -289,6 +325,8 @@ async function ensureAdSets(cfg, result, campaignId, audience, startTime) {
   console.log(`  Largada agendada: ${startTime} (depois disso, roda sem parar, sem horário de término).`)
   result.adsets = result.adsets || {}
   const common = cfg.configuracao_comum_dos_conjuntos
+  // "observacao" é só um comentário do campanha.json — a Meta recusa campos desconhecidos no público.
+  const { observacao: _observacao, ...targeting } = audience.targeting
   for (const conjunto of cfg.conjuntos) {
     if (result.adsets[conjunto.chave]?.id) {
       console.log(`  "${conjunto.nome}" já existe: ${result.adsets[conjunto.chave].id} — pulando.`)
@@ -306,7 +344,8 @@ async function ensureAdSets(cfg, result, campaignId, audience, startTime) {
       status: common.status,
       start_time: startTime,
       promoted_object: { pixel_id: cfg.pixel.id, custom_event_type: common.promoted_object.custom_event_type },
-      targeting: audience.targeting,
+      targeting,
+      ...(audience.attribution_spec ? { attribution_spec: audience.attribution_spec } : {}),
     })
     result.adsets[conjunto.chave] = { id: resp.id, name: conjunto.nome }
     saveResult(result)
@@ -322,14 +361,37 @@ async function ensureCreative(cfg, result, adName, ad, images) {
   const img9x16 = images[`${adName}__imagem_9x16`]
   const titulo = resolveTitulo(cfg, ad)
   const texto = cfg.textos[ad.conjunto].texto_principal
+  // "standard_enhancements" (desligar tudo de uma vez) foi descontinuado pela Meta: agora cada
+  // melhoria automática do Advantage+ criativo é desligada separadamente.
+  const ADVANTAGE_FEATURES = [
+    'image_touchups',
+    'image_templates',
+    'image_brightness_and_contrast',
+    'image_uncrop',
+    'text_optimizations',
+    'inline_comment',
+    'enhance_cta',
+  ]
   const advantageOff = cfg.advantage_creative_desligado
-    ? { degrees_of_freedom_spec: { creative_features_spec: { standard_enhancements: { enroll_status: 'OPT_OUT' } } } }
+    ? {
+        degrees_of_freedom_spec: {
+          creative_features_spec: Object.fromEntries(ADVANTAGE_FEATURES.map((f) => [f, { enroll_status: 'OPT_OUT' }])),
+        },
+      }
+    : {}
+
+  // Sem conta de Instagram: no Instagram o anúncio aparece representado pela própria página do
+  // Facebook (identidade automática da página — "Usar Página do Facebook" no Gerenciador), igual
+  // aos anúncios do StudioMenu com essa página. A API exige que esse id seja informado.
+  const igIdentity = cfg.pagina_facebook.instagram_user_id_da_pagina
+    ? { instagram_user_id: cfg.pagina_facebook.instagram_user_id_da_pagina }
     : {}
 
   const fallbackBody = {
     name: `Criativo · ${adName}`,
     object_story_spec: {
       page_id: cfg.pagina_facebook.id,
+      ...igIdentity,
       link_data: {
         link: cfg.link_final,
         message: texto,
@@ -348,8 +410,9 @@ async function ensureCreative(cfg, result, adName, ad, images) {
     // Personalização por posicionamento: 4x5 no feed, 9x16 em Stories/Reels.
     body = {
       name: `Criativo · ${adName}`,
-      object_story_spec: { page_id: cfg.pagina_facebook.id },
+      object_story_spec: { page_id: cfg.pagina_facebook.id, ...igIdentity },
       asset_feed_spec: {
+        ad_formats: ['SINGLE_IMAGE'],
         images: [
           { hash: img4x5.hash, adlabels: [{ name: 'img_4x5' }] },
           { hash: img9x16.hash, adlabels: [{ name: 'img_9x16' }] },
@@ -440,6 +503,7 @@ function printDryRunPlan(cfg, audience, startTime) {
   console.log(`Largada agendada: ${startTime} — depois disso, roda sem parar (sem horário de término).`)
   console.log(`\nPúblico (${audience.source}):`)
   console.log(JSON.stringify(audience.targeting, null, 2))
+  if (audience.attribution_spec) console.log(`Janela de atribuição (copiada): ${JSON.stringify(audience.attribution_spec)}`)
   for (const conjunto of cfg.conjuntos) {
     console.log(`\n  Conjunto "${conjunto.nome}" · orçamento diário R$ ${(conjunto.daily_budget_centavos / 100).toFixed(2)} · status PAUSED`)
     for (const adName of conjunto.ads) {
@@ -489,8 +553,9 @@ async function main() {
   const account = await checkAccess(cfg)
   const pixelOk = await checkPixelRecentEvents(cfg)
   if (!pixelOk) {
-    console.error('\nPARANDO: o pixel não recebeu eventos de lashbox.app nas últimas 48h. Confira o pixel (Kiwify + index.html) antes de criar a campanha.')
-    process.exit(1)
+    // Não para mais: um pixel recém-criado começa sem eventos. A campanha fica PAUSED de qualquer
+    // forma — confira os eventos no Gerenciador de Eventos antes de ativar.
+    console.log('\nAVISO: o pixel ainda não recebeu eventos de lashbox.app nas últimas 48h. Seguindo assim mesmo (tudo fica PAUSED) — confira o pixel antes de ativar.')
   }
 
   result.audience = result.audience || (await resolveAudience(cfg))
