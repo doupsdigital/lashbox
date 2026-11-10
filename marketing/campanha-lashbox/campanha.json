@@ -23,6 +23,11 @@
     "observacao_orcamento": "Orçamento fica nos conjuntos (ABO), não na campanha. Se a API exigir o campo is_adset_budget_sharing_enabled na criação da campanha, enviar false."
   },
 
+  "agendamento": {
+    "regra": "Os 3 conjuntos só começam a entregar a partir das 05:00 (no fuso da conta de anúncios) — depois disso, rodam sem parar, sem horário de término (não pausa de madrugada nos dias seguintes).",
+    "como_o_script_calcula": "No momento em que os conjuntos são criados de verdade, o script pega a hora atual no fuso da conta: se ainda não passou das 05:00 locais, agenda para hoje; se já passou, agenda para amanhã. Esse valor único (start_time) é salvo em resultado.json e usado nos 3 conjuntos, pra garantir que todos larguem juntos mesmo se o script for retomado depois de um erro no meio."
+  },
+
   "link_final": "https://lashbox.app/lp",
   "call_to_action": "LEARN_MORE",
   "descricao_padrao": "App LashBox · 7 dias de garantia",

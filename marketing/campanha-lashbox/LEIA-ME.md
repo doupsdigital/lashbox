@@ -46,6 +46,9 @@ e depois **imprime exatamente o que seria criado**, sem criar nada. Confira a sa
   a campanha de referência existe, confira se o nome em `campanha.json` → `publico.campanha_referencia`
   está exatamente igual ao da Meta.
 - Os 3 conjuntos, os 7 anúncios, os títulos e os orçamentos (R$ 20,00/dia cada) estão certos?
+- **A "Largada agendada"** mostrada na saída — é a próxima 05:00 no fuso da conta de anúncios. Depois de ativados (PAUSED → ACTIVE), os conjuntos só começam a entregar a partir desse horário; depois disso rodam sem parar, sem pausar de madrugada nos dias seguintes.
+
+**Importante sobre o horário:** o script calcula a "largada agendada" no momento em que roda de verdade (passo 4) — não quando você for ativar os conjuntos depois. Se você ativar (PAUSED → ACTIVE) antes desse horário, os conjuntos esperam e começam certinho às 05:00. Mas se você demorar pra ativar e esse horário já tiver passado, a Meta começa a entregar imediatamente ao ativar, não espera até a 05:00 do dia seguinte. Se isso acontecer e você quiser mesmo assim só às 05:00 de um dia específico, ative os conjuntos manualmente perto desse horário em vez de rodar o script de novo (rodar de novo não recalcula a largada dos conjuntos já criados).
 
 ## 4. Rodar de verdade
 

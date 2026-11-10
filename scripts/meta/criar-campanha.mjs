@@ -90,6 +90,49 @@ function resolveTitulo(cfg, ad) {
   return cfg.textos[ad.conjunto].titulo
 }
 
+// A largada dos anúncios é sempre às 05:00 (no fuso da conta de anúncios) — depois disso, rodam
+// sem parar, sem horário de término. Calcula a próxima 05:00 a partir de agora: se já passou das
+// 05:00 locais hoje, agenda para amanhã.
+function getUtcOffsetMinutes(timeZone, atDate) {
+  const offsetPart = new Intl.DateTimeFormat('en-US', { timeZone, timeZoneName: 'shortOffset' })
+    .formatToParts(atDate)
+    .find((p) => p.type === 'timeZoneName')?.value ?? 'GMT+0'
+  const match = offsetPart.match(/GMT([+-]\d+)(?::(\d+))?/)
+  if (!match) return 0
+  const sign = match[1].startsWith('-') ? -1 : 1
+  return sign * (Math.abs(Number(match[1])) * 60 + Number(match[2] || 0))
+}
+
+function computeNext5amIso(timeZone) {
+  const now = new Date()
+  const parts = Object.fromEntries(
+    new Intl.DateTimeFormat('en-US', {
+      timeZone,
+      hour12: false,
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+    })
+      .formatToParts(now)
+      .map((p) => [p.type, p.value]),
+  )
+  const localNowMinutes = Number(parts.hour) * 60 + Number(parts.minute)
+
+  let targetDateStr = `${parts.year}-${parts.month}-${parts.day}`
+  if (localNowMinutes >= 5 * 60) {
+    const tomorrow = new Date(Date.UTC(Number(parts.year), Number(parts.month) - 1, Number(parts.day) + 1))
+    targetDateStr = tomorrow.toISOString().slice(0, 10)
+  }
+
+  const offsetMinutes = getUtcOffsetMinutes(timeZone, now)
+  const sign = offsetMinutes >= 0 ? '+' : '-'
+  const abs = Math.abs(offsetMinutes)
+  const offsetStr = `${sign}${String(Math.floor(abs / 60)).padStart(2, '0')}:${String(abs % 60).padStart(2, '0')}`
+  return `${targetDateStr}T05:00:00${offsetStr}`
+}
+
 // --- Passo 1: acesso à conta, página e pixel -------------------------------------------------
 
 async function checkAccess(cfg) {
@@ -241,8 +284,9 @@ async function ensureCampaign(cfg, result) {
   return resp.id
 }
 
-async function ensureAdSets(cfg, result, campaignId, audience) {
+async function ensureAdSets(cfg, result, campaignId, audience, startTime) {
   console.log('\n[5b] Conjuntos…')
+  console.log(`  Largada agendada: ${startTime} (depois disso, roda sem parar, sem horário de término).`)
   result.adsets = result.adsets || {}
   const common = cfg.configuracao_comum_dos_conjuntos
   for (const conjunto of cfg.conjuntos) {
@@ -260,6 +304,7 @@ async function ensureAdSets(cfg, result, campaignId, audience) {
       billing_event: common.billing_event,
       bid_strategy: common.bid_strategy,
       status: common.status,
+      start_time: startTime,
       promoted_object: { pixel_id: cfg.pixel.id, custom_event_type: common.promoted_object.custom_event_type },
       targeting: audience.targeting,
     })
@@ -390,8 +435,9 @@ async function generatePreviews(cfg, result) {
 
 // --- Modo simulação: imprime o plano sem chamar a API para criar nada -----------------------
 
-function printDryRunPlan(cfg, audience) {
+function printDryRunPlan(cfg, audience, startTime) {
   console.log(`\nCampanha: "${cfg.campanha.nome}" · ${cfg.campanha.objective} · status ${cfg.campanha.status}`)
+  console.log(`Largada agendada: ${startTime} — depois disso, roda sem parar (sem horário de término).`)
   console.log(`\nPúblico (${audience.source}):`)
   console.log(JSON.stringify(audience.targeting, null, 2))
   for (const conjunto of cfg.conjuntos) {
@@ -420,23 +466,27 @@ async function main() {
       process.exit(1)
     }
     console.log('\nSem META_ACCESS_TOKEN no .env — simulação 100% offline (nenhuma chamada à API). O que seria criado:\n')
-    printDryRunPlan(cfg, { source: 'alternativa (sem token para conferir a campanha de referência)', targeting: cfg.publico.alternativa_se_nao_for_possivel })
+    printDryRunPlan(
+      cfg,
+      { source: 'alternativa (sem token para conferir a campanha de referência)', targeting: cfg.publico.alternativa_se_nao_for_possivel },
+      `${computeNext5amIso('America/Sao_Paulo')} (exemplo — sem token não sei o fuso real da conta; o script usa o fuso de verdade quando roda com token)`,
+    )
     return
   }
 
   if (SIMULATE) {
     console.log('\nToken encontrado — fazendo as leituras de verdade (passos 1 a 3) e simulando o resto (nada é criado).\n')
-    await checkAccess(cfg)
+    const account = await checkAccess(cfg)
     const pixelOk = await checkPixelRecentEvents(cfg)
     if (!pixelOk) console.log('\n(Simulação) Em modo real, o script pararia aqui — pixel sem eventos recentes.')
     const audience = await resolveAudience(cfg)
-    printDryRunPlan(cfg, audience)
+    printDryRunPlan(cfg, audience, computeNext5amIso(account.timezone_name))
     return
   }
 
   // MODO REAL
   const result = loadResult()
-  await checkAccess(cfg)
+  const account = await checkAccess(cfg)
   const pixelOk = await checkPixelRecentEvents(cfg)
   if (!pixelOk) {
     console.error('\nPARANDO: o pixel não recebeu eventos de lashbox.app nas últimas 48h. Confira o pixel (Kiwify + index.html) antes de criar a campanha.')
@@ -444,11 +494,14 @@ async function main() {
   }
 
   result.audience = result.audience || (await resolveAudience(cfg))
+  // Calculada uma vez e guardada: se o script for retomado depois de um erro no meio, os 3
+  // conjuntos continuam com a mesma largada (em vez de recalcular "a próxima 05:00" de novo).
+  result.scheduledStart = result.scheduledStart || computeNext5amIso(account.timezone_name)
   saveResult(result)
 
   const images = await ensureImages(cfg, result)
   const campaignId = await ensureCampaign(cfg, result)
-  await ensureAdSets(cfg, result, campaignId, result.audience)
+  await ensureAdSets(cfg, result, campaignId, result.audience, result.scheduledStart)
 
   for (const [adName, ad] of Object.entries(cfg.anuncios)) {
     const creativeId = await ensureCreative(cfg, result, adName, ad, images)
