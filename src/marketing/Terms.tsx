@@ -13,13 +13,13 @@ export function Terms() {
       <p className="text-[14px] text-[#6B5C66]">Última atualização: 6 de novembro de 2026</p>
 
       <p>
-        Estes termos explicam as regras de assinatura, acesso e uso da <b>LashBox - Um produto Doup - Soluções Digitais</b>.
+        Estes termos explicam as regras de assinatura, acesso e uso do <b>LashBox - Um produto Doup - Soluções Digitais</b>.
         Ao assinar ou usar o app, você concorda com eles.
       </p>
 
-      <h2>1. O que é a LashBox</h2>
+      <h2>1. O que é o LashBox</h2>
       <p>
-        A LashBox é um aplicativo digital (PWA) para lash designers, acessado pelo navegador em lashbox.app. Ela reúne artes
+        O LashBox é um aplicativo digital (PWA) para lash designers, acessado pelo navegador em lashbox.app. Ele reúne artes
         prontas para Instagram e WhatsApp, vale-presente, montador de ofertas, calculadoras, mensagens prontas e um plano de
         divulgação — tudo preenchido com o nome, a foto e os preços do seu estúdio. Não é um produto físico nem um curso.
       </p>
@@ -27,7 +27,7 @@ export function Terms() {
       <h2>2. Assinatura e cobrança</h2>
       <ul>
         <li>
-          A LashBox é vendida por <b>assinatura</b>, nos planos <b>mensal (R$ 22,90)</b> ou <b>anual (R$ 149,00)</b>, com{' '}
+          O LashBox é vendido por <b>assinatura</b>, nos planos <b>mensal (R$ 22,90)</b> ou <b>anual (R$ 149,00)</b>, com{' '}
           <b>renovação automática</b> até você cancelar.
         </li>
         <li>O pagamento é feito pela Kiwify, por cartão de crédito, Pix (inclusive Pix Automático) ou boleto.</li>
@@ -60,7 +60,7 @@ export function Terms() {
 
       <h2>5. Kits sazonais (compras avulsas)</h2>
       <p>
-        Além da assinatura, a LashBox vende kits sazonais dentro do app (como o Kit Fim de Ano), em <b>compra avulsa</b>, sem
+        Além da assinatura, o LashBox vende kits sazonais dentro do app (como o Kit Fim de Ano), em <b>compra avulsa</b>, sem
         mensalidade. Um kit comprado fica <b>liberado para sempre na sua conta</b>, mesmo que a assinatura seja cancelada e
         depois reativada. Kits não são reembolsáveis fora do prazo padrão de 7 dias da própria compra do kit.
       </p>
@@ -76,7 +76,7 @@ export function Terms() {
       <ul>
         <li>Você pode usar as artes, mensagens e demais conteúdos gerados no app livremente, no seu próprio negócio de lash designer.</li>
         <li>
-          Não é permitido <b>revender, redistribuir ou publicar os modelos</b> da LashBox (artes, mensagens, planos) como
+          Não é permitido <b>revender, redistribuir ou publicar os modelos</b> do LashBox (artes, mensagens, planos) como
           material próprio, curso, pacote ou produto destinado a outras lash designers.
         </li>
         <li>Também não é permitido compartilhar o seu acesso com outras pessoas, nem tentar copiar o app ou burlar o login.</li>
@@ -85,7 +85,7 @@ export function Terms() {
 
       <h2>8. Resultados</h2>
       <p>
-        A LashBox entrega ferramentas práticas, mas <b>não garante um número de clientes, agendamentos ou faturamento</b>. Os
+        O LashBox entrega ferramentas práticas, mas <b>não garante um número de clientes, agendamentos ou faturamento</b>. Os
         resultados dependem de como você usa as ferramentas, da sua região, dos seus preços, da qualidade do seu trabalho e de
         outros fatores que não controlamos.
       </p>
@@ -99,7 +99,7 @@ export function Terms() {
 
       <h2>10. Propriedade intelectual</h2>
       <p>
-        Os textos, artes, a marca e o design da LashBox pertencem aos seus criadores e são protegidos pela lei de direitos
+        Os textos, artes, a marca e o design do LashBox pertencem aos seus criadores e são protegidos pela lei de direitos
         autorais. A assinatura dá a você uma licença de uso pessoal, conforme estes termos, e não transfere esses direitos.
       </p>
 

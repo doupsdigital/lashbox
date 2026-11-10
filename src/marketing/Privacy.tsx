@@ -13,7 +13,7 @@ export function Privacy() {
       <p className="text-[14px] text-[#6B5C66]">Última atualização: 6 de novembro de 2026</p>
 
       <p>
-        Esta política explica quais dados a <b>LashBox</b> coleta, para que usa e quais são os seus direitos, de acordo com a
+        Esta política explica quais dados o <b>LashBox</b> coleta, para que usa e quais são os seus direitos, de acordo com a
         Lei Geral de Proteção de Dados (Lei nº 13.709/2018, LGPD). Ela vale para a página de vendas e para o app, em
         lashbox.app.
       </p>
@@ -114,7 +114,7 @@ export function Privacy() {
       </p>
 
       <h2>9. Idade</h2>
-      <p>A LashBox é destinada a pessoas maiores de 18 anos.</p>
+      <p>O LashBox é destinado a pessoas maiores de 18 anos.</p>
 
       <h2>10. Mudanças nesta política</h2>
       <p>

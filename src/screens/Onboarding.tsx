@@ -33,7 +33,7 @@ export function Onboarding() {
           {step === 0 && (
             <div className="flex flex-col items-center gap-5 text-center">
               <img src="/icone-256.webp" alt="" width={160} height={160} className="rounded-[36px] shadow-[0_20px_40px_rgba(91,42,78,.3)]" />
-              <h1 className="mt-1 text-[30px] font-bold tracking-tight">Bem-vinda à LashBox</h1>
+              <h1 className="mt-1 text-[30px] font-bold tracking-tight">Bem-vinda ao LashBox</h1>
               <p className="max-w-[300px] text-[16px] leading-[1.45] text-muted">
                 A caixa de ferramentas da lash designer. Artes, ofertas e mensagens prontas, com o seu nome e a sua foto.
               </p>
