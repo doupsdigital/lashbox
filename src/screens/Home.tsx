@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ScaledBoard } from '../components/art/ScaledBoard'
 import { StoryBoard } from '../components/art/StoryBoard'
@@ -6,8 +7,33 @@ import { studioFootStory } from '../lib/studioFooter'
 import { applyStudioTokens, resolveArtPreview } from '../lib/studioTokens'
 import { useStudioPhotoUrl } from '../lib/studioPhoto'
 import { useStudio } from '../state/studio'
-import { artKind, getAnyArt, homeSuggestions, kitsCatalog, type HomeSuggestion, type KitArt } from '../content/lash'
+import { artKind, getAnyArt, getKitCatalog, homeSuggestions, kitFimDeAno, kitsCatalog, nextPlanItem, type HomeSuggestion, type KitArt } from '../content/lash'
 import { usePurchases } from '../state/purchases'
+
+const KIT_FIM_DE_ANO_KEY = 'fim-de-ano'
+const KIT_CARD_PROMO_END = '2026-12-31' // depois disso, a propaganda do kit some sozinha
+const KIT_CARD_DISMISS_KEY = 'lashbox:kitfimdeano-card-hidden-until'
+
+function localDateKey(d: Date) {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+}
+
+function isKitCardDismissed() {
+  try {
+    const until = Number(localStorage.getItem(KIT_CARD_DISMISS_KEY))
+    return Number.isFinite(until) && until > Date.now()
+  } catch {
+    return false
+  }
+}
+
+function dismissKitCardFor3Days() {
+  try {
+    localStorage.setItem(KIT_CARD_DISMISS_KEY, String(Date.now() + 3 * 24 * 60 * 60 * 1000))
+  } catch {
+    // localStorage indisponível (ex.: modo privado) — sem card pra esconder, sem problema
+  }
+}
 
 /**
  * Sugestão de hoje, pulando "antes e depois" (duas fotos — a do estúdio sozinha não dá pra usar
@@ -59,6 +85,14 @@ export function Home() {
   const needsPhotoWarning = isPhotoKind && art.photo === 'required' && !studioPhotoUrl
   const initials = (studio.ownerName || 'LB').trim().slice(0, 2).toUpperCase()
   const today = new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: '2-digit', month: 'long' }).toUpperCase()
+
+  const [kitCardDismissed, setKitCardDismissed] = useState(isKitCardDismissed)
+  const kitFimDeAnoCatalog = getKitCatalog(KIT_FIM_DE_ANO_KEY)
+  const kitOwned = isUnlocked(KIT_FIM_DE_ANO_KEY)
+  const todayKeyStr = localDateKey(new Date())
+  const kitPlanEnd = kitFimDeAno.plan[kitFimDeAno.plan.length - 1].date
+  const withinKitCardWindow = kitOwned ? todayKeyStr <= kitPlanEnd : todayKeyStr <= KIT_CARD_PROMO_END
+  const showKitCard = !!kitFimDeAnoCatalog && withinKitCardWindow && !kitCardDismissed
 
   return (
     <div className="flex flex-1 flex-col gap-[24px] overflow-auto bg-lilac px-5 pt-9 pb-8">
@@ -127,6 +161,49 @@ export function Home() {
               Copiar legenda
             </button>
           </div>
+        </div>
+      )}
+
+      {showKitCard && kitFimDeAnoCatalog && (
+        <div
+          className="relative flex shrink-0 flex-col gap-3 overflow-hidden rounded-[28px] p-[18px] text-white shadow-[0_10px_30px_rgba(91,42,78,.25)]"
+          style={{ background: `linear-gradient(135deg,${kitFimDeAnoCatalog.color1},${kitFimDeAnoCatalog.color2})` }}
+        >
+          <div className="absolute -top-9 -right-9 h-32 w-32 rounded-full bg-white/10" />
+          <button
+            type="button"
+            onClick={() => {
+              dismissKitCardFor3Days()
+              setKitCardDismissed(true)
+            }}
+            aria-label="Esconder por 3 dias"
+            className="press absolute right-3.5 top-3.5 flex h-7 w-7 cursor-pointer items-center justify-center rounded-full bg-white/15 text-white"
+          >
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.6} strokeLinecap="round">
+              <path d="M6 6l12 12M18 6L6 18" />
+            </svg>
+          </button>
+          <div className="flex items-center gap-3 pr-8">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[14px] bg-white/15 text-xl">🎁</div>
+            <div className="text-[17px] font-bold leading-[1.2] text-pretty">
+              {kitOwned ? 'Seu Kit Fim de Ano' : 'Black Friday, Natal e Réveillon prontos 🎁'}
+            </div>
+          </div>
+          <div className="text-[13.5px] leading-[1.45] text-white/85">
+            {kitOwned ? (
+              <>Próximo passo: <span className="font-semibold" style={{ color: '#F6E3B8' }}>{nextPlanItem().title}</span></>
+            ) : (
+              'Kit Fim de Ano: 10 artes temáticas, vale-presente de Natal, ofertas montadas com os seus preços e um plano dia a dia até janeiro.'
+            )}
+          </div>
+          <button
+            type="button"
+            onClick={() => navigate(kitOwned ? '/kits/fim-de-ano?aba=plano' : '/kits/fim-de-ano')}
+            className="press flex h-11 w-fit cursor-pointer items-center justify-center self-start rounded-full px-5 text-[14.5px] font-semibold"
+            style={{ background: '#C9A15B', color: '#2A1E27' }}
+          >
+            {kitOwned ? 'Ver plano' : `Ver o kit · ${kitFimDeAnoCatalog.price}`}
+          </button>
         </div>
       )}
 

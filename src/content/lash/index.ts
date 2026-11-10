@@ -10,7 +10,7 @@ import combosRaw from './combos.json'
 import { kitFimDeAno, type KitArt, type Combo } from './kitFimDeAno'
 
 export type { KitArt, Combo }
-export { kitFimDeAno, getArt as getKitArt, getCombo, getKitMessage, artKind } from './kitFimDeAno'
+export { kitFimDeAno, getArt as getKitArt, getCombo, getKitMessage, artKind, nextPlanItem } from './kitFimDeAno'
 
 export const genericArts = genericArtsRaw as KitArt[]
 

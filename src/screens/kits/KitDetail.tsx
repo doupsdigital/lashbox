@@ -1,10 +1,10 @@
 import { useMemo, useState } from 'react'
-import { Navigate, useNavigate, useParams } from 'react-router-dom'
+import { Navigate, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { ScaledBoard } from '../../components/art/ScaledBoard'
 import { StoryBoard } from '../../components/art/StoryBoard'
 import { CopyButton, MessageText, useMessageResolver } from '../../components/Messages'
 import { BackButton, SoftButton } from '../../components/ui'
-import { getKitCatalog, kitFimDeAno } from '../../content/lash'
+import { getKitCatalog, kitFimDeAno, nextPlanItem } from '../../content/lash'
 import { KIT_CHECKOUT_URLS } from '../../lib/config'
 import { studioFootStory } from '../../lib/studioFooter'
 import { resolveArtPreview } from '../../lib/studioTokens'
@@ -28,18 +28,15 @@ function formatDate(iso: string) {
 export function KitDetail() {
   const { key } = useParams()
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const resolve = useMessageResolver()
   const { user } = useAuth()
   const { studio } = useStudio()
   const { isUnlocked, refresh, loading } = usePurchases()
   const catalog = getKitCatalog(key)
-  const [section, setSection] = useState<'tools' | 'plan' | 'mensagens'>('tools')
+  const [section, setSection] = useState<'tools' | 'plan' | 'mensagens'>(searchParams.get('aba') === 'plano' ? 'plan' : 'tools')
 
-  const todayKey = useMemo(() => {
-    const d = new Date()
-    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
-  }, [])
-  const nextItem = kitFimDeAno.plan.find((p) => p.date >= todayKey) ?? kitFimDeAno.plan[kitFimDeAno.plan.length - 1]
+  const nextItem = useMemo(nextPlanItem, [])
 
   const groups = useMemo(() => {
     const map = new Map<string, typeof kitFimDeAno.messages>()
@@ -51,6 +48,13 @@ export function KitDetail() {
   const unlocked = isUnlocked(catalog.key)
   const foot = studioFootStory(studio)
   const previewArts = kitFimDeAno.arts.slice(0, 4)
+  const insideList = [
+    `${kitFimDeAno.arts.length} artes temáticas prontas`,
+    'Vale-presente de Natal personalizado',
+    'Ofertas de Black Friday e Natal com os seus preços',
+    `Plano dia a dia, de ${formatDate(kitFimDeAno.plan[0].date)} a ${formatDate(kitFimDeAno.plan[kitFimDeAno.plan.length - 1].date)}`,
+    `${kitFimDeAno.messages.length} mensagens prontas para as clientes`,
+  ]
 
   const checkoutUrl = (() => {
     const base = KIT_CHECKOUT_URLS[catalog.key]
@@ -111,6 +115,17 @@ export function KitDetail() {
               </div>
             </div>
           </div>
+
+          <ul className="flex flex-col gap-2 rounded-[18px] bg-white p-4">
+            {insideList.map((item) => (
+              <li key={item} className="flex items-start gap-2.5 text-[14px] leading-[1.4] text-ink">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9A15B" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" className="mt-0.5 shrink-0">
+                  <path d="M5 12l5 5L20 7" />
+                </svg>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
 
           {checkoutUrl ? (
             <a

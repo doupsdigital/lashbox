@@ -100,6 +100,13 @@ export function getKitMessage(id: string | undefined): KitMessageItem | undefine
   return kitFimDeAno.messages.find((m) => m.id === id)
 }
 
+/** Item do plano de hoje (ou o último, se o plano já tiver terminado). */
+export function nextPlanItem(): PlanItem {
+  const d = new Date()
+  const todayKey = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+  return kitFimDeAno.plan.find((p) => p.date >= todayKey) ?? kitFimDeAno.plan[kitFimDeAno.plan.length - 1]
+}
+
 /** Que "kind" de miolo a arte usa: texto simples, urgência (vagas), preço (combo), lista (horários), ou um dos 5 tipos novos. */
 export function artKind(art: KitArt): NonNullable<KitArt['kind']> {
   if (art.kind) return art.kind
