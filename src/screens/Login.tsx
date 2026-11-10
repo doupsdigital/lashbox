@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Logo } from '../components/ui'
+import { track } from '../lib/analytics'
 import { PRIVACY_URL, TERMS_URL } from '../lib/config'
 import { useAuth } from '../state/auth'
 
@@ -20,8 +21,10 @@ export function Login() {
     setBusy(true)
     const r = await requestLink(email.trim().toLowerCase())
     setBusy(false)
-    if (r.ok) setStep('code')
-    else setError(r.message)
+    if (r.ok) {
+      track('login_codigo_enviado')
+      setStep('code')
+    } else setError(r.message)
   }
 
   const onCode = async (v: string) => {
@@ -31,8 +34,10 @@ export function Login() {
       setBusy(true)
       const r = await verifyCode(email.trim().toLowerCase(), digits)
       setBusy(false)
-      if (r.ok) navigate('/inicio', { replace: true })
-      else setError(r.message)
+      if (r.ok) {
+        track('login_concluido')
+        navigate('/inicio', { replace: true })
+      } else setError(r.message)
     }
   }
 

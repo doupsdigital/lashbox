@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { BackButton } from '../../components/ui'
+import { track, useDebouncedTrack } from '../../lib/analytics'
 import { brl } from '../../lib/text'
 
 const num = (v: string) => parseInt(v.replace(/\D/g, ''), 10) || 0
@@ -14,6 +15,8 @@ export function FairPrice() {
   const v = num(vhora)
   const minimo = c + h * v
   const sugerido = Math.round((minimo * 1.3) / 5) * 5
+
+  useDebouncedTrack([custo, horas, vhora], () => track('calculadora_usada', { tipo: 'preco_justo' }))
 
   return (
     <div className="flex flex-1 flex-col gap-[18px] overflow-auto bg-lilac px-5 pt-6 pb-8">

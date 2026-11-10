@@ -1,9 +1,15 @@
+import { useEffect } from 'react'
+import { track } from '../lib/analytics'
 import { KIWIFY_SUBSCRIPTION_CHECKOUT_URLS } from '../lib/config'
 import { useAuth } from '../state/auth'
 
 export function ExpiredSubscription() {
   const { signOut } = useAuth()
   const renewUrl = KIWIFY_SUBSCRIPTION_CHECKOUT_URLS.anual || KIWIFY_SUBSCRIPTION_CHECKOUT_URLS.mensal
+
+  useEffect(() => {
+    track('assinatura_vencida_vista')
+  }, [])
 
   return (
     <div className="flex flex-1 flex-col items-center justify-center gap-3.5 px-6 py-10 text-center">
@@ -17,6 +23,7 @@ export function ExpiredSubscription() {
           href={renewUrl}
           target="_blank"
           rel="noopener"
+          onClick={() => track('clique_renovar')}
           className="press mt-5 flex h-[54px] w-full cursor-pointer items-center justify-center rounded-full bg-plum text-[17px] font-semibold text-white"
         >
           Renovar assinatura

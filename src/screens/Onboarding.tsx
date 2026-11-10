@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { track } from '../lib/analytics'
 
 const STEPS = [
   { n: 1, t: 'Escolha um modelo', d: 'Artes prontas para cada momento do mês.' },
@@ -23,6 +24,7 @@ export function Onboarding() {
     } catch {
       // segue mesmo sem conseguir salvar
     }
+    track('onboarding_concluido')
     navigate('/estudio', { replace: true })
   }
 

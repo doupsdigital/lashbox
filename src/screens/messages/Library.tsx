@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { CopyButton, MessageText, useMessageResolver } from '../../components/Messages'
+import { track } from '../../lib/analytics'
 import { normalize } from '../../lib/text'
 import { whatsAppLinkTo } from '../../lib/studioTokens'
 import { useVipList, type VipClient } from '../../lib/vipList'
@@ -51,7 +52,7 @@ function MessagesTab() {
             <div className="rounded-[9px] bg-blush px-2.5 py-1 text-[12px] font-semibold text-plum">{m.category}</div>
           </div>
           <MessageText text={m.text} name="" className="text-[15px] leading-[1.5]" />
-          <CopyButton text={resolve(m.text)} />
+          <CopyButton text={resolve(m.text)} onCopied={() => track('mensagem_copiada', { id_mensagem: m.id, categoria: m.category })} />
         </div>
       ))}
       {filtered.length === 0 && <div className="px-3 py-8 text-center text-[15px] text-muted">Nenhuma mensagem encontrada.</div>}
@@ -94,7 +95,7 @@ function ClientsTab() {
       {list.map((c) => {
         const [bg, color] = STATUS_COLORS[c.status] ?? ['#EDE1EA', '#5B2A4E']
         return (
-          <div key={c.id} className="flex flex-col gap-3 rounded-[22px] bg-white p-[14px]">
+          <div key={c.id} className="ph-no-capture flex flex-col gap-3 rounded-[22px] bg-white p-[14px]">
             <div className="flex items-center gap-3">
               <div className="flex h-[42px] w-[42px] shrink-0 items-center justify-center rounded-full bg-blush font-bold text-plum">{c.name[0]?.toUpperCase()}</div>
               <div className="min-w-0 flex-1">
@@ -136,7 +137,7 @@ function ClientsTab() {
 
       {picking && (
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40" role="dialog" aria-modal="true" onClick={() => setPicking(null)}>
-          <div className="animate-fade-up pb-safe max-h-[80vh] w-full max-w-[430px] overflow-auto rounded-t-[32px] bg-white px-5 pt-6" onClick={(e) => e.stopPropagation()}>
+          <div className="ph-no-capture animate-fade-up pb-safe max-h-[80vh] w-full max-w-[430px] overflow-auto rounded-t-[32px] bg-white px-5 pt-6" onClick={(e) => e.stopPropagation()}>
             <div className="mb-3 text-lg font-bold">Mensagem para {picking.name}</div>
             <div className="flex flex-col gap-2.5 pb-6">
               {messages.map((m) => {

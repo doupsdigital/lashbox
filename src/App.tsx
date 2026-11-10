@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { TabBar } from './components/TabBar'
 import { Logo } from './components/ui'
+import { initAnalyticsDeferred, useTrackPageview } from './lib/analytics'
 import { missingConfigInProd } from './lib/supabase'
 import { useAuth } from './state/auth'
 import { useStudio } from './state/studio'
@@ -119,6 +120,11 @@ function Shell() {
   const { status } = useAuth()
   const inApp = status === 'local' || status === 'ready'
   const showTabs = inApp && (TAB_ROUTES.includes(pathname) || TABBED_PREFIXES.some((p) => pathname.startsWith(p)))
+
+  useEffect(() => {
+    initAnalyticsDeferred()
+  }, [])
+  useTrackPageview()
 
   return (
     <div className="flex h-dvh justify-center sm:py-6">

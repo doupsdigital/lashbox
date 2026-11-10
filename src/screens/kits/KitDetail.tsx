@@ -1,10 +1,11 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Navigate, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { ScaledBoard } from '../../components/art/ScaledBoard'
 import { StoryBoard } from '../../components/art/StoryBoard'
 import { CopyButton, MessageText, useMessageResolver } from '../../components/Messages'
 import { BackButton, SoftButton } from '../../components/ui'
 import { getKitCatalog, kitFimDeAno, nextPlanItem } from '../../content/lash'
+import { track } from '../../lib/analytics'
 import { KIT_CHECKOUT_URLS } from '../../lib/config'
 import { studioFootStory } from '../../lib/studioFooter'
 import { resolveArtPreview } from '../../lib/studioTokens'
@@ -43,6 +44,12 @@ export function KitDetail() {
     for (const m of kitFimDeAno.messages) map.set(m.group, [...(map.get(m.group) ?? []), m])
     return [...map.entries()]
   }, [])
+
+  useEffect(() => {
+    if (!catalog) return
+    track('kit_visualizado', { kit: catalog.key, comprado: isUnlocked(catalog.key) ? 'sim' : 'não' })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [catalog?.key])
 
   if (!catalog) return <Navigate to="/kits" replace />
   const unlocked = isUnlocked(catalog.key)
@@ -132,6 +139,7 @@ export function KitDetail() {
               href={checkoutUrl}
               target="_blank"
               rel="noopener"
+              onClick={() => track('kit_clique_comprar', { kit: catalog.key })}
               className="press flex h-[54px] w-full cursor-pointer items-center justify-center rounded-full bg-plum text-[17px] font-semibold text-white"
             >
               {catalog.price} · Comprar
@@ -176,7 +184,14 @@ export function KitDetail() {
               <div className="text-[14px] leading-[1.4] text-ink">{item.todo}</div>
               <div className="flex flex-wrap gap-2">
                 {item.links.art && (
-                  <button type="button" onClick={() => navigate(`/criar/${item.links.art}`)} className="flex h-8 cursor-pointer items-center rounded-full bg-blush px-3 text-[13px] font-semibold text-plum">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      track('arte_aberta', { modelo: item.links.art, origem: 'kit' })
+                      navigate(`/criar/${item.links.art}`)
+                    }}
+                    className="flex h-8 cursor-pointer items-center rounded-full bg-blush px-3 text-[13px] font-semibold text-plum"
+                  >
                     Ver arte
                   </button>
                 )}
@@ -203,7 +218,7 @@ export function KitDetail() {
                 <div key={m.id} className="flex flex-col gap-2.5 rounded-3xl bg-white p-4">
                   <div className="text-base font-bold">{m.title}</div>
                   <MessageText text={m.text} name="" className="text-[15px] leading-[1.55]" />
-                  <CopyButton text={resolve(m.text)} size="sm" />
+                  <CopyButton text={resolve(m.text)} size="sm" onCopied={() => track('mensagem_copiada', { id_mensagem: m.id, categoria: m.group })} />
                 </div>
               ))}
             </div>

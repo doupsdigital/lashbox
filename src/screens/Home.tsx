@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ScaledBoard } from '../components/art/ScaledBoard'
 import { StoryBoard } from '../components/art/StoryBoard'
+import { track } from '../lib/analytics'
 import { copyText } from '../lib/text'
 import { studioFootStory } from '../lib/studioFooter'
 import { applyStudioTokens, resolveArtPreview } from '../lib/studioTokens'
@@ -148,14 +149,20 @@ export function Home() {
           <div className="flex gap-2.5">
             <button
               type="button"
-              onClick={() => navigate(`/criar/${art.id}`)}
+              onClick={() => {
+                track('arte_aberta', { modelo: art.id, origem: 'para_postar_hoje' })
+                navigate(`/criar/${art.id}`)
+              }}
               className="press flex h-12 flex-1 cursor-pointer items-center justify-center rounded-full bg-plum text-[15.5px] font-semibold text-white"
             >
               Criar agora
             </button>
             <button
               type="button"
-              onClick={() => copyText(caption)}
+              onClick={() => {
+                copyText(caption)
+                track('legenda_copiada', { origem: 'para_postar_hoje' })
+              }}
               className="press flex h-12 flex-1 cursor-pointer items-center justify-center rounded-full bg-blush text-[15.5px] font-semibold text-plum"
             >
               Copiar legenda

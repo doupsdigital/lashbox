@@ -5,6 +5,7 @@ import { CopyButton, MessageText, useMessageResolver } from '../../components/Me
 import { StudioNotice } from '../../components/StudioNotice'
 import { BackButton, SoftButton } from '../../components/ui'
 import { kitFimDeAno } from '../../content/lash'
+import { track } from '../../lib/analytics'
 import { exportNodeToPng, shareOrDownloadPng } from '../../lib/exportBoard'
 import { studioFootGift } from '../../lib/studioFooter'
 import { useStudio } from '../../state/studio'
@@ -37,6 +38,7 @@ export function GiftScreen() {
     try {
       const blob = await exportNodeToPng(exportRef.current, 1080, 1350)
       await shareOrDownloadPng(blob, `vale-presente-${style}.png`)
+      track('vale_presente_exportado', { estilo: style })
     } catch (e) {
       console.warn('exportar vale-presente', e)
       const detail = e instanceof Error ? e.message : String(e)
@@ -155,7 +157,7 @@ export function GiftScreen() {
         </div>
       </div>
 
-      <div style={{ position: 'fixed', left: -10000, top: 0, pointerEvents: 'none' }} aria-hidden="true">
+      <div className="ph-no-capture" style={{ position: 'fixed', left: -10000, top: 0, pointerEvents: 'none' }} aria-hidden="true">
         <div ref={exportRef}>
           <GiftBoard style={style} palette={palette} para={para} de={de} servico={servico} mensagem={mensagem} validade={validade} foot={foot} />
         </div>

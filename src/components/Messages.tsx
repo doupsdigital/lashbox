@@ -18,7 +18,7 @@ export function MessageText({ text, name, className = '' }: { text: string; name
   const n = name.trim()
   const parts = applyStudioTokens(text, studio).split(/(\[[^\]\n]+\])/g)
   return (
-    <div className={`whitespace-pre-wrap ${className}`}>
+    <div className={`ph-no-capture whitespace-pre-wrap ${className}`}>
       {parts.map((p, i) => {
         if (!/^\[[^\]\n]+\]$/.test(p)) return <Fragment key={i}>{p}</Fragment>
         if (p === '[nome]' && n) return <Fragment key={i}>{n}</Fragment>
@@ -32,14 +32,25 @@ export function MessageText({ text, name, className = '' }: { text: string; name
   )
 }
 
-/** Botão Copiar → "Copiado! ✓" por 1,8s. */
-export function CopyButton({ text, label = 'Copiar', size = 'md' }: { text: string; label?: string; size?: 'md' | 'sm' }) {
+/** Botão Copiar → "Copiado! ✓" por 1,8s. `onCopied`: evento de análise específico da tela (opcional). */
+export function CopyButton({
+  text,
+  label = 'Copiar',
+  size = 'md',
+  onCopied,
+}: {
+  text: string
+  label?: string
+  size?: 'md' | 'sm'
+  onCopied?: () => void
+}) {
   const [copied, setCopied] = useState(false)
   const t = useRef<number | undefined>(undefined)
   useEffect(() => () => window.clearTimeout(t.current), [])
   const h = size === 'md' ? 'h-[46px] text-[15px]' : 'h-10 text-sm'
   const onCopy = async () => {
     await copyText(text)
+    onCopied?.()
     setCopied(true)
     window.clearTimeout(t.current)
     t.current = window.setTimeout(() => setCopied(false), 1800)

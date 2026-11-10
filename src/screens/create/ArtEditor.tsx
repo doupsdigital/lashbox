@@ -5,6 +5,7 @@ import { ScaledBoard } from '../../components/art/ScaledBoard'
 import { StudioNotice } from '../../components/StudioNotice'
 import { BackButton, SoftButton } from '../../components/ui'
 import { artKind, getAnyArt } from '../../content/lash'
+import { track } from '../../lib/analytics'
 import { takeArtDraft } from '../../lib/artDraft'
 import { exportNodeToPng, shareOrDownloadPng } from '../../lib/exportBoard'
 import { studioFootStory } from '../../lib/studioFooter'
@@ -189,7 +190,8 @@ export function ArtEditor() {
     try {
       const h = post ? 1350 : 1920
       const blob = await exportNodeToPng(exportRef.current, 1080, h)
-      await shareOrDownloadPng(blob, `${art.id}-${post ? 'post' : 'story'}.png`)
+      const acao = await shareOrDownloadPng(blob, `${art.id}-${post ? 'post' : 'story'}.png`)
+      track('arte_exportada', { modelo: art.id, formato: post ? 'post' : 'story', paleta: palette, acao: acao === 'shared' ? 'compartilhar' : 'salvar' })
     } catch (e) {
       console.warn('exportar arte', e)
       const detail = e instanceof Error ? e.message : String(e)
@@ -525,7 +527,7 @@ export function ArtEditor() {
         </SoftButton>
       </div>
 
-      <div style={{ position: 'fixed', left: -10000, top: 0, pointerEvents: 'none' }} aria-hidden="true">
+      <div className="ph-no-capture" style={{ position: 'fixed', left: -10000, top: 0, pointerEvents: 'none' }} aria-hidden="true">
         <div ref={exportRef}>
           <StoryBoard {...boardProps} />
         </div>

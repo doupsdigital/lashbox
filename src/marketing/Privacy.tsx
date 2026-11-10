@@ -10,7 +10,7 @@ export function Privacy() {
   return (
     <LegalLayout>
       <h1 className="text-[32px] font-extrabold tracking-tight">Política de Privacidade</h1>
-      <p className="text-[14px] text-[#6B5C66]">Última atualização: 6 de novembro de 2026</p>
+      <p className="text-[14px] text-[#6B5C66]">Última atualização: 10 de novembro de 2026</p>
 
       <p>
         Esta política explica quais dados o <b>LashBox</b> coleta, para que usa e quais são os seus direitos, de acordo com a
@@ -52,6 +52,15 @@ export function Privacy() {
         login) não usa o pixel.</b> Como qualquer site, o servidor de hospedagem registra dados técnicos de acesso (como
         endereço IP e navegador) para segurança e funcionamento.
       </p>
+      <h3 className="mt-1 text-[16px] font-bold">Análise de uso (página de vendas e app)</h3>
+      <p>
+        Usamos o <b>PostHog</b> para entender como a página de vendas e o app são usados: quais telas são abertas, quais
+        botões são clicados e eventos como abrir ou exportar uma arte. O PostHog também grava sessões de uso (como um vídeo
+        da navegação na tela) para nos ajudar a encontrar problemas — nessas gravações, todo campo digitado, o conteúdo das
+        suas mensagens, a sua lista de "Minhas clientes" e as prévias de arte (incluindo a foto do seu estúdio) ficam
+        escondidos. Enquanto você estiver logada, o PostHog identifica você pelo seu usuário (nunca pelo e-mail); ao sair, essa
+        identificação é apagada do navegador.
+      </p>
 
       <h2>3. Para que usamos os dados</h2>
       <ul>
@@ -60,6 +69,7 @@ export function Privacy() {
         <li>Preencher as artes, mensagens e ofertas com os dados do seu estúdio.</li>
         <li>Responder aos seus pedidos de suporte.</li>
         <li>Medir e melhorar os nossos anúncios (Pixel da Meta na página de vendas).</li>
+        <li>Entender o uso do app e da página de vendas, e encontrar problemas (PostHog, com gravação de sessão mascarada).</li>
         <li>Cumprir obrigações legais e prevenir fraudes.</li>
       </ul>
       <p>Não vendemos nem alugamos os seus dados para ninguém, e não enviamos mensagens de propaganda de terceiros.</p>
@@ -78,6 +88,7 @@ export function Privacy() {
         <li><b>Vercel</b>: hospedagem da página de vendas e do app.</li>
         <li><b>Resend</b>: envio dos e-mails de acesso.</li>
         <li><b>Meta</b>: medição e otimização dos anúncios no Facebook e no Instagram (Pixel da Meta, só na página de vendas).</li>
+        <li><b>PostHog</b>: análise de uso e gravação de sessão (com mascaramento), no app e na página de vendas.</li>
         <li><b>Google Fonts</b>: entrega das fontes usadas no app, quando aplicável.</li>
       </ul>
       <p>

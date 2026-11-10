@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { BackButton } from '../../components/ui'
+import { track } from '../../lib/analytics'
 import { getKitCatalog, weekPlan, yearDates } from '../../content/lash'
 import { usePurchases } from '../../state/purchases'
 
@@ -52,7 +53,10 @@ export function PlanScreen() {
               <button
                 key={d.dow}
                 type="button"
-                onClick={() => navigate(to)}
+                onClick={() => {
+                  if (d.links.art) track('arte_aberta', { modelo: d.links.art, origem: 'plano' })
+                  navigate(to)
+                }}
                 className="press flex cursor-pointer items-center gap-3.5 rounded-[22px] p-3.5 text-left shadow-[0_8px_22px_rgba(91,42,78,.07)]"
                 style={{ background: isToday ? '#5B2A4E' : '#fff', color: isToday ? '#fff' : '#2A1E27' }}
               >

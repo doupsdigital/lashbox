@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { BackButton } from '../../components/ui'
+import { track, useDebouncedTrack } from '../../lib/analytics'
 import { brl } from '../../lib/text'
 
 type Field = 'meta' | 'serv' | 'manut'
@@ -31,6 +32,8 @@ export function Goal() {
   const explain =
     'Cada cliente rende ' + brl(sv) + ' da aplicação + ' + freqTxt + (freq === 1 ? ' manutenção' : ' manutenções') +
     ' de ' + brl(mt) + ' = ' + brl(perCli) + ' no mês. ' + brl(m) + ' ÷ ' + brl(perCli) + ' = ' + novas + ' clientes.'
+
+  useDebouncedTrack([meta, serv, manut, freq], () => track('calculadora_usada', { tipo: 'meta' }))
 
   return (
     <div className="flex flex-1 flex-col gap-[18px] overflow-auto bg-lilac px-5 pt-6 pb-8">

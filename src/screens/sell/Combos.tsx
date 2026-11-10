@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { CopyButton, MessageText, useMessageResolver } from '../../components/Messages'
 import { BackButton } from '../../components/ui'
 import { combos, comboDefaults } from '../../content/lash'
+import { track } from '../../lib/analytics'
 import { computeCombo, fillComboMessage, money } from '../../lib/combo'
 import { useStudio } from '../../state/studio'
 
@@ -96,7 +97,7 @@ export function CombosTool() {
                 <div className="mt-1 text-[14px] leading-[1.4]">{c.how}</div>
               </div>
               <MessageText text={msg} name="" className="text-[15px] leading-[1.5]" />
-              <CopyButton text={msg} size="sm" />
+              <CopyButton text={msg} size="sm" onCopied={() => track('oferta_copiada', { id_combo: c.id })} />
             </div>
           )
         })}

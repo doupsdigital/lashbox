@@ -18,6 +18,7 @@ import '@fontsource/playfair-display/latin-500.css'
 import '@fontsource/playfair-display/latin-400-italic.css'
 import { registerSW } from 'virtual:pwa-register'
 import App from './App'
+import { AnalyticsBridge } from './components/AnalyticsBridge'
 import { AuthProvider } from './state/auth'
 import { StudioProvider } from './state/studio'
 import { SubscriptionProvider } from './state/subscription'
@@ -31,6 +32,7 @@ export default function AppRoot() {
       <StudioProvider>
         <SubscriptionProvider>
           <PurchasesProvider>
+            <AnalyticsBridge />
             <App />
           </PurchasesProvider>
         </SubscriptionProvider>

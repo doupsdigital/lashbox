@@ -33,7 +33,7 @@ export function CookieNotice() {
       role="status"
       className="fixed inset-x-0 bottom-0 z-50 flex flex-wrap items-center justify-center gap-x-3 gap-y-1.5 bg-[#2A1E27] px-4 py-3 text-center text-[13px] text-white/90"
     >
-      <span>Usamos cookies para medir nossos anúncios.</span>
+      <span>Usamos cookies para medir nossos anúncios e melhorar o app.</span>
       <a href="/privacidade" className="font-semibold text-white underline underline-offset-2">
         Saiba mais
       </a>

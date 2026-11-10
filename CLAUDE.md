@@ -220,6 +220,45 @@ Toda a infraestrutura e o conteúdo do dia a dia estão prontos (ver seção 8 e
     - Testado em `--simular` sem token neste computador (100% offline, mostra o plano completo); o teste com token (leituras de verdade + criação real) é feito no outro computador, que tem o `META_ACCESS_TOKEN`.
   - Pendência do item 1 da seção 7 (cadastrar o pixel nos dois produtos da Kiwify, com "Disparar Purchase ao gerar Pix" desligado) precisa estar feita **antes** de rodar o script de verdade — o passo 2 dele para a execução se o pixel não tiver recebido eventos de `lashbox.app` nas últimas 48h.
 
+## 12. PostHog (análise de uso + gravação de sessão)
+
+- **Configuração:** `VITE_POSTHOG_KEY` (Project API key, `phc_...`) e `VITE_POSTHOG_HOST` (`https://us.i.posthog.com`, projeto na região US) no `.env.local` (fora do Git) e nas variáveis de ambiente da Vercel (Settings → Environment Variables). **Sem essas duas variáveis, o PostHog simplesmente não carrega** — nada quebra, nenhuma chamada é feita (`src/lib/analytics.ts`, guardado por um `if (!KEY) return` em todo ponto de entrada).
+- **Uma única instalação**, compartilhada por `/lp` e pelo app logado (mesmo domínio, mesmo projeto) — `src/lib/analytics.ts` é importado pelos dois bundles (`MarketingLayout.tsx` e `App.tsx`/`Shell`). Inicializa só depois do `window` `load` (`initAnalyticsDeferred()`), pra nunca atrasar a abertura da `/lp` (é o que recebe tráfego de anúncio).
+- **Autocapture desligado, pageview automático ligado:** `autocapture:false` (só eventos nomeados, pra nunca capturar sem querer texto de mensagem ou nome de cliente); `capture_pageview:false` no init + `useTrackPageview()` (hook que dispara `$pageview` a cada troca de `pathname`/`search`, via `useLocation()`) chamado tanto no `Shell` do app quanto no `MarketingLayout` — cobre o carregamento inicial e as trocas de tela da SPA dos dois lados.
+- **Gravação de sessão ligada, com mascaramento:**
+  - `session_recording: { maskAllInputs: true }` — todo campo digitado (inputs/textareas) sai mascarado automaticamente.
+  - Classe `ph-no-capture` (o PostHog esconde o bloco inteiro na gravação): aplicada em `ScaledBoard.tsx` (cobre **toda** prévia de arte/vale-presente do app — Início, Galeria, ArtEditor, Vale-presente, Kits — porque é o wrapper universal do motor de artes, então a foto do estúdio nunca aparece), em `MessageText` (`components/Messages.tsx`, cobre todo conteúdo de mensagem — Mensagens, Montador de ofertas, Vale-presente, Kit), nos nós ocultos de exportação do `ArtEditor.tsx`/`Gift.tsx` (já fora da tela, mas por garantia), no card de cada cliente e no modal de mensagem da aba "Minhas clientes" (`Library.tsx`), e no círculo da foto do estúdio em `Studio.tsx`.
+  - **É preciso também ligar a gravação de sessão no painel do PostHog** (Project Settings → Session Replay) — o código só manda o que já vem mascarado; o projeto precisa ter a gravação ativada para gravar alguma coisa.
+- **Identificação** (`src/components/AnalyticsBridge.tsx`, dentro de todos os providers do `AppRoot.tsx`): ao entrar (`status==='ready'`), `posthog.identify(user.id)` — **o id do Supabase, nunca o e-mail**. Propriedades de pessoa (`setPersonProperties`, atualizadas a cada mudança): `plano` (mensal/anual), `situacao_assinatura`, `tem_kit_fim_de_ano` (bool), `estudio_completo` (bool). No "Sair" (`status` vira `signedOut`), `posthog.reset()`.
+- **Eventos nomeados** (nome exato + propriedades):
+
+  | Evento | Propriedades | Onde |
+  |---|---|---|
+  | `lp_visualizada` | `utm_source`, `utm_campaign`, `utm_content` (se vierem na URL) | `/lp`, ao carregar |
+  | `lp_planos_vistos` | — | `/lp`, quando a seção `#planos` entra na tela (`IntersectionObserver`) |
+  | `lp_clique_plano` | `plano` (mensal\|anual) | `/lp`, clique em "Assinar mensal/anual" |
+  | `login_codigo_enviado` | — | `/entrar`, link/código enviado com sucesso |
+  | `login_concluido` | — | `/entrar`, código verificado com sucesso |
+  | `onboarding_concluido` | — | `/boas-vindas`, ao terminar o 3º passo |
+  | `estudio_salvo` | `campos_preenchidos` (número), `tem_foto` (sim\|não) | `/estudio`, ~1s depois da última mudança (nunca os dados em si) |
+  | `arte_aberta` | `modelo`, `origem` (galeria\|para_postar_hoje\|plano\|kit) | Galeria, Início, Planejar, Kit — ao abrir uma arte |
+  | `arte_exportada` | `modelo`, `formato` (story\|post), `paleta`, `acao` (compartilhar\|salvar) | `ArtEditor`, ao exportar — **o mais importante** |
+  | `vale_presente_exportado` | `estilo` | `GiftScreen`, ao exportar |
+  | `mensagem_copiada` | `id_mensagem`, `categoria` (nunca o texto) | Mensagens, Kit |
+  | `legenda_copiada` | `origem` | Início ("Copiar legenda") |
+  | `oferta_copiada` | `id_combo` | Montador de ofertas |
+  | `calculadora_usada` | `tipo` (preco_justo\|meta) | Preço justo / Meta do mês, ~1s depois da última mudança |
+  | `kit_visualizado` | `kit`, `comprado` (sim\|não) | `KitDetail`, ao abrir |
+  | `kit_clique_comprar` | `kit` | `KitDetail`, clique em "Comprar" |
+  | `assinatura_vencida_vista` | — | `/assinatura-vencida`, ao carregar |
+  | `clique_renovar` | — | `/assinatura-vencida`, clique em "Renovar assinatura" |
+
+- **Testado localmente** (`--simular` não existe aqui; foi um script Playwright descartável, não salvo no repo) com uma chave de teste e `posthog.debug()` ligado (só em `import.meta.env.DEV`): os 16 eventos do app foram confirmados de ponta a ponta, incluindo a chegada da requisição de rede (`/e/`); os 3 da `/lp` (`lp_visualizada`, `lp_planos_vistos`, `lp_clique_plano`) foram confirmados pelo log de debug do próprio PostHog no console (`send "evento" {...}`, com as propriedades certas no momento certo) — só não pela captura de rede do script de teste, por causa de uma particularidade de como aquele contexto descartável libera a fila de eventos (não afeta o funcionamento real, com uma chave de verdade). Também descobri, nesse teste: o Chromium automatizado do Playwright é detectado como bot pelo PostHog (um filtro real e correto para produção) — contornado só no teste com `opt_out_useragent_filter` atrás de uma env var de teste (`VITE_POSTHOG_TEST_MODE`) que nunca deve ser configurada na Vercel.
+- **Privacidade:** `/privacidade` já cita o PostHog como operador (análise de uso + gravação de sessão mascarada, no app e na `/lp`) e o aviso de cookies da `/lp` já cita "medir nossos anúncios e melhorar o app".
+- **Gráficos no painel do PostHog** (passo a passo, depois que as env vars estiverem na Vercel e o app no ar gerando eventos de verdade):
+  1. **Funil de vendas** (`lp_visualizada` → `lp_planos_vistos` → `lp_clique_plano`): no painel, vá em **Product analytics → Funnels → New insight**. Adicione os 3 eventos nessa ordem (botão "+ Add step", escolher cada evento pelo nome exato). Em "Breakdown", pode adicionar `plano` do evento `lp_clique_plano` pra ver mensal vs. anual separado. Salve com um nome (ex.: "Funil da LP").
+  2. **Uso semanal** (quantas artes cada assinante exporta por semana): **Product analytics → New insight → Trends**. Série: evento `arte_exportada`. No seletor de matemática da série (o "Σ" ao lado do nome do evento), troque de "Total count" para **"Average count per user"** e em "Interval" escolha **"Week"** — mostra, semana a semana, a média de artes exportadas por assinante. Para ver pessoa por pessoa (não só a média), troque "Display" para **"Table"** e em "Breakdown" escolha a opção de pessoa (aparece como "Person" nas propriedades) — a tabela sai com uma linha por assinante e a contagem de exportações em cada semana.
+
 ## 11. E-mail de divulgação do Kit Fim de Ano
 
 - **`scripts/emails/kit-fim-de-ano.mjs`**: manda, pelo Resend, um lembrete do Kit Fim de Ano para quem tem assinatura ativa (mesma regra do `has_access()`) e **ainda não comprou** o kit (consulta `subscriptions` e `purchases` direto no Supabase, com o service role — por isso precisa de `SUPABASE_URL` e `SUPABASE_SERVICE_ROLE_KEY` no `.env`, além de `RESEND_API_KEY`; os três nunca são impressos). Remetente `LashBox <acesso@lashbox.app>` (mesmo domínio verificado do login), assunto "Sua Black Friday já está pronta 🎁", visual igual ao e-mail de link mágico (`supabase/templates/link-magico.html`): fundo blush, card branco, botão ameixa "Ver o kit no app" → `https://lashbox.app/kits/fim-de-ano`.

@@ -1,6 +1,7 @@
 import { useRef, useState, type ChangeEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { BackButton } from '../components/ui'
+import { track, useDebouncedTrack } from '../lib/analytics'
 import { KIWIFY_BUYER_AREA_URL, PRIVACY_URL, TERMS_URL } from '../lib/config'
 import { removeStudioPhoto, saveStudioPhoto, useStudioPhotoUrl } from '../lib/studioPhoto'
 import { useAuth } from '../state/auth'
@@ -82,6 +83,11 @@ export function StudioScreen() {
 
   const initials = (studio.ownerName || 'LB').trim().slice(0, 2).toUpperCase()
   const activePalette = PALETTES.find((p) => p.id === studio.palette) ?? PALETTES[0]
+  const camposPreenchidos = Object.entries(studio).filter(([k, v]) => k !== 'palette' && String(v).trim()).length
+
+  useDebouncedTrack([studio, photoUrl], () => {
+    track('estudio_salvo', { campos_preenchidos: camposPreenchidos, tem_foto: photoUrl ? 'sim' : 'não' })
+  })
 
   return (
     <div className="flex flex-1 flex-col gap-[18px] overflow-auto bg-lilac px-5 pt-6 pb-8">
@@ -94,7 +100,7 @@ export function StudioScreen() {
       {loading && <div className="-mt-3 text-[13px] text-muted">Carregando…</div>}
 
       <div className="flex flex-col items-center gap-2">
-        <div className="relative h-24 w-24 overflow-hidden rounded-full border-[3px] border-white shadow-[0_8px_20px_rgba(91,42,78,.25)]" style={{ background: 'linear-gradient(135deg,#E07A9B,#5B2A4E)' }}>
+        <div className="ph-no-capture relative h-24 w-24 overflow-hidden rounded-full border-[3px] border-white shadow-[0_8px_20px_rgba(91,42,78,.25)]" style={{ background: 'linear-gradient(135deg,#E07A9B,#5B2A4E)' }}>
           {photoUrl ? <img src={photoUrl} alt="" className="h-full w-full object-cover" /> : <div className="flex h-full w-full items-center justify-center text-[34px] font-bold text-white">{initials}</div>}
         </div>
         <button type="button" onClick={() => fileInput.current?.click()} className="cursor-pointer text-[15.5px] font-semibold text-rose">

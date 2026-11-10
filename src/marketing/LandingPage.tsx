@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode, type SVGProps } from 'react'
 import { KIWIFY_SUBSCRIPTION_CHECKOUT_URLS } from '../lib/config'
 import { withForwardedParams } from '../lib/checkoutUrl'
+import { track, trackEventOnceVisible } from '../lib/analytics'
 import { trackAddToCart, trackViewContentOnceVisible } from './pixel'
 
 /** Mude para true quando public/lp/demo.mp4 existir de verdade. */
@@ -151,6 +152,7 @@ function PlanButton({ plan, price, className, children }: { plan: 'mensal' | 'an
       href={url}
       onClick={(e) => {
         e.preventDefault()
+        track('lp_clique_plano', { plano: plan })
         trackAddToCart(price, () => {
           window.location.href = url
         })
@@ -185,7 +187,17 @@ export function LandingPage() {
     }
   }, [])
 
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    track('lp_visualizada', {
+      utm_source: params.get('utm_source') ?? undefined,
+      utm_campaign: params.get('utm_campaign') ?? undefined,
+      utm_content: params.get('utm_content') ?? undefined,
+    })
+  }, [])
+
   useEffect(() => trackViewContentOnceVisible(plansRef.current), [])
+  useEffect(() => trackEventOnceVisible(plansRef.current, 'lp_planos_vistos'), [])
 
   // Capa: imagens críticas para o LCP, sem lazy loading — preload explícito, já que é o que
   // carrega primeiro vindo do anúncio.

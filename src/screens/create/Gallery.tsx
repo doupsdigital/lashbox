@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { ScaledBoard } from '../../components/art/ScaledBoard'
 import { StoryBoard } from '../../components/art/StoryBoard'
+import { track } from '../../lib/analytics'
 import { studioFootStory } from '../../lib/studioFooter'
 import { resolveArtPreview } from '../../lib/studioTokens'
 import { useStudio } from '../../state/studio'
@@ -61,7 +62,15 @@ export function Gallery() {
 
       <div className="grid grid-cols-2 gap-3.5">
         {arts.map((a) => (
-          <button key={a.id} type="button" onClick={() => navigate(`/criar/${a.id}`)} className="flex cursor-pointer flex-col gap-2">
+          <button
+            key={a.id}
+            type="button"
+            onClick={() => {
+              track('arte_aberta', { modelo: a.id, origem: 'galeria' })
+              navigate(`/criar/${a.id}`)
+            }}
+            className="flex cursor-pointer flex-col gap-2"
+          >
             <div className="overflow-hidden rounded-[18px] shadow-[0_8px_22px_rgba(91,42,78,.14)]">
               <ScaledBoard width={1080} height={1920} scale={0.16}>
                 <StoryBoard
