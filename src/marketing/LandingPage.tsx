@@ -28,41 +28,6 @@ function Icon({ d, ...rest }: { d: string } & SVGProps<SVGSVGElement>) {
   )
 }
 
-const DOR_ITEMS = [
-  {
-    icon: ICONS.clock,
-    text: 'Termina o último atendimento do dia e ainda precisa pensar no que postar.',
-  },
-  {
-    icon: ICONS.edit,
-    text: 'Baixa um pacote de artes e passa a noite trocando nome, telefone e preço, uma por uma.',
-  },
-  {
-    icon: ICONS.msg,
-    text: "Alguém pergunta 'quanto custa?' e você digita tudo de novo, do zero.",
-  },
-  {
-    icon: ICONS.eyeOff,
-    text: 'Seu perfil fica dias sem post. E quem não aparece não é lembrada.',
-  },
-]
-
-const TEMPLATES_COMPARE = [
-  'Você troca nome, telefone e preço em cada arte',
-  'Precisa abrir o Canva e saber mexer',
-  'Só artes',
-  'Arquivos perdidos na galeria do celular',
-  'Você ainda precisa pensar no que postar',
-]
-
-const APP_COMPARE = [
-  'Seus dados entram sozinhos em todas as artes',
-  '3 toques no celular, sem saber design',
-  'Artes, vale-presentes, ofertas e mensagens',
-  'Tudo num lugar só, sempre à mão',
-  'Uma sugestão de post pronta todo dia',
-]
-
 const STEPS = [
   {
     n: 1,
@@ -120,17 +85,14 @@ const APP_FEATURES = [
 ]
 
 const VITRINE = [
-  { src: '/lp/art-valores.webp', alt: 'Tabela de valores' },
-  { src: '/lp/art-quote.webp', alt: 'Depoimento' },
-  { src: '/lp/art-bullets.webp', alt: 'Estilos de cílios' },
-  { src: '/lp/art-antes-depois.webp', alt: 'Antes e depois' },
-]
-
-const TARGET_AUDIENCE = [
-  'Você quer aparecer todo dia no Instagram, mas não tem tempo',
-  'Não gosta (ou não sabe) mexer no Canva',
-  'Quer um perfil com cara de estúdio profissional',
-  'Atende sozinha e faz tudo pelo celular',
+  { src: '/lp/art-valores.webp', alt: 'Tabela de valores, paleta Rosa' },
+  { src: '/lp/art-valores-nude.webp', alt: 'Tabela de valores, paleta Nude e dourado' },
+  { src: '/lp/art-bullets-preto.webp', alt: 'Estilos de cílios, paleta Preto e dourado' },
+  { src: '/lp/art-quote.webp', alt: 'Depoimento, paleta Rosa' },
+  { src: '/lp/art-antes-depois.webp', alt: 'Antes e depois, paleta Rosa' },
+  { src: '/lp/art-quote-nude.webp', alt: 'Depoimento, paleta Nude e dourado' },
+  { src: '/lp/art-valores-preto.webp', alt: 'Tabela de valores, paleta Preto e dourado' },
+  { src: '/lp/art-bullets.webp', alt: 'Estilos de cílios, paleta Rosa' },
 ]
 
 const INC = [
@@ -284,14 +246,14 @@ export function LandingPage() {
         </div>
         <div className="relative mx-auto flex max-w-[1120px] flex-wrap items-center gap-x-10 gap-y-9 px-5 pt-5 pb-10 md:pt-10 md:pb-24">
           <div className="flex min-w-0 flex-[1_1_420px] flex-col items-start gap-3.5 md:gap-6">
-            <div className="flex h-[44px] w-full items-center justify-center rounded-full bg-[#E07A9B] px-6 text-center text-[22px] leading-none font-extrabold tracking-[-.02em] text-white shadow-[0_10px_26px_rgba(0,0,0,.25)] [text-shadow:0_2px_0_rgba(91,42,78,.3)] md:h-[72px] md:w-fit md:px-10 md:text-[44px]">
+            <div className="self-center rounded-full border border-white/30 bg-white/10 px-5 py-2 text-[18px] font-bold tracking-[-.01em] text-white backdrop-blur-sm md:self-start md:px-7 md:py-2.5 md:text-[28px]">
               Ei, Lash Designer 👋
             </div>
-            <h1 className="text-pretty leading-[1.03] font-extrabold tracking-[-.03em] text-white">
-              <span className="block text-[clamp(34px,8vw,66px)]">Esqueça os templates do Canva.</span>
-              <span className="mt-1.5 block text-[clamp(19px,3vw,34px)] font-bold text-[#E07A9B] md:mt-3">O LashBox faz tudo por você.</span>
+            <h1 className="text-center leading-[1.03] font-extrabold tracking-[-.03em] text-white md:text-left">
+              <span className="block text-balance text-[clamp(42px,11vw,66px)]">Esqueça os templates do Canva.</span>
+              <span className="mt-1.5 block text-[clamp(22px,4.2vw,34px)] font-bold text-[#E07A9B] md:mt-3">O LashBox faz tudo por você.</span>
             </h1>
-            <p className="max-w-[460px] text-pretty text-[15px] leading-[1.42] text-[#F6E9F0] md:max-w-[560px] md:text-[21px] md:leading-[1.4]">
+            <p className="max-w-[460px] self-center text-pretty text-center text-[15px] leading-[1.42] text-[#F6E9F0] md:max-w-[560px] md:self-start md:text-left md:text-[21px] md:leading-[1.4]">
               Seus posts prontos em 1 minuto, num app feito para lash designers.
             </p>
             <button
@@ -333,83 +295,7 @@ export function LandingPage() {
         </div>
       </div>
 
-      {/* 2. A DOR (seção nova, logo após o hero) */}
-      <div style={{ background: '#4A2140' }}>
-        <div className="mx-auto flex max-w-[860px] flex-col gap-8 px-5 py-20">
-          <h2 className="text-pretty text-center text-[clamp(28px,4.4vw,42px)] font-extrabold tracking-[-.03em] text-white">
-            Você conhece essa rotina?
-          </h2>
-          <div className="grid gap-3.5 sm:grid-cols-2">
-            {DOR_ITEMS.map((item) => (
-              <div
-                key={item.text}
-                className="flex items-start gap-3.5 rounded-[24px] border border-white/[0.10] bg-white/[0.05] p-5"
-              >
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-white/[0.08] text-[#E07A9B]">
-                  <Icon d={item.icon} width={20} height={20} stroke="currentColor" strokeWidth={2} />
-                </div>
-                <p className="text-[16px] leading-[1.5] text-white/85">{item.text}</p>
-              </div>
-            ))}
-          </div>
-          <div className="rounded-[26px] border border-[#E07A9B]/35 bg-[#E07A9B]/15 px-6 py-5 text-center shadow-[0_10px_25px_rgba(224,122,155,0.1)]">
-            <p className="text-pretty text-[18px] md:text-[20px] font-bold leading-[1.4] text-[#E07A9B]">
-              Não é falta de talento. É falta de tempo, e de uma ferramenta feita para a sua rotina.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* 3. O DIFERENCIAL (seção nova, substitui a antiga Sem/Com) */}
-      <div className="mx-auto flex max-w-[1120px] flex-col items-center gap-6 px-5 py-20">
-        <div className="rounded-full border border-[#E07A9B]/35 bg-[#E07A9B]/20 px-4 py-1.5 text-[13px] font-bold tracking-[.08em] text-[#E07A9B] uppercase">
-          A diferença
-        </div>
-        <div className="flex flex-col items-center gap-3 text-center">
-          <h2 className="text-pretty text-[clamp(28px,4.4vw,42px)] font-extrabold tracking-[-.03em] text-white">
-            Não é um pacote de templates. É um app.
-          </h2>
-          <p className="max-w-[640px] text-pretty text-[17px] md:text-[18px] leading-[1.5] text-white/80">
-            Os pacotes de artes te dão arquivos para editar. O LashBox te entrega o post pronto.
-          </p>
-        </div>
-        <div className="mt-4 grid w-full max-w-[880px] gap-4 md:grid-cols-2">
-          {/* Coluna esquerda "Pacote de templates" */}
-          <div className="flex flex-col gap-4 rounded-[28px] border border-white/[0.10] bg-white/[0.05] p-6">
-            <div className="text-[14px] font-bold tracking-[.08em] text-white/65 uppercase">
-              Pacote de templates
-            </div>
-            <div className="flex flex-col gap-3.5">
-              {TEMPLATES_COMPARE.map((t) => (
-                <div key={t} className="flex items-start gap-3 text-[16px] leading-[1.45] text-white/65">
-                  <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-white/10">
-                    <Icon d={ICONS.x} width={12} height={12} stroke="#fff" strokeWidth={3} opacity={0.65} />
-                  </span>
-                  <span>{t}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-          {/* Coluna direita "App LashBox" */}
-          <div className="flex flex-col gap-4 rounded-[28px] bg-[#E07A9B] p-6 text-white shadow-[0_18px_40px_rgba(224,122,155,.35)]">
-            <div className="text-[14px] font-bold tracking-[.08em] text-white uppercase">
-              App LashBox
-            </div>
-            <div className="flex flex-col gap-3.5">
-              {APP_COMPARE.map((t) => (
-                <div key={t} className="flex items-start gap-3 text-[16px] leading-[1.45] font-medium text-white">
-                  <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#C9A15B]">
-                    <Icon d={ICONS.check} width={13} height={13} stroke="#5B2A4E" strokeWidth={3.2} />
-                  </span>
-                  <span>{t}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* 4. COMO FUNCIONA */}
+      {/* 2. COMO FUNCIONA */}
       <div style={{ background: '#4A2140' }}>
         <div className="mx-auto flex max-w-[1120px] flex-col items-center gap-10 px-5 py-20">
           <h2 className="text-center text-[clamp(28px,4.4vw,42px)] font-extrabold tracking-[-.03em] text-white">
@@ -462,7 +348,7 @@ export function LandingPage() {
         </div>
       </div>
 
-      {/* 5. O QUE TEM DENTRO DO APP */}
+      {/* 3. O QUE TEM DENTRO DO APP */}
       <div>
         <div className="mx-auto flex max-w-[1120px] flex-col gap-9 px-5 py-20">
           <h2 className="mx-auto max-w-[820px] text-pretty text-center text-[clamp(28px,4.4vw,42px)] font-extrabold tracking-[-.03em] text-white">
@@ -499,7 +385,7 @@ export function LandingPage() {
         </div>
       </div>
 
-      {/* 6. VITRINE DE ARTES */}
+      {/* 4. VITRINE DE ARTES */}
       <div style={{ background: '#4A2140' }}>
         <div className="mx-auto flex max-w-[1120px] flex-col gap-8 px-5 py-20">
           <h2 className="text-pretty text-center text-[clamp(28px,4.4vw,42px)] font-extrabold tracking-[-.03em] text-white">
@@ -508,7 +394,7 @@ export function LandingPage() {
           <div className="flex gap-4.5 overflow-x-auto px-1 pt-1.5 pb-5" style={{ scrollSnapType: 'x mandatory' }}>
             {VITRINE.map((v) => (
               <div key={v.alt} className="aspect-[9/16] flex-[0_0_min(62%,250px)] overflow-hidden rounded-2xl shadow-[0_14px_34px_rgba(0,0,0,.4)]" style={{ scrollSnapAlign: 'center' }}>
-                <img src={v.src} className="block h-full w-full object-cover" alt={v.alt} loading="eager" />
+                <img src={v.src} className="block h-full w-full object-cover" alt={v.alt} loading="lazy" />
               </div>
             ))}
           </div>
@@ -518,24 +404,7 @@ export function LandingPage() {
         </div>
       </div>
 
-      {/* 7. PARA QUEM É (seção nova, curta) */}
-      <div className="mx-auto flex max-w-[800px] flex-col items-center gap-8 px-5 py-20">
-        <h2 className="text-pretty text-center text-[clamp(28px,4.4vw,42px)] font-extrabold tracking-[-.03em] text-white">
-          O LashBox é para você se…
-        </h2>
-        <div className="flex w-full flex-col gap-3.5">
-          {TARGET_AUDIENCE.map((t) => (
-            <div key={t} className="flex items-center gap-4 rounded-[24px] border border-white/[0.12] bg-white/[0.06] p-5">
-              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#C9A15B]">
-                <Icon d={ICONS.check} width={15} height={15} stroke="#5B2A4E" strokeWidth={3.2} />
-              </span>
-              <span className="text-[16.5px] md:text-[18px] font-medium leading-[1.4] text-white/90">{t}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* 8. PLANOS */}
+      {/* 5. PLANOS */}
       <div ref={plansRef} id="planos" className="relative mx-auto flex max-w-[1120px] flex-col gap-8 px-5 py-20">
         <div className="pointer-events-none absolute top-10 right-[6%] h-[280px] w-[280px] rounded-full bg-[#E07A9B]/22 blur-3xl" />
         <div className="flex flex-col items-center gap-3 text-center">
@@ -598,16 +467,12 @@ export function LandingPage() {
             </div>
           </div>
         </div>
-        <div className="relative mx-auto max-w-[700px] text-pretty text-center text-[14px] leading-[1.55] text-white/75">
-          Todas as ferramentas e modelos enquanto você for assinante, com melhorias constantes. Kits sazonais (como o de Fim de
-          Ano) são opcionais e vendidos dentro do app, a partir de R$ 14,90.
-        </div>
         <div className="relative text-center text-[15px] font-semibold text-white">
-          Pix, cartão ou boleto · Pagamento seguro pela Kiwify · Acesso na hora
+          Pix ou cartão · Pagamento seguro pela Kiwify · Acesso na hora
         </div>
       </div>
 
-      {/* 9. GARANTIA */}
+      {/* 6. GARANTIA */}
       <div className="mx-auto max-w-[820px] px-5 pb-20">
         <div className="flex flex-wrap items-center justify-center gap-5 rounded-[32px] border border-white/[0.14] bg-white/[0.07] p-[30px] text-left">
           <div
@@ -626,9 +491,9 @@ export function LandingPage() {
         </div>
       </div>
 
-      {/* 10. PERGUNTAS FREQUENTES */}
+      {/* 7. PERGUNTAS FREQUENTES */}
       <div style={{ background: '#4A2140' }}>
-        <div className="mx-auto flex max-w-[760px] flex-col gap-7 px-5 py-20">
+        <div className="mx-auto flex max-w-[760px] flex-col gap-7 px-5 pt-20 pb-10">
           <h2 className="text-center text-[clamp(28px,4.4vw,42px)] font-extrabold tracking-[-.03em] text-white">Perguntas frequentes</h2>
           <div className="flex flex-col gap-2.5">
             {FAQ.map(([q, a], i) => (
@@ -655,30 +520,10 @@ export function LandingPage() {
         </div>
       </div>
 
-      {/* 11. CHAMADA FINAL — inverte: fundo rosa, texto ameixa */}
-      <div className="text-center" style={{ background: '#E07A9B' }}>
-        <div className="mx-auto flex max-w-[760px] flex-col items-center gap-[22px] px-5 py-[84px]">
-          <h2 className="text-balance text-[clamp(28px,5vw,46px)] font-extrabold tracking-[-.03em] text-[#2A1E27]">
-            Enquanto você lê isso, seu próximo post já podia estar pronto.
-          </h2>
-          <button
-            type="button"
-            onClick={toPlans}
-            className="press flex h-[58px] cursor-pointer items-center rounded-[29px] bg-white px-[34px] text-[18px] font-bold text-[#5B2A4E]"
-          >
-            Quero o app LashBox
-          </button>
-          <div className="text-[15px] font-medium text-[#2A1E27]/80">
-            A partir de R$ 12,42 por mês · 7 dias de garantia · Cancele quando quiser
-          </div>
-        </div>
-      </div>
-
       {/* Rodapé */}
       <div style={{ background: '#4A2140' }}>
-        <div className="mx-auto flex max-w-[1120px] flex-col items-center gap-3.5 px-5 pt-9 pb-10 text-center text-[14px] text-white/70">
+        <div className="mx-auto flex max-w-[1120px] flex-col items-center gap-3.5 px-5 pb-10 text-center text-[14px] text-white/70">
           <div className="flex flex-wrap justify-center gap-x-5 gap-y-2 font-semibold [&_a]:text-white [&_a]:no-underline [&_a]:hover:underline">
-            <a href="/entrar">Já sou assinante · Entrar</a>
             <a href="/termos">Termos de uso</a>
             <a href="/privacidade">Política de privacidade</a>
           </div>
