@@ -1,0 +1,139 @@
+{
+  "_comentario": "Configuração da campanha de lançamento do LashBox no Meta Ads. Lida por scripts/meta/criar-campanha.mjs. Não tem token nenhum aqui — o token (META_ACCESS_TOKEN) fica só no .env, fora do Git.",
+
+  "conta_de_anuncios": {
+    "id": "act_1626088674941828",
+    "nome": "Conta de Anúncios - 01"
+  },
+  "pagina_facebook": {
+    "id": "1184875188046307",
+    "nome": "Vida de Lash Designer",
+    "observacao": "Não há conta de Instagram vinculada. Nos posicionamentos do Instagram (Stories/Reels), a página do Facebook é usada como identidade do anúncio."
+  },
+  "pixel": {
+    "id": "1042165951490026",
+    "conjunto_de_dados": "lash"
+  },
+
+  "campanha": {
+    "nome": "[LASHBOX] Teste de ganchos · nov26",
+    "objective": "OUTCOME_SALES",
+    "special_ad_categories": [],
+    "status": "PAUSED",
+    "observacao_orcamento": "Orçamento fica nos conjuntos (ABO), não na campanha. Se a API exigir o campo is_adset_budget_sharing_enabled na criação da campanha, enviar false."
+  },
+
+  "link_final": "https://lashbox.app/lp",
+  "call_to_action": "LEARN_MORE",
+  "descricao_padrao": "App LashBox · 7 dias de garantia",
+  "url_tags": "utm_source=meta&utm_medium=pago&utm_campaign={{campaign.name}}&utm_content={{ad.name}}",
+  "advantage_creative_desligado": true,
+
+  "publico": {
+    "mesmo_nos_3_conjuntos": true,
+    "estrategia_preferida": "Copiar, no computador com token, o público do conjunto de MENOR custo por resultado (com pelo menos 3 resultados) da campanha \"[STUDIOMENU] - CAMPANHA WHATSAPP X1\" (mesma conta de anúncios), removendo qualquer exclusão de clientes do StudioMenu (ex.: públicos personalizados de clientes/compradores do StudioMenu). O script só LÊ essa campanha (GET), nunca grava nela.",
+    "campanha_referencia": "[STUDIOMENU] - CAMPANHA WHATSAPP X1",
+    "alternativa_se_nao_for_possivel": {
+      "geo_locations": { "countries": ["BR"] },
+      "genders": [2],
+      "age_min": 20,
+      "age_max": 45,
+      "targeting_automation": { "advantage_audience": 1 },
+      "observacao": "Brasil, mulheres, 20 a 45 anos, com o público Advantage+ ligado."
+    }
+  },
+
+  "conjuntos": [
+    {
+      "nome": "C1 · Não edite mais arte no Canva",
+      "chave": "C1",
+      "daily_budget_centavos": 2000,
+      "ads": ["C1-H1-Clara", "C1-H1-Escura"]
+    },
+    {
+      "nome": "C2 · Pare de perder horas no Canva",
+      "chave": "C2",
+      "daily_budget_centavos": 2000,
+      "ads": ["C2-H2-Clara", "C2-H2-Escura"]
+    },
+    {
+      "nome": "C3 · Explicativos",
+      "chave": "C3",
+      "daily_budget_centavos": 2000,
+      "ads": ["C3-L2", "C3-L3", "C3-L4"]
+    }
+  ],
+
+  "configuracao_comum_dos_conjuntos": {
+    "optimization_goal": "OFFSITE_CONVERSIONS",
+    "promoted_object": { "custom_event_type": "PURCHASE", "pixel_usa_id_do_topo": true },
+    "bid_strategy": "LOWEST_COST_WITHOUT_CAP",
+    "billing_event": "IMPRESSIONS",
+    "placements": "advantage_plus",
+    "status": "PAUSED"
+  },
+
+  "textos": {
+    "C1": {
+      "titulo": "Não edite mais arte no Canva",
+      "texto_principal": "Ei, Lash Designer 👋\n\nAinda baixa template e passa a noite trocando nome, telefone e preço, arte por arte?\n\nO LashBox é um app no seu celular: você escolhe a arte e o nome do seu estúdio, seu WhatsApp e seus preços entram sozinhos. Story pronto em 1 minuto.\n\n20 modelos de arte, vale-presentes, ofertas e 70 mensagens prontas, tudo num lugar só.\n\nPlanos a partir de R$ 12,42/mês, com 7 dias de garantia."
+    },
+    "C2": {
+      "titulo": "Pare de perder horas no Canva",
+      "texto_principal": "Ei, Lash Designer 👋\n\nQuanto tempo você gastou montando o último story?\n\nNo LashBox, você escolhe o modelo e pronto: o nome do seu estúdio, seu WhatsApp e seus preços já entram na arte. É só postar.\n\nUm app no seu celular com artes, vale-presentes, ofertas e mensagens prontas para o dia a dia do seu estúdio.\n\nPlanos a partir de R$ 12,42/mês, com 7 dias de garantia."
+    },
+    "C3": {
+      "titulos": {
+        "C3-L2": "Escolha. Personalize. Poste.",
+        "C3-L3": "Faça seu story em 1 minuto",
+        "C3-L4": "20 artes com o nome do seu estúdio"
+      },
+      "texto_principal": "Ei, Lash Designer 👋\n\nEscolha a arte. Seus dados entram sozinhos. Poste.\n\nO LashBox é o app que deixa seus posts prontos com o nome do seu estúdio: horário livre, valores, antes e depois, cuidados, depoimentos e muito mais. Tudo no celular, entre uma cliente e outra.\n\nPlanos a partir de R$ 12,42/mês, com 7 dias de garantia."
+    }
+  },
+
+  "anuncios": {
+    "C1-H1-Clara": {
+      "conjunto": "C1",
+      "titulo_ref": "C1",
+      "imagem_4x5": "criativos/conjunto-01/H1-4x5-Clara.jpg",
+      "imagem_9x16": "criativos/conjunto-01/H1-9x16-Clara.jpg"
+    },
+    "C1-H1-Escura": {
+      "conjunto": "C1",
+      "titulo_ref": "C1",
+      "imagem_4x5": "criativos/conjunto-01/H1-4x5-Escura.jpg",
+      "imagem_9x16": "criativos/conjunto-01/H1-9x16-Escura.jpg"
+    },
+    "C2-H2-Clara": {
+      "conjunto": "C2",
+      "titulo_ref": "C2",
+      "imagem_4x5": "criativos/conjunto-02/H2-4x5-Clara.jpg",
+      "imagem_9x16": "criativos/conjunto-02/H2-9x16-Clara.jpg"
+    },
+    "C2-H2-Escura": {
+      "conjunto": "C2",
+      "titulo_ref": "C2",
+      "imagem_4x5": "criativos/conjunto-02/H2-4x5-Escura.jpg",
+      "imagem_9x16": "criativos/conjunto-02/H2-9x16-Escura.jpg"
+    },
+    "C3-L2": {
+      "conjunto": "C3",
+      "titulo_ref": "C3-L2",
+      "imagem_4x5": "criativos/conjunto-03/L2-4x5.jpg",
+      "imagem_9x16": "criativos/conjunto-03/L2-9x16.jpg"
+    },
+    "C3-L3": {
+      "conjunto": "C3",
+      "titulo_ref": "C3-L3",
+      "imagem_4x5": "criativos/conjunto-03/L3-4x5.jpg",
+      "imagem_9x16": "criativos/conjunto-03/L3-9x16.jpg"
+    },
+    "C3-L4": {
+      "conjunto": "C3",
+      "titulo_ref": "C3-L4",
+      "imagem_4x5": "criativos/conjunto-03/L4-4x5.jpg",
+      "imagem_9x16": "criativos/conjunto-03/L4-9x16.jpg"
+    }
+  }
+}

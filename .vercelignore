@@ -6,4 +6,5 @@
 !/.env.example
 /supabase
 /scripts
+/marketing
 .DS_Store
