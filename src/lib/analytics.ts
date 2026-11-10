@@ -9,10 +9,13 @@ const KEY = import.meta.env.VITE_POSTHOG_KEY as string | undefined
 const HOST = (import.meta.env.VITE_POSTHOG_HOST as string | undefined) || 'https://us.i.posthog.com'
 
 let ready = false
+// Chamadas feitas antes do init (comum: a /lp dispara lp_visualizada no mount, antes da janela
+// 'load' terminar) ficam na fila e são reproduzidas na ordem, assim que o init terminar — sem
+// fila, esse evento se perderia sempre que a página ainda não tivesse terminado de carregar.
+let queue: Array<() => void> = []
 
 function doInit() {
   if (ready || !KEY) return
-  ready = true
   posthog.init(KEY, {
     api_host: HOST,
     autocapture: false,
@@ -27,6 +30,10 @@ function doInit() {
       if (import.meta.env.DEV) ph.debug()
     },
   })
+  ready = true
+  const pending = queue
+  queue = []
+  for (const fn of pending) fn()
 }
 
 /**
@@ -40,29 +47,31 @@ export function initAnalyticsDeferred() {
   else window.addEventListener('load', doInit, { once: true })
 }
 
+/** Sem KEY, nunca enfileira (nada a disparar depois) — com KEY, enfileira até o init terminar. */
+function runOrQueue(fn: () => void) {
+  if (!KEY) return
+  if (ready) fn()
+  else queue.push(fn)
+}
+
 export function trackPageview() {
-  if (!ready) return
-  posthog.capture('$pageview')
+  runOrQueue(() => posthog.capture('$pageview'))
 }
 
 export function track(event: string, properties?: Record<string, unknown>) {
-  if (!ready) return
-  posthog.capture(event, properties)
+  runOrQueue(() => posthog.capture(event, properties))
 }
 
 export function identifyUser(id: string) {
-  if (!ready) return
-  posthog.identify(id)
+  runOrQueue(() => posthog.identify(id))
 }
 
 export function setPersonProperties(properties: Record<string, unknown>) {
-  if (!ready) return
-  posthog.setPersonProperties(properties)
+  runOrQueue(() => posthog.setPersonProperties(properties))
 }
 
 export function resetAnalytics() {
-  if (!ready) return
-  posthog.reset()
+  runOrQueue(() => posthog.reset())
 }
 
 /** $pageview em todo carregamento inicial e em toda troca de rota da SPA (/lp e o app). */
