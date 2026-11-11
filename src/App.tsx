@@ -29,13 +29,13 @@ const TABBED_PREFIXES = ['/vender', '/planejar']
 
 function Splash({ text }: { text?: string }) {
   return (
-    <div className="flex flex-1 flex-col items-center justify-center gap-4 px-8 text-center">
-      <Logo />
+    <div className="flex flex-1 flex-col items-center justify-center gap-4 bg-night px-8 text-center">
+      <Logo light />
       {text ? (
-        <p className="text-[15px] leading-normal text-muted">{text}</p>
+        <p className="text-[15px] leading-normal text-white/70">{text}</p>
       ) : (
-        <div className="h-1.5 w-24 overflow-hidden rounded-full bg-blush">
-          <div className="h-full w-1/2 animate-pulse rounded-full bg-rose" />
+        <div className="h-1.5 w-24 overflow-hidden rounded-full bg-white/15">
+          <div className="h-full w-1/2 animate-pulse rounded-full bg-[#E07A9B]" />
         </div>
       )}
     </div>
@@ -128,8 +128,8 @@ function Shell() {
 
   return (
     <div className="flex h-dvh justify-center sm:py-6">
-      <div className="pt-safe relative flex h-full w-full max-w-[430px] flex-col overflow-hidden bg-white sm:rounded-[40px] sm:shadow-[0_0_0_1px_#EFE6EA,0_30px_60px_rgba(90,20,50,.12)]">
-        <main key={pathname} className="flex min-h-0 flex-1 flex-col bg-white">
+      <div className="pt-safe relative flex h-full w-full max-w-[430px] flex-col overflow-hidden bg-night sm:rounded-[40px] sm:shadow-[0_0_0_1px_rgba(0,0,0,.2),0_30px_60px_rgba(0,0,0,.35)]">
+        <main key={pathname} className="flex min-h-0 flex-1 flex-col bg-night">
           <Gate />
         </main>
         {showTabs && <TabBar />}

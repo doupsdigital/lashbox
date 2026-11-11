@@ -282,3 +282,82 @@ Toda a infraestrutura e o conteúdo do dia a dia estão prontos (ver seção 8 e
   - Sem `SUPABASE_URL`/`SUPABASE_SERVICE_ROLE_KEY` no `.env`, a simulação mostra só a prévia do e-mail (assunto, remetente, texto), avisando que não dá pra saber quantas pessoas receberiam nem enviar de verdade — é o caso deste computador.
   - Testado em `--simular` sem essas credenciais (mostra a prévia certinha) e a prévia visual (HTML renderizado) conferida à parte.
   - **Ninguém foi avisado ainda** — a dona avisa quando quiser disparar de verdade (precisa rodar com `--enviar` no computador que tiver as três credenciais no `.env`).
+
+## 13. Reskin escuro do app logado (concluído em 11/11/2026)
+
+- **Por quê:** a dona testou o demo interativo da `/lp` (seção 9) e achou o visual dele
+  (ameixa escuro, chips vibrantes) mais bonito que o app pago de verdade, que sempre foi
+  claro (`bg-lilac`). Decisão dela: reskin **do app inteiro**, mas **sem mudar o fluxo**
+  de telas (Galeria → Editor continuam duas telas separadas — só ficam mais vivas).
+- **Token aditivo, não substitui os antigos:** `src/index.css` define `--color-night`
+  (`#4A2140`, igual ao fundo do `DemoModal.tsx` da `/lp` — a primeira tentativa usou
+  `#2A1E27`, escuro demais, lia como "preto" em vez de "ameixa") no `@theme`, **sem
+  redefinir** `--color-lilac`/`--color-ink`/`--color-muted`
+  etc. — esses são compartilhados com a `/lp`/`/termos`/`/privacidade` (mesmo `index.css`,
+  importado uma vez em `main.tsx`) e com as telas do app **ainda não migradas**, que
+  continuam claras até a vez delas chegar. Cards/bordas/texto sobre `bg-night` usam
+  opacidade do branco direto (`bg-white/[.05-.08]`, `border-white/[.1-.2]`,
+  `text-white/60-90`), o mesmo padrão já usado em `KitPromoCard.tsx` e no `DemoModal.tsx`
+  da `/lp` — nunca um hex sólido novo.
+- **Feito até agora:** `TabBar.tsx` (fundo `bg-night/95`, ativo em rosa `#E07A9B`),
+  `Gallery.tsx` e `ArtEditor.tsx` (chips de categoria/paleta no estilo do demo: ativo
+  rosa sólido, inativo contorno fino; inputs/cards translúcidos; badges de aviso/erro
+  também em versão translúcida sobre escuro, ex. `bg-[#C9A15B]/15` em vez do
+  `bg-gold-soft` sólido), `Home.tsx` (saudação, os 4 ícones, "Para postar hoje" e o
+  carrossel "Kits promocionais" — os próprios cards com gradiente, como `KitPromoCard`,
+  não precisaram mudar; os 4 ícones usam `bg-white/[.16]` em vez do `[.05-.08]` do resto,
+  a pedido dela, pra ter mais contraste), `Library.tsx` (Mensagens + Minhas clientes,
+  inclusive o modal de escolher mensagem pro WhatsApp, que agora é opaco `bg-[#4A2140]`
+  em vez de translúcido — ele fica sobre um fundo escurecido, não sobre a página) e
+  `Gift.tsx` (vale-presente).
+  - **`CopyButton` (`components/Messages.tsx`) não mudou** — já usa `bg-plum`, testado
+    e aprovado sobre fundo escuro desde o demo da `/lp` (`DemoMessagesTab.tsx` já usa o
+    mesmo componente sobre `bg-white/[.07]`), então não precisa de tratamento especial.
+  - **Vender** (`Hub.tsx`, `Combos.tsx`/Montador de ofertas, `FairPrice.tsx`/Preço justo,
+    `Goal.tsx`/Meta do mês) — os cards de resultado com degradê próprio (ameixa→rosa)
+    de `FairPrice`/`Goal` não precisaram mudar, só o resto da tela em volta.
+  - **Planejar** (`Plan.tsx`, as duas abas — Esta semana e Datas do ano) e **Kits**
+    (`Kits.tsx`, `KitDetail.tsx` nos 3 estados: bloqueado, ferramentas e plano dia a dia).
+  - **Estúdio** (`Studio.tsx` — lista agrupada inteira: Perfil, Endereço, Contato,
+    Preços, Preferências, Assinatura, Sair), **Onboarding** (`Onboarding.tsx`, os 3
+    passos) e **Login** (`Login.tsx`) e **Assinatura vencida** (`ExpiredSubscription.tsx`).
+- **Última etapa — shell e componentes compartilhados** (feita só depois de todas as
+  telas migradas, como planejado):
+  - `App.tsx`: o cartão de 430px (`Shell`) e o `<main>` por trás de todo `<Gate/>` viram
+    `bg-night` (antes `bg-white`); o `Splash` (tela de carregamento) também — `Logo` ganhou
+    uma prop `light` (padrão `false`, aditiva) pra não quebrar o único outro uso dela que
+    continua sobre fundo claro no momento em que isso foi escrito — hoje nenhum, mas a
+    prop existe por segurança.
+  - `components/ui.tsx`: `BackButton` virou `bg-white/15 text-white` (antes um "vidro"
+    claro — só fazia sentido com tudo em volta claro). `PrimaryButton`/`TextButton`/
+    `Eyebrow` existem no arquivo mas **não são usados em lugar nenhum** — não mexi.
+  - `components/StudioNotice.tsx`: o aviso "Complete seu estúdio" virou translúcido
+    (`bg-[#C9A15B]/15` + texto `#E8C27E`) em vez do cartão `bg-gold-soft` sólido — mesmo
+    tratamento usado nos avisos do `ArtEditor.tsx`.
+  - **`CopyButton` segue sem alteração** (ver acima) — é o único componente
+    compartilhado de UI que já funcionava em fundo escuro desde o início.
+- **Bug encontrado e corrigido nessa varredura final** (não é do reskin, é um efeito
+  colateral de um fix anterior nesta mesma sessão): o `useEffect` de `Login.tsx` que
+  navega pra `/inicio` quando o `status` muda (ver seção 5) tinha `status === 'local'`
+  na condição — isso fazia a tela de Login redirecionar sozinha assim que montava,
+  sempre que rodando sem Supabase (`npm run dev` local, ou o `?preview=entrar` usado por
+  `scripts/screenshot-auth.mjs`), porque nesse modo o status já nasce `'local'`. Removido
+  da condição — a tela de Login nunca é alcançada organicamente com `status==='local'`
+  (o `Gate()` só mostra Login quando `status==='signedOut'`), só via esse `?preview=`
+  de propósito pra tirar print, que agora funciona de novo.
+- **A mesma "pegadinha de CSS" do carrossel do Início** (seção acima, "overflow-hidden
+  + flex-column com scroll zera a altura mínima") apareceu de novo depois do reskin,
+  dessa vez em produção: no Vale-presente (`Gift.tsx`), o quadro "Para/De/Serviço/
+  Validade" tinha ficado espremido a **10px de altura** (quase invisível, parecia que os
+  campos tinham sumido — foi assim que a dona percebeu e pediu pra investigar). Corrigido
+  com `shrink-0`, e **aplicado preventivamente** nos outros quadros com o mesmo padrão
+  (`flex flex-col ... overflow-hidden`, sem `shrink-0`, direto dentro de uma tela com
+  scroll): `Kits.tsx` (card do catálogo), `Combos.tsx` e `FairPrice.tsx` (quadro de
+  preços) e as 7 seções agrupadas de `Studio.tsx`. Nenhum desses estava visivelmente
+  quebrado nos prints tirados até então — o tamanho que sobra pra esse tipo de elemento
+  depende da altura total do conteúdo da tela (quanto mais cheia, mais aperta exatamente
+  esse item), então o mesmo bug podia aparecer de surpresa com mais conteúdo (ex.: mais
+  campos preenchidos no Estúdio) sem ninguém ter mexido em nada.
+- **Fora de escopo, de propósito:** as artes exportadas (`StoryBoard.tsx`,
+  `artPalettes.ts`, paletas Rosa/Nude/Preto) não mudam — é o produto que a lash designer
+  posta, independente de como a ferramenta (o app) se parece por dentro.

@@ -10,20 +10,20 @@ const CARDS = [
 export function SellHub() {
   const navigate = useNavigate()
   return (
-    <div className="flex flex-1 flex-col gap-[18px] overflow-auto bg-lilac px-5 pt-6 pb-8">
+    <div className="flex flex-1 flex-col gap-[18px] overflow-auto bg-night px-5 pt-6 pb-8">
       <div className="flex items-center justify-between">
         <BackButton fallback="/inicio" />
         <div className="w-[38px]" />
       </div>
-      <h1 className="text-[34px] font-bold tracking-tight">Vender</h1>
-      <p className="-mt-2.5 text-[16px] leading-[1.4] text-muted">Ofertas e preços calculados com os valores do seu estúdio.</p>
+      <h1 className="text-[34px] font-bold tracking-tight text-white">Vender</h1>
+      <p className="-mt-2.5 text-[16px] leading-[1.4] text-white/60">Ofertas e preços calculados com os valores do seu estúdio.</p>
 
       {CARDS.map((c) => (
         <button
           key={c.t}
           type="button"
           onClick={() => navigate(c.to)}
-          className="press flex cursor-pointer items-center gap-4 rounded-[26px] bg-white p-5 text-left shadow-[0_1px_2px_rgba(42,30,39,.04),0_8px_24px_rgba(91,42,78,.07)]"
+          className="press flex cursor-pointer items-center gap-4 rounded-[26px] border border-white/[0.1] bg-white/[0.05] p-5 text-left"
         >
           <div className="flex h-[58px] w-[58px] shrink-0 items-center justify-center rounded-[19px]" style={{ background: c.bg }}>
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke={c.c} strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round">
@@ -31,10 +31,10 @@ export function SellHub() {
             </svg>
           </div>
           <div className="flex-1">
-            <div className="text-[19px] font-bold">{c.t}</div>
-            <div className="mt-0.5 text-[14px] leading-[1.35] text-muted">{c.d}</div>
+            <div className="text-[19px] font-bold text-white">{c.t}</div>
+            <div className="mt-0.5 text-[14px] leading-[1.35] text-white/60">{c.d}</div>
           </div>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C4B8BF" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.35)" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
             <path d="M9 6l6 6-6 6" />
           </svg>
         </button>

@@ -85,7 +85,7 @@ export function KitDetail() {
   }
 
   return (
-    <div className="flex flex-1 flex-col gap-[18px] overflow-auto bg-lilac px-5 pt-6 pb-8">
+    <div className="flex flex-1 flex-col gap-[18px] overflow-auto bg-night px-5 pt-6 pb-8">
       <div className="flex items-center justify-between">
         <BackButton fallback={section === 'tools' ? '/kits' : undefined} onClick={section !== 'tools' ? () => setSection('tools') : undefined} />
         <div className="w-[38px]" />
@@ -99,8 +99,8 @@ export function KitDetail() {
           🎁
         </div>
         <div>
-          <h1 className="text-[23px] font-bold leading-[1.15] text-pretty">{catalog.title ?? kitFimDeAno.title}</h1>
-          <div className="mt-0.5 text-sm leading-[1.35] text-muted">{catalog.subtitle ?? kitFimDeAno.subtitle}</div>
+          <h1 className="text-[23px] font-bold leading-[1.15] text-pretty text-white">{catalog.title ?? kitFimDeAno.title}</h1>
+          <div className="mt-0.5 text-sm leading-[1.35] text-white/60">{catalog.subtitle ?? kitFimDeAno.subtitle}</div>
         </div>
       </div>
 
@@ -123,9 +123,9 @@ export function KitDetail() {
             </div>
           </div>
 
-          <ul className="flex flex-col gap-2 rounded-[18px] bg-white p-4">
+          <ul className="flex flex-col gap-2 rounded-[18px] border border-white/[0.1] bg-white/[0.05] p-4">
             {insideList.map((item) => (
-              <li key={item} className="flex items-start gap-2.5 text-[14px] leading-[1.4] text-ink">
+              <li key={item} className="flex items-start gap-2.5 text-[14px] leading-[1.4] text-white/85">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9A15B" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" className="mt-0.5 shrink-0">
                   <path d="M5 12l5 5L20 7" />
                 </svg>
@@ -140,32 +140,32 @@ export function KitDetail() {
               target="_blank"
               rel="noopener"
               onClick={() => track('kit_clique_comprar', { kit: catalog.key })}
-              className="press flex h-[54px] w-full cursor-pointer items-center justify-center rounded-full bg-plum text-[17px] font-semibold text-white"
+              className="press flex h-[54px] w-full cursor-pointer items-center justify-center rounded-full bg-[#E07A9B] text-[17px] font-semibold text-white"
             >
               {catalog.price} · Comprar
             </a>
           ) : (
-            <div className="flex h-[54px] w-full items-center justify-center rounded-full bg-lock text-[17px] font-semibold text-muted">
+            <div className="flex h-[54px] w-full items-center justify-center rounded-full border border-white/15 bg-white/[0.05] text-[17px] font-semibold text-white/40">
               {catalog.price} · Comprar
             </div>
           )}
 
           {user?.email && (
-            <div className="text-center text-[13px] text-muted">
-              Use o mesmo e-mail da sua conta: <span className="font-semibold">{user.email}</span>
+            <div className="text-center text-[13px] text-white/60">
+              Use o mesmo e-mail da sua conta: <span className="font-semibold text-white/85">{user.email}</span>
             </div>
           )}
 
-          <SoftButton className="h-[50px] text-[15px]" disabled={loading} onClick={refresh}>
+          <SoftButton className="h-[50px] text-[15px] !border !border-white/15 !bg-white/[0.08] !text-white" disabled={loading} onClick={refresh}>
             {loading ? 'Atualizando…' : 'Já comprei, atualizar'}
           </SoftButton>
         </div>
       ) : section === 'tools' ? (
         <div className="grid grid-cols-2 gap-2.5">
           {TOOLS.map((t) => (
-            <button key={t.id} type="button" onClick={() => onTool(t.id)} className="press flex cursor-pointer flex-col items-start gap-3 rounded-[22px] bg-white p-4 text-left">
-              <div className="flex h-11 w-11 items-center justify-center rounded-full bg-blush text-lg font-bold text-plum">{t.glyph}</div>
-              <div className="text-[15px] leading-[1.2] font-bold text-pretty">{t.label}</div>
+            <button key={t.id} type="button" onClick={() => onTool(t.id)} className="press flex cursor-pointer flex-col items-start gap-3 rounded-[22px] border border-white/[0.1] bg-white/[0.05] p-4 text-left">
+              <div className="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-lg font-bold text-[#E07A9B]">{t.glyph}</div>
+              <div className="text-[15px] leading-[1.2] font-bold text-pretty text-white">{t.label}</div>
             </button>
           ))}
         </div>
@@ -174,14 +174,15 @@ export function KitDetail() {
           {kitFimDeAno.plan.map((item) => (
             <div
               key={item.date}
-              className="flex flex-col gap-2 rounded-[20px] p-3.5"
-              style={{ background: item.date === nextItem.date ? '#FBE8EE' : '#fff' }}
+              className={`flex flex-col gap-2 rounded-[20px] border p-3.5 ${
+                item.date === nextItem.date ? 'border-[#E07A9B]/30 bg-[#E07A9B]/15' : 'border-white/[0.1] bg-white/[0.05]'
+              }`}
             >
               <div className="flex items-center gap-2.5">
-                <div className="flex h-8 shrink-0 items-center justify-center rounded-full bg-ink px-2.5 text-sm font-bold text-white">{formatDate(item.date)}</div>
-                <div className="text-[15px] font-bold leading-[1.2] text-pretty">{item.title}</div>
+                <div className="flex h-8 shrink-0 items-center justify-center rounded-full bg-[#E07A9B] px-2.5 text-sm font-bold text-white">{formatDate(item.date)}</div>
+                <div className="text-[15px] font-bold leading-[1.2] text-pretty text-white">{item.title}</div>
               </div>
-              <div className="text-[14px] leading-[1.4] text-ink">{item.todo}</div>
+              <div className="text-[14px] leading-[1.4] text-white/80">{item.todo}</div>
               <div className="flex flex-wrap gap-2">
                 {item.links.art && (
                   <button
@@ -190,18 +191,18 @@ export function KitDetail() {
                       track('arte_aberta', { modelo: item.links.art, origem: 'kit' })
                       navigate(`/criar/${item.links.art}`)
                     }}
-                    className="flex h-8 cursor-pointer items-center rounded-full bg-blush px-3 text-[13px] font-semibold text-plum"
+                    className="flex h-8 cursor-pointer items-center rounded-full bg-white/10 px-3 text-[13px] font-semibold text-white"
                   >
                     Ver arte
                   </button>
                 )}
                 {item.links.message && (
-                  <button type="button" onClick={() => setSection('mensagens')} className="flex h-8 cursor-pointer items-center rounded-full bg-blush px-3 text-[13px] font-semibold text-plum">
+                  <button type="button" onClick={() => setSection('mensagens')} className="flex h-8 cursor-pointer items-center rounded-full bg-white/10 px-3 text-[13px] font-semibold text-white">
                     Ver mensagem
                   </button>
                 )}
                 {item.links.tool && (
-                  <button type="button" onClick={() => onTool(item.links.tool!)} className="flex h-8 cursor-pointer items-center rounded-full bg-blush px-3 text-[13px] font-semibold text-plum">
+                  <button type="button" onClick={() => onTool(item.links.tool!)} className="flex h-8 cursor-pointer items-center rounded-full bg-white/10 px-3 text-[13px] font-semibold text-white">
                     Abrir ferramenta
                   </button>
                 )}
@@ -213,11 +214,11 @@ export function KitDetail() {
         <div className="flex flex-col gap-4">
           {groups.map(([group, list]) => (
             <div key={group} className="flex flex-col gap-2.5">
-              <div className="text-[15px] font-bold text-rose">{group}</div>
+              <div className="text-[15px] font-bold text-[#E07A9B]">{group}</div>
               {list.map((m) => (
-                <div key={m.id} className="flex flex-col gap-2.5 rounded-3xl bg-white p-4">
-                  <div className="text-base font-bold">{m.title}</div>
-                  <MessageText text={m.text} name="" className="text-[15px] leading-[1.55]" />
+                <div key={m.id} className="flex flex-col gap-2.5 rounded-3xl border border-white/[0.12] bg-white/[0.07] p-4">
+                  <div className="text-base font-bold text-white">{m.title}</div>
+                  <MessageText text={m.text} name="" className="text-[15px] leading-[1.55] text-white/85" />
                   <CopyButton text={resolve(m.text)} size="sm" onCopied={() => track('mensagem_copiada', { id_mensagem: m.id, categoria: m.group })} />
                 </div>
               ))}

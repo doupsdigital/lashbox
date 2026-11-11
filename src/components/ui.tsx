@@ -51,7 +51,7 @@ export function BackButton({ fallback = '/inicio', onClick }: { fallback?: strin
       type="button"
       aria-label="Voltar"
       onClick={go}
-      className="flex h-[38px] w-[38px] shrink-0 cursor-pointer items-center justify-center rounded-full bg-[#EBE2E7]/85 text-ink backdrop-blur"
+      className="flex h-[38px] w-[38px] shrink-0 cursor-pointer items-center justify-center rounded-full bg-white/15 text-white backdrop-blur"
     >
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round">
         <path d="M15 6l-6 6 6 6" />
@@ -60,12 +60,16 @@ export function BackButton({ fallback = '/inicio', onClick }: { fallback?: strin
   )
 }
 
-/** Logo (ícone + nome), usado no login e no onboarding. */
-export function Logo({ size = 30 }: { size?: number }) {
+/**
+ * Logo (ícone + nome), usado no login e no "splash" de carregamento (`App.tsx`).
+ * `light`: texto branco, pra usar sobre fundo escuro (ex.: telas já migradas pro reskin
+ * ameixa) — sem isso, continua o texto escuro de sempre (o splash ainda é sobre `bg-white`).
+ */
+export function Logo({ size = 30, light }: { size?: number; light?: boolean }) {
   return (
     <div className="flex items-center gap-2">
       <img src="/icone-64.webp" alt="LashBox" width={size} height={size} style={{ width: size, height: size }} className="rounded-[22%]" />
-      <div className="text-[19px] font-bold">LashBox</div>
+      <div className={`text-[19px] font-bold ${light ? 'text-white' : ''}`}>LashBox</div>
     </div>
   )
 }

@@ -25,13 +25,13 @@ export function Gallery() {
   }, [cat])
 
   return (
-    <div className="flex flex-1 flex-col gap-[18px] overflow-auto bg-lilac px-5 pt-6 pb-8">
-      <h1 className="text-[34px] font-bold tracking-tight">Criar</h1>
+    <div className="flex flex-1 flex-col gap-[18px] overflow-auto bg-night px-5 pt-6 pb-8">
+      <h1 className="text-[34px] font-bold tracking-tight text-white">Criar</h1>
 
       <button
         type="button"
         onClick={() => navigate('/vale-presente')}
-        className="press flex cursor-pointer items-center gap-4 rounded-[26px] p-5 text-left text-white shadow-[0_12px_28px_rgba(91,42,78,.28)]"
+        className="press flex cursor-pointer items-center gap-4 rounded-[26px] p-5 text-left text-white shadow-[0_12px_28px_rgba(0,0,0,.35)]"
         style={{ background: 'linear-gradient(135deg,#5B2A4E,#8A3F6F)' }}
       >
         <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-[18px] bg-white/14">
@@ -54,8 +54,9 @@ export function Gallery() {
             key={c}
             type="button"
             onClick={() => setCat(c)}
-            className="shrink-0 cursor-pointer rounded-[20px] px-4 py-2.5 text-[14.5px] font-semibold shadow-[0_1px_2px_rgba(42,30,39,.05)]"
-            style={{ background: c === cat ? '#5B2A4E' : '#fff', color: c === cat ? '#fff' : '#2A1E27' }}
+            className={`shrink-0 cursor-pointer rounded-[20px] px-4 py-2.5 text-[14.5px] font-semibold ${
+              c === cat ? 'bg-[#E07A9B] text-white' : 'border border-white/20 text-white/80'
+            }`}
           >
             {c}
           </button>
@@ -73,7 +74,7 @@ export function Gallery() {
             }}
             className="flex cursor-pointer flex-col gap-2"
           >
-            <div className="overflow-hidden rounded-[18px] shadow-[0_8px_22px_rgba(91,42,78,.14)]">
+            <div className="overflow-hidden rounded-[18px] shadow-[0_8px_22px_rgba(0,0,0,.3)]">
               <ScaledBoard width={1080} height={1920} scale={0.16}>
                 <StoryBoard
                   art={resolveArtPreview(a, studio)}
@@ -92,7 +93,7 @@ export function Gallery() {
                 />
               </ScaledBoard>
             </div>
-            <div className="px-1 text-left text-[14.5px] font-semibold leading-[1.2] text-pretty">{a.title}</div>
+            <div className="px-1 text-left text-[14.5px] font-semibold leading-[1.2] text-pretty text-white/90">{a.title}</div>
           </button>
         ))}
       </div>

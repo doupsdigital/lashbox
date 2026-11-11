@@ -18,7 +18,7 @@ const tabs = [
 
 export function TabBar() {
   return (
-    <nav className="pb-safe shrink-0 border-t border-[#EFE6EA] bg-white/85 backdrop-blur-xl">
+    <nav className="pb-safe shrink-0 border-t border-white/[0.1] bg-night/95 backdrop-blur-xl">
       <div className="grid h-[72px] grid-cols-5 px-1 pt-2">
         {tabs.map((t) => (
           <NavLink key={t.to} to={t.to} className="flex flex-col items-center gap-1 text-[10.5px] font-semibold">
@@ -29,14 +29,14 @@ export function TabBar() {
                   height="24"
                   viewBox="0 0 24 24"
                   fill="none"
-                  stroke={isActive ? 'var(--color-plum)' : 'var(--color-faint)'}
+                  stroke={isActive ? '#E07A9B' : 'rgba(255,255,255,.45)'}
                   strokeWidth={1.7}
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 >
                   <path d={ICONS[t.icon]} />
                 </svg>
-                <span style={{ color: isActive ? 'var(--color-plum)' : 'var(--color-faint)' }}>{t.label}</span>
+                <span style={{ color: isActive ? '#E07A9B' : 'rgba(255,255,255,.45)' }}>{t.label}</span>
               </>
             )}
           </NavLink>

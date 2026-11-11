@@ -28,15 +28,15 @@ function Row({ label, value, onClick, danger, dot }: { label: string; value: str
       type="button"
       onClick={onClick}
       disabled={!onClick}
-      className="flex min-h-12 w-full items-center gap-2.5 bg-white px-4 py-3.5 text-left disabled:cursor-default"
+      className="flex min-h-12 w-full items-center gap-2.5 bg-white/[0.07] px-4 py-3.5 text-left disabled:cursor-default"
     >
-      <div className={`flex-1 text-[16px] ${danger ? 'font-semibold text-danger' : ''}`}>{label}</div>
-      <div className="flex max-w-[190px] items-center gap-1.5 truncate text-[15.5px] text-muted">
+      <div className={`flex-1 text-[16px] ${danger ? 'font-semibold text-[#FF7B90]' : 'text-white'}`}>{label}</div>
+      <div className="flex max-w-[190px] items-center gap-1.5 truncate text-[15.5px] text-white/60">
         {dot && <span className="h-3 w-3 shrink-0 rounded-full" style={{ background: dot }} />}
         {value}
       </div>
       {onClick && (
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C4B8BF" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.35)" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round">
           <path d="M9 6l6 6-6 6" />
         </svg>
       )}
@@ -48,15 +48,15 @@ function EditableRow({ label, value, onChange, money, optional }: { label: strin
   const [editing, setEditing] = useState(false)
   if (editing) {
     return (
-      <div className="flex min-h-12 items-center gap-2.5 bg-white px-4 py-3">
-        <div className="flex-1 text-[16px]">{label}</div>
+      <div className="flex min-h-12 items-center gap-2.5 bg-white/[0.07] px-4 py-3">
+        <div className="flex-1 text-[16px] text-white">{label}</div>
         <input
           autoFocus
           value={value}
           onChange={(e) => onChange(money ? e.target.value.replace(/\D/g, '').slice(0, 6) : e.target.value)}
           onBlur={() => setEditing(false)}
           inputMode={money ? 'numeric' : undefined}
-          className="min-w-0 max-w-[190px] flex-1 bg-transparent text-right text-[15.5px] text-plum outline-none"
+          className="min-w-0 max-w-[190px] flex-1 bg-transparent text-right text-[15.5px] text-[#E07A9B] outline-none"
         />
       </div>
     )
@@ -90,20 +90,20 @@ export function StudioScreen() {
   })
 
   return (
-    <div className="flex flex-1 flex-col gap-[18px] overflow-auto bg-lilac px-5 pt-6 pb-8">
+    <div className="flex flex-1 flex-col gap-[18px] overflow-auto bg-night px-5 pt-6 pb-8">
       <div className="flex items-center justify-between">
         <BackButton fallback="/inicio" />
         <div className="w-[38px]" />
       </div>
 
-      <h1 className="text-[34px] font-bold tracking-tight">Meu Estúdio</h1>
-      {loading && <div className="-mt-3 text-[13px] text-muted">Carregando…</div>}
+      <h1 className="text-[34px] font-bold tracking-tight text-white">Meu Estúdio</h1>
+      {loading && <div className="-mt-3 text-[13px] text-white/50">Carregando…</div>}
 
       <div className="flex flex-col items-center gap-2">
-        <div className="ph-no-capture relative h-24 w-24 overflow-hidden rounded-full border-[3px] border-white shadow-[0_8px_20px_rgba(91,42,78,.25)]" style={{ background: 'linear-gradient(135deg,#E07A9B,#5B2A4E)' }}>
+        <div className="ph-no-capture relative h-24 w-24 overflow-hidden rounded-full border-[3px] border-white/80 shadow-[0_8px_20px_rgba(0,0,0,.35)]" style={{ background: 'linear-gradient(135deg,#E07A9B,#5B2A4E)' }}>
           {photoUrl ? <img src={photoUrl} alt="" className="h-full w-full object-cover" /> : <div className="flex h-full w-full items-center justify-center text-[34px] font-bold text-white">{initials}</div>}
         </div>
-        <button type="button" onClick={() => fileInput.current?.click()} className="cursor-pointer text-[15.5px] font-semibold text-rose">
+        <button type="button" onClick={() => fileInput.current?.click()} className="cursor-pointer text-[15.5px] font-semibold text-[#E07A9B]">
           {photoUrl ? 'Alterar foto' : 'Adicionar foto'}
         </button>
         {photoUrl && (
@@ -113,7 +113,7 @@ export function StudioScreen() {
               await removeStudioPhoto()
               refreshPhoto()
             }}
-            className="text-[13px] font-semibold text-muted underline"
+            className="text-[13px] font-semibold text-white/50 underline"
           >
             Remover foto
           </button>
@@ -122,16 +122,16 @@ export function StudioScreen() {
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <div className="pl-4 text-[13px] font-semibold tracking-[.03em] text-muted">PERFIL</div>
-        <div className="flex flex-col gap-[1px] overflow-hidden rounded-[20px] bg-line">
+        <div className="pl-4 text-[13px] font-semibold tracking-[.03em] text-white/50">PERFIL</div>
+        <div className="flex shrink-0 flex-col gap-[1px] overflow-hidden rounded-[20px] border border-white/[0.1]">
           <EditableRow label="Nome" value={studio.ownerName} onChange={(v) => setField('ownerName', v)} />
           <EditableRow label="Estúdio" value={studio.studioName} onChange={(v) => setField('studioName', v)} />
         </div>
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <div className="pl-4 text-[13px] font-semibold tracking-[.03em] text-muted">ENDEREÇO</div>
-        <div className="flex flex-col gap-[1px] overflow-hidden rounded-[20px] bg-line">
+        <div className="pl-4 text-[13px] font-semibold tracking-[.03em] text-white/50">ENDEREÇO</div>
+        <div className="flex shrink-0 flex-col gap-[1px] overflow-hidden rounded-[20px] border border-white/[0.1]">
           <EditableRow label="Bairro" value={studio.neighborhood} onChange={(v) => setField('neighborhood', v)} />
           <EditableRow label="Cidade" value={studio.city} onChange={(v) => setField('city', v)} />
           <EditableRow label="Endereço" value={studio.address} onChange={(v) => setField('address', v)} optional />
@@ -139,8 +139,8 @@ export function StudioScreen() {
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <div className="pl-4 text-[13px] font-semibold tracking-[.03em] text-muted">CONTATO</div>
-        <div className="flex flex-col gap-[1px] overflow-hidden rounded-[20px] bg-line">
+        <div className="pl-4 text-[13px] font-semibold tracking-[.03em] text-white/50">CONTATO</div>
+        <div className="flex shrink-0 flex-col gap-[1px] overflow-hidden rounded-[20px] border border-white/[0.1]">
           <EditableRow label="WhatsApp" value={studio.whatsapp} onChange={(v) => setField('whatsapp', v)} />
           <EditableRow label="Instagram" value={studio.instagram} onChange={(v) => setField('instagram', v.replace(/^@/, ''))} />
           <EditableRow label="Chave Pix" value={studio.pixKey} onChange={(v) => setField('pixKey', v)} optional />
@@ -149,19 +149,19 @@ export function StudioScreen() {
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <div className="pl-4 text-[13px] font-semibold tracking-[.03em] text-muted">PREÇOS</div>
-        <div className="flex flex-col gap-[1px] overflow-hidden rounded-[20px] bg-line">
+        <div className="pl-4 text-[13px] font-semibold tracking-[.03em] text-white/50">PREÇOS</div>
+        <div className="flex shrink-0 flex-col gap-[1px] overflow-hidden rounded-[20px] border border-white/[0.1]">
           <EditableRow label="Aplicação" value={studio.servicePrice} onChange={(v) => setField('servicePrice', v)} money />
           <EditableRow label="Manutenção" value={studio.maintenancePrice} onChange={(v) => setField('maintenancePrice', v)} money />
         </div>
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <div className="pl-4 text-[13px] font-semibold tracking-[.03em] text-muted">PREFERÊNCIAS</div>
-        <div className="flex flex-col gap-[1px] overflow-hidden rounded-[20px] bg-line">
+        <div className="pl-4 text-[13px] font-semibold tracking-[.03em] text-white/50">PREFERÊNCIAS</div>
+        <div className="flex shrink-0 flex-col gap-[1px] overflow-hidden rounded-[20px] border border-white/[0.1]">
           <Row label="Paleta preferida" value={activePalette.label} dot={activePalette.swatch} onClick={() => setEditingPalette((v) => !v)} />
           {editingPalette && (
-            <div className="flex gap-2 bg-white p-3">
+            <div className="flex gap-2 bg-white/[0.07] p-3">
               {PALETTES.map((p) => (
                 <button
                   key={p.id}
@@ -171,10 +171,10 @@ export function StudioScreen() {
                     setEditingPalette(false)
                   }}
                   className="flex flex-1 cursor-pointer flex-col items-center gap-1.5 rounded-2xl p-2"
-                  style={{ background: studio.palette === p.id ? '#FBE8EE' : 'transparent' }}
+                  style={{ background: studio.palette === p.id ? 'rgba(224,122,155,.18)' : 'transparent' }}
                 >
                   <span className="h-7 w-7 rounded-full" style={{ background: p.swatch }} />
-                  <span className="text-center text-[11.5px] font-semibold leading-tight">{p.label}</span>
+                  <span className="text-center text-[11.5px] font-semibold leading-tight text-white">{p.label}</span>
                 </button>
               ))}
             </div>
@@ -183,8 +183,8 @@ export function StudioScreen() {
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <div className="pl-4 text-[13px] font-semibold tracking-[.03em] text-muted">ASSINATURA</div>
-        <div className="flex flex-col gap-[1px] overflow-hidden rounded-[20px] bg-line">
+        <div className="pl-4 text-[13px] font-semibold tracking-[.03em] text-white/50">ASSINATURA</div>
+        <div className="flex shrink-0 flex-col gap-[1px] overflow-hidden rounded-[20px] border border-white/[0.1]">
           <Row label="Plano" value={subscription.plan ? PLAN_LABEL[subscription.plan] : '—'} />
           <Row label="Situação" value={subscription.status ? STATUS_LABEL[subscription.status] : '—'} />
           <Row label="Próxima cobrança" value={formatDate(subscription.currentPeriodEnd)} />
@@ -192,26 +192,26 @@ export function StudioScreen() {
             href={KIWIFY_BUYER_AREA_URL}
             target="_blank"
             rel="noopener"
-            className="flex min-h-12 items-center justify-between gap-2.5 bg-white px-4 py-3.5 text-[16px] font-semibold text-plum"
+            className="flex min-h-12 items-center justify-between gap-2.5 bg-white/[0.07] px-4 py-3.5 text-[16px] font-semibold text-[#E07A9B]"
           >
             Gerenciar assinatura
-            <span className="text-[13.5px] font-medium text-muted">Pelo e-mail da Kiwify</span>
+            <span className="text-[13.5px] font-medium text-white/50">Pelo e-mail da Kiwify</span>
           </a>
         </div>
-        <div className="px-4 text-[12.5px] leading-[1.4] text-muted">
+        <div className="px-4 text-[12.5px] leading-[1.4] text-white/60">
           Depois da compra e em cada renovação, a Kiwify manda um e-mail com um botão para cancelar a assinatura ou trocar o cartão. Não achou o e-mail? O link acima abre a área da Kiwify para entrar com o mesmo e-mail da compra.
         </div>
       </div>
 
-      <div className="flex flex-col gap-[1px] overflow-hidden rounded-[20px] bg-line">
-        <button type="button" onClick={signOut} className="flex min-h-12 items-center bg-white px-4 py-3.5 text-left text-[16px] font-semibold text-danger">
+      <div className="flex shrink-0 flex-col gap-[1px] overflow-hidden rounded-[20px] border border-white/[0.1]">
+        <button type="button" onClick={signOut} className="flex min-h-12 items-center bg-white/[0.07] px-4 py-3.5 text-left text-[16px] font-semibold text-[#FF7B90]">
           Sair
         </button>
       </div>
-      <button type="button" onClick={() => navigate('/kits')} className="text-center text-[13px] text-muted underline">
+      <button type="button" onClick={() => navigate('/kits')} className="text-center text-[13px] text-white/60 underline">
         Ver todos os kits
       </button>
-      <div className="flex justify-center gap-4 text-[12.5px] font-semibold text-muted">
+      <div className="flex justify-center gap-4 text-[12.5px] font-semibold text-white/50">
         <a href={TERMS_URL}>Termos de uso</a>
         <a href={PRIVACY_URL}>Privacidade</a>
       </div>

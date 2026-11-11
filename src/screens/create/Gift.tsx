@@ -55,16 +55,16 @@ export function GiftScreen() {
   )
 
   return (
-    <div className="flex flex-1 flex-col gap-[18px] overflow-auto bg-lilac px-5 pt-6 pb-8">
+    <div className="flex flex-1 flex-col gap-[18px] overflow-auto bg-night px-5 pt-6 pb-8">
       <div className="flex items-center justify-between">
         <BackButton fallback="/criar" />
         <div className="w-[38px]" />
       </div>
 
-      <h1 className="text-[34px] font-bold tracking-tight">Vale-presente</h1>
+      <h1 className="text-[34px] font-bold tracking-tight text-white">Vale-presente</h1>
       <StudioNotice />
 
-      <div className="flex justify-center rounded-[26px] bg-white p-3.5">
+      <div className="flex justify-center rounded-[26px] border border-white/[0.1] bg-white/[0.05] p-3.5">
         <ScaledBoard width={1080} height={1350} scale={0.3}>
           <GiftBoard
             style={style}
@@ -80,14 +80,14 @@ export function GiftScreen() {
       </div>
 
       <div className="flex flex-col gap-2">
-        <span className="text-[13px] font-semibold text-muted">ESTILO</span>
+        <span className="text-[13px] font-semibold text-white/60">ESTILO</span>
         <div className="flex flex-wrap gap-2">
           {STYLES.map((s) => (
             <button
               type="button"
               key={s.id}
               onClick={() => setStyle(s.id)}
-              className={`flex h-10 cursor-pointer items-center rounded-full px-4 text-sm font-semibold ${style === s.id ? 'bg-plum text-white' : 'bg-white text-ink'}`}
+              className={`flex h-10 cursor-pointer items-center rounded-full px-4 text-sm font-semibold ${style === s.id ? 'bg-[#E07A9B] text-white' : 'border border-white/20 text-white/80'}`}
             >
               {s.name}
             </button>
@@ -96,14 +96,14 @@ export function GiftScreen() {
       </div>
 
       <div className="flex flex-col gap-2">
-        <span className="text-[13px] font-semibold text-muted">PALETA</span>
+        <span className="text-[13px] font-semibold text-white/60">PALETA</span>
         <div className="flex gap-2">
           {PALETTES.map((p) => (
             <button
               type="button"
               key={p.id}
               onClick={() => setPalette(p.id)}
-              className={`flex h-10 flex-1 cursor-pointer items-center justify-center rounded-full text-sm font-semibold ${palette === p.id ? 'bg-plum text-white' : 'bg-white text-ink'}`}
+              className={`flex h-10 flex-1 cursor-pointer items-center justify-center rounded-full text-sm font-semibold ${palette === p.id ? 'bg-[#E07A9B] text-white' : 'border border-white/20 text-white/80'}`}
             >
               {p.label}
             </button>
@@ -111,48 +111,48 @@ export function GiftScreen() {
         </div>
       </div>
 
-      <div className="flex flex-col gap-2 rounded-[22px] bg-white p-1 overflow-hidden">
+      <div className="flex shrink-0 flex-col gap-2 overflow-hidden rounded-[22px] border border-white/[0.1] bg-white/[0.05] p-1">
         {[
           ['Para', para, setPara],
           ['De', de, setDe],
           ['Serviço', servico, setServico],
           ['Validade', validade, setValidade],
         ].map(([label, value, setter], i) => (
-          <div key={label as string} className={`flex items-center gap-3 px-4 py-3 ${i > 0 ? 'border-t border-line' : ''}`}>
-            <div className="w-20 shrink-0 text-[15px] text-muted">{label as string}</div>
+          <div key={label as string} className={`flex items-center gap-3 px-4 py-3 ${i > 0 ? 'border-t border-white/[0.1]' : ''}`}>
+            <div className="w-20 shrink-0 text-[15px] text-white/60">{label as string}</div>
             <input
               value={value as string}
               onChange={(e) => (setter as (v: string) => void)(e.target.value)}
               placeholder={label === 'Validade' ? '31/03/2027' : undefined}
-              className="min-w-0 flex-1 bg-transparent text-right text-[16px] text-ink outline-none"
+              className="min-w-0 flex-1 bg-transparent text-right text-[16px] text-white outline-none placeholder:text-white/40"
             />
           </div>
         ))}
       </div>
       <label className="flex flex-col gap-1.5">
-        <span className="text-[15px] font-semibold">Mensagem no cartão</span>
-        <textarea value={mensagem} onChange={(e) => setMensagem(e.target.value)} rows={2} className="rounded-[16px] bg-white px-[16px] py-3 text-base outline-none" />
+        <span className="text-[15px] font-semibold text-white">Mensagem no cartão</span>
+        <textarea value={mensagem} onChange={(e) => setMensagem(e.target.value)} rows={2} className="rounded-[16px] border border-white/[0.15] bg-white/[0.08] px-[16px] py-3 text-base text-white outline-none placeholder:text-white/40" />
       </label>
 
       <div className="flex flex-col gap-2.5">
-        <button type="button" disabled={exporting} onClick={doExport} className="press flex h-[54px] cursor-pointer items-center justify-center rounded-full bg-plum text-[17px] font-semibold text-white disabled:opacity-60">
+        <button type="button" disabled={exporting} onClick={doExport} className="press flex h-[54px] cursor-pointer items-center justify-center rounded-full bg-[#E07A9B] text-[17px] font-semibold text-white disabled:opacity-60">
           {exporting ? 'Gerando…' : 'Compartilhar'}
         </button>
-        <SoftButton className="h-[54px] text-[17px]" disabled={exporting} onClick={doExport}>
+        <SoftButton className="h-[54px] text-[17px] !border !border-white/15 !bg-white/[0.08] !text-white" disabled={exporting} onClick={doExport}>
           {exporting ? 'Gerando…' : 'Salvar no celular'}
         </SoftButton>
       </div>
 
       <div className="flex flex-col gap-3 pt-1">
-        <h2 className="text-[19px] font-bold">Mensagens prontas</h2>
-        <div className="flex flex-col gap-2 rounded-[18px] bg-white p-3.5">
-          <div className="text-[13px] font-semibold text-rose">Para quem comprou</div>
-          <MessageText text={buyerMsg} name="" className="text-[15px] leading-[1.5]" />
+        <h2 className="text-[19px] font-bold text-white">Mensagens prontas</h2>
+        <div className="flex flex-col gap-2 rounded-[18px] border border-white/[0.12] bg-white/[0.07] p-3.5">
+          <div className="text-[13px] font-semibold text-[#E07A9B]">Para quem comprou</div>
+          <MessageText text={buyerMsg} name="" className="text-[15px] leading-[1.5] text-white/85" />
           <CopyButton text={buyerMsg} size="sm" />
         </div>
-        <div className="flex flex-col gap-2 rounded-[18px] bg-white p-3.5">
-          <div className="text-[13px] font-semibold text-rose">Para quem recebeu</div>
-          <MessageText text={recipientMsg} name="" className="text-[15px] leading-[1.5]" />
+        <div className="flex flex-col gap-2 rounded-[18px] border border-white/[0.12] bg-white/[0.07] p-3.5">
+          <div className="text-[13px] font-semibold text-[#E07A9B]">Para quem recebeu</div>
+          <MessageText text={recipientMsg} name="" className="text-[15px] leading-[1.5] text-white/85" />
           <CopyButton text={recipientMsg} size="sm" />
         </div>
       </div>

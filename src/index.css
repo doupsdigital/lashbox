@@ -28,6 +28,13 @@
   --color-warn-ink: #7a5a00;
   --color-danger: #d1344c;
   --color-lock: #d9d0d5;
+
+  /* Reskin escuro do app logado (ver CLAUDE.md) — token aditivo, não substitui os acima
+     (que continuam valendo nas telas ainda não migradas e na /lp/termos/privacidade,
+     que não usam este). Cards/bordas/texto sobre ele usam opacidade do branco direto
+     (bg-white/[.06], border-white/[.12], text-white/70...), mesmo padrão já usado em
+     KitPromoCard.tsx e no DemoModal.tsx da /lp. */
+  --color-night: #4a2140;
 }
 
 html,

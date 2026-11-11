@@ -23,7 +23,7 @@ function KitCard({ k }: { k: KitCatalogItem }) {
   const unlocked = isUnlocked(k.key)
 
   return (
-    <div className="flex flex-col overflow-hidden rounded-[28px] bg-white shadow-[0_1px_2px_rgba(42,30,39,.04),0_10px_30px_rgba(91,42,78,.09)]">
+    <div className="flex shrink-0 flex-col overflow-hidden rounded-[28px] border border-white/[0.1] bg-white/[0.05]">
       <div className="relative flex h-[150px] items-center justify-center" style={{ background: `linear-gradient(135deg,${k.color1},${k.color2})` }}>
         <div className="absolute -top-10 -right-[30px] h-40 w-40 rounded-full bg-white/17" />
         <div className="absolute -bottom-[50px] -left-5 h-[130px] w-[130px] rounded-full bg-white/10" />
@@ -39,8 +39,8 @@ function KitCard({ k }: { k: KitCatalogItem }) {
       </div>
       <div className="flex flex-col gap-3.5 p-[18px]">
         <div>
-          <div className="text-[21px] font-bold tracking-tight">{k.name}</div>
-          <div className="mt-0.5 text-[14px] text-muted">{kitFimDeAno.arts.length} artes · {k.desc}</div>
+          <div className="text-[21px] font-bold tracking-tight text-white">{k.name}</div>
+          <div className="mt-0.5 text-[14px] text-white/60">{kitFimDeAno.arts.length} artes · {k.desc}</div>
         </div>
         <div className="relative flex gap-2">
           {previewArts.map((a) => (
@@ -77,8 +77,8 @@ export function Kits() {
   const blackFriday = getKitCatalog('black-friday')
 
   return (
-    <div className="flex flex-1 flex-col gap-[18px] overflow-auto bg-lilac px-5 pt-6 pb-8">
-      <h1 className="text-[34px] font-bold tracking-tight">Kits</h1>
+    <div className="flex flex-1 flex-col gap-[18px] overflow-auto bg-night px-5 pt-6 pb-8">
+      <h1 className="text-[34px] font-bold tracking-tight text-white">Kits</h1>
 
       {blackFriday && <KitCard k={blackFriday} />}
       {visibleKitsCatalog.map((k) => (

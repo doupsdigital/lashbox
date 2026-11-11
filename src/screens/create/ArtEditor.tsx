@@ -219,57 +219,57 @@ export function ArtEditor() {
   }
 
   return (
-    <div className="flex flex-1 flex-col gap-[18px] overflow-auto bg-lilac px-5 pt-6 pb-8">
+    <div className="flex flex-1 flex-col gap-[18px] overflow-auto bg-night px-5 pt-6 pb-8">
       <div className="flex items-center justify-between">
         <BackButton fallback="/criar" />
         <div className="w-[38px]" />
       </div>
 
-      <h1 className="text-[23px] font-bold text-pretty">{art.title}</h1>
+      <h1 className="text-[23px] font-bold text-pretty text-white">{art.title}</h1>
       <StudioNotice />
 
-      <div className="flex justify-center rounded-[26px] bg-white p-4">
+      <div className="flex justify-center rounded-[26px] border border-white/[0.1] bg-white/[0.05] p-4">
         <ScaledBoard width={1080} height={post ? 1350 : 1920} scale={post ? 0.25 : 0.19}>
           <StoryBoard {...boardProps} />
         </ScaledBoard>
       </div>
 
       <div className="flex flex-col gap-2">
-        <span className="text-[13px] font-semibold text-muted">FORMATO</span>
-        <div className="flex gap-2 rounded-[11px] bg-[#EFE8EC] p-0.5">
-          <button type="button" onClick={() => setPost(false)} className={`flex h-9 flex-1 cursor-pointer items-center justify-center rounded-[9px] text-[14.5px] font-semibold ${!post ? 'bg-white shadow-sm' : ''}`}>
+        <span className="text-[13px] font-semibold text-white/60">FORMATO</span>
+        <div className="flex gap-2 rounded-[11px] bg-white/[0.08] p-0.5">
+          <button type="button" onClick={() => setPost(false)} className={`flex h-9 flex-1 cursor-pointer items-center justify-center rounded-[9px] text-[14.5px] font-semibold ${!post ? 'bg-white text-ink shadow-sm' : 'text-white/70'}`}>
             Story
           </button>
-          <button type="button" onClick={() => setPost(true)} className={`flex h-9 flex-1 cursor-pointer items-center justify-center rounded-[9px] text-[14.5px] font-semibold ${post ? 'bg-white shadow-sm' : ''}`}>
+          <button type="button" onClick={() => setPost(true)} className={`flex h-9 flex-1 cursor-pointer items-center justify-center rounded-[9px] text-[14.5px] font-semibold ${post ? 'bg-white text-ink shadow-sm' : 'text-white/70'}`}>
             Post
           </button>
         </div>
       </div>
 
       <div className="flex flex-col gap-2.5">
-        <span className="text-[13px] font-semibold text-muted">PALETA</span>
+        <span className="text-[13px] font-semibold text-white/60">PALETA</span>
         <div className="flex gap-4">
           {PALETTES.map((p) => (
             <button type="button" key={p.id} onClick={() => setPalette(p.id)} className="flex flex-1 cursor-pointer flex-col items-center gap-1.5">
               <div
-                className="h-11 w-11 rounded-full border-[3px] border-white"
-                style={{ background: p.id === 'rosa' ? '#E07A9B' : p.id === 'nude' ? '#D9BFA3' : '#1A1614', boxShadow: palette === p.id ? '0 0 0 2.5px #5B2A4E' : 'none' }}
+                className="h-11 w-11 rounded-full border-[3px] border-white/80"
+                style={{ background: p.id === 'rosa' ? '#E07A9B' : p.id === 'nude' ? '#D9BFA3' : '#1A1614', boxShadow: palette === p.id ? '0 0 0 2.5px #E07A9B' : 'none' }}
               />
-              <span className="text-center text-[11.5px] text-muted">{p.label}</span>
+              <span className="text-center text-[11.5px] text-white/70">{p.label}</span>
             </button>
           ))}
         </div>
       </div>
 
       {art.photo === 'optional' && (
-        <div className="flex flex-col gap-2.5 rounded-[20px] bg-white p-3.5">
+        <div className="flex flex-col gap-2.5 rounded-[20px] border border-white/[0.1] bg-white/[0.05] p-3.5">
           <div className="flex items-center justify-between">
-            <span className="text-[16px] font-medium">Usar foto</span>
+            <span className="text-[16px] font-medium text-white">Usar foto</span>
             <button
               type="button"
               onClick={() => setPhotoOn((v) => !v)}
               className="relative h-[31px] w-[51px] shrink-0 cursor-pointer rounded-full transition-colors"
-              style={{ background: photoOn ? '#34C759' : '#D9D0D5' }}
+              style={{ background: photoOn ? '#34C759' : 'rgba(255,255,255,.18)' }}
             >
               <span className="absolute top-0.5 h-[27px] w-[27px] rounded-full bg-white shadow transition-all" style={{ left: photoOn ? 22 : 2 }} />
             </button>
@@ -280,26 +280,26 @@ export function ArtEditor() {
                 <button
                   type="button"
                   onClick={() => setPhotoChoice('studio')}
-                  className={`flex h-10 flex-1 cursor-pointer items-center justify-center rounded-full text-sm font-semibold ${photoChoice === 'studio' ? 'bg-plum text-white' : 'bg-lilac text-ink'}`}
+                  className={`flex h-10 flex-1 cursor-pointer items-center justify-center rounded-full text-sm font-semibold ${photoChoice === 'studio' ? 'bg-[#E07A9B] text-white' : 'border border-white/20 text-white/80'}`}
                 >
                   Foto do estúdio
                 </button>
                 <button
                   type="button"
                   onClick={() => fileInput.current?.click()}
-                  className={`flex h-10 flex-1 cursor-pointer items-center justify-center rounded-full text-sm font-semibold ${photoChoice === 'custom' ? 'bg-plum text-white' : 'bg-lilac text-ink'}`}
+                  className={`flex h-10 flex-1 cursor-pointer items-center justify-center rounded-full text-sm font-semibold ${photoChoice === 'custom' ? 'bg-[#E07A9B] text-white' : 'border border-white/20 text-white/80'}`}
                 >
                   Escolher outra
                 </button>
                 <input ref={fileInput} type="file" accept="image/*" onChange={onPickFile} className="hidden" />
               </div>
               {!rawPhotoUrl && (
-                <div className="rounded-xl bg-gold-soft px-3 py-2 text-[13px] text-gold-ink">
+                <div className="rounded-xl border border-[#C9A15B]/30 bg-[#C9A15B]/15 px-3 py-2 text-[13px] text-[#E8C27E]">
                   {photoChoice === 'studio' ? 'Você ainda não tem uma foto no Meu Estúdio. Escolha outra ou desligue a foto.' : 'Escolha uma foto para continuar.'}
                 </div>
               )}
               <label className="flex flex-col gap-1">
-                <span className="text-[13px] font-semibold text-muted">Posição da foto</span>
+                <span className="text-[13px] font-semibold text-white/60">Posição da foto</span>
                 <input type="range" min={0} max={100} value={photoPosY} onChange={(e) => setPhotoPosY(Number(e.target.value))} />
               </label>
             </>
@@ -309,25 +309,25 @@ export function ArtEditor() {
 
       {kind === 'urgent' && (
         <label className="flex flex-col gap-1.5">
-          <span className="text-[15px] font-semibold">Quantas vagas restam</span>
-          <input value={vagas} onChange={(e) => setVagas(e.target.value)} className="h-[46px] rounded-[13px] bg-white px-[14px] text-base outline-none" />
+          <span className="text-[15px] font-semibold text-white">Quantas vagas restam</span>
+          <input value={vagas} onChange={(e) => setVagas(e.target.value)} className="h-[46px] rounded-[13px] border border-white/[0.15] bg-white/[0.08] px-[14px] text-base text-white outline-none placeholder:text-white/40" />
         </label>
       )}
 
       {kind === 'price' && (
         <>
           <label className="flex flex-col gap-1.5">
-            <span className="text-[15px] font-semibold">Título</span>
-            <input value={comboTitulo} onChange={(e) => setComboTitulo(e.target.value)} placeholder="Ex.: Aplicação a partir de" className="h-[46px] rounded-[13px] bg-white px-[14px] text-base outline-none" />
+            <span className="text-[15px] font-semibold text-white">Título</span>
+            <input value={comboTitulo} onChange={(e) => setComboTitulo(e.target.value)} placeholder="Ex.: Aplicação a partir de" className="h-[46px] rounded-[13px] border border-white/[0.15] bg-white/[0.08] px-[14px] text-base text-white outline-none placeholder:text-white/40" />
           </label>
           <div className="grid grid-cols-2 gap-2.5">
             <label className="flex flex-col gap-1.5">
-              <span className="text-[15px] font-semibold">Preço</span>
-              <input value={preco} onChange={(e) => setPreco(e.target.value)} placeholder="180,00" className="h-[46px] rounded-[13px] bg-white px-[14px] text-base outline-none" />
+              <span className="text-[15px] font-semibold text-white">Preço</span>
+              <input value={preco} onChange={(e) => setPreco(e.target.value)} placeholder="180,00" className="h-[46px] rounded-[13px] border border-white/[0.15] bg-white/[0.08] px-[14px] text-base text-white outline-none placeholder:text-white/40" />
             </label>
             <label className="flex flex-col gap-1.5">
-              <span className="text-[15px] font-semibold">Válido até</span>
-              <input value={dataLimite} onChange={(e) => setDataLimite(e.target.value)} className="h-[46px] rounded-[13px] bg-white px-[14px] text-base outline-none" />
+              <span className="text-[15px] font-semibold text-white">Válido até</span>
+              <input value={dataLimite} onChange={(e) => setDataLimite(e.target.value)} className="h-[46px] rounded-[13px] border border-white/[0.15] bg-white/[0.08] px-[14px] text-base text-white outline-none placeholder:text-white/40" />
             </label>
           </div>
         </>
@@ -335,33 +335,33 @@ export function ArtEditor() {
 
       {kind === 'list' && (
         <label className="flex flex-col gap-1.5">
-          <span className="text-[15px] font-semibold">Horários (2 a 5, um por linha)</span>
-          <textarea value={horariosText} onChange={(e) => setHorariosText(e.target.value)} rows={4} className="rounded-[13px] bg-white px-[14px] py-3 text-base outline-none" />
+          <span className="text-[15px] font-semibold text-white">Horários (2 a 5, um por linha)</span>
+          <textarea value={horariosText} onChange={(e) => setHorariosText(e.target.value)} rows={4} className="rounded-[13px] border border-white/[0.15] bg-white/[0.08] px-[14px] py-3 text-base text-white outline-none placeholder:text-white/40" />
         </label>
       )}
 
       {kind === 'photo' && art.photo === 'required' && (
-        <div className="flex flex-col gap-2.5 rounded-[20px] bg-white p-3.5">
-          <span className="text-[16px] font-medium">Foto (obrigatória)</span>
+        <div className="flex flex-col gap-2.5 rounded-[20px] border border-white/[0.1] bg-white/[0.05] p-3.5">
+          <span className="text-[16px] font-medium text-white">Foto (obrigatória)</span>
           <div className="flex gap-2">
             <button
               type="button"
               onClick={() => setPhotoChoice('studio')}
-              className={`flex h-10 flex-1 cursor-pointer items-center justify-center rounded-full text-sm font-semibold ${photoChoice === 'studio' ? 'bg-plum text-white' : 'bg-lilac text-ink'}`}
+              className={`flex h-10 flex-1 cursor-pointer items-center justify-center rounded-full text-sm font-semibold ${photoChoice === 'studio' ? 'bg-[#E07A9B] text-white' : 'border border-white/20 text-white/80'}`}
             >
               Foto do estúdio
             </button>
             <button
               type="button"
               onClick={() => fileInput.current?.click()}
-              className={`flex h-10 flex-1 cursor-pointer items-center justify-center rounded-full text-sm font-semibold ${photoChoice === 'custom' ? 'bg-plum text-white' : 'bg-lilac text-ink'}`}
+              className={`flex h-10 flex-1 cursor-pointer items-center justify-center rounded-full text-sm font-semibold ${photoChoice === 'custom' ? 'bg-[#E07A9B] text-white' : 'border border-white/20 text-white/80'}`}
             >
               Escolher outra
             </button>
             <input ref={fileInput} type="file" accept="image/*" onChange={onPickFile} className="hidden" />
           </div>
           {!rawPhotoUrl && (
-            <div className="rounded-xl bg-gold-soft px-3 py-2 text-[13px] text-gold-ink">
+            <div className="rounded-xl border border-[#C9A15B]/30 bg-[#C9A15B]/15 px-3 py-2 text-[13px] text-[#E8C27E]">
               {photoChoice === 'studio' ? 'Você ainda não tem uma foto no Meu Estúdio. Escolha outra.' : 'Escolha uma foto para continuar.'}
             </div>
           )}
@@ -369,22 +369,22 @@ export function ArtEditor() {
       )}
 
       {kind === 'beforeAfter' && art.photo === 'required' && (
-        <div className="flex flex-col gap-3.5 rounded-[20px] bg-white p-3.5">
-          <span className="text-[16px] font-medium">Fotos antes/depois (obrigatórias)</span>
+        <div className="flex flex-col gap-3.5 rounded-[20px] border border-white/[0.1] bg-white/[0.05] p-3.5">
+          <span className="text-[16px] font-medium text-white">Fotos antes/depois (obrigatórias)</span>
           <div className="flex flex-col gap-2">
-            <span className="text-[13px] font-semibold text-muted">{labels[0]}</span>
+            <span className="text-[13px] font-semibold text-white/60">{labels[0]}</span>
             <div className="flex gap-2">
               <button
                 type="button"
                 onClick={() => setPhotoChoice('studio')}
-                className={`flex h-10 flex-1 cursor-pointer items-center justify-center rounded-full text-sm font-semibold ${photoChoice === 'studio' ? 'bg-plum text-white' : 'bg-lilac text-ink'}`}
+                className={`flex h-10 flex-1 cursor-pointer items-center justify-center rounded-full text-sm font-semibold ${photoChoice === 'studio' ? 'bg-[#E07A9B] text-white' : 'border border-white/20 text-white/80'}`}
               >
                 Foto do estúdio
               </button>
               <button
                 type="button"
                 onClick={() => fileInput.current?.click()}
-                className={`flex h-10 flex-1 cursor-pointer items-center justify-center rounded-full text-sm font-semibold ${photoChoice === 'custom' ? 'bg-plum text-white' : 'bg-lilac text-ink'}`}
+                className={`flex h-10 flex-1 cursor-pointer items-center justify-center rounded-full text-sm font-semibold ${photoChoice === 'custom' ? 'bg-[#E07A9B] text-white' : 'border border-white/20 text-white/80'}`}
               >
                 Escolher outra
               </button>
@@ -392,19 +392,19 @@ export function ArtEditor() {
             </div>
           </div>
           <div className="flex flex-col gap-2">
-            <span className="text-[13px] font-semibold text-muted">{labels[1]}</span>
+            <span className="text-[13px] font-semibold text-white/60">{labels[1]}</span>
             <div className="flex gap-2">
               <button
                 type="button"
                 onClick={() => setPhotoChoice2('studio')}
-                className={`flex h-10 flex-1 cursor-pointer items-center justify-center rounded-full text-sm font-semibold ${photoChoice2 === 'studio' ? 'bg-plum text-white' : 'bg-lilac text-ink'}`}
+                className={`flex h-10 flex-1 cursor-pointer items-center justify-center rounded-full text-sm font-semibold ${photoChoice2 === 'studio' ? 'bg-[#E07A9B] text-white' : 'border border-white/20 text-white/80'}`}
               >
                 Foto do estúdio
               </button>
               <button
                 type="button"
                 onClick={() => fileInput2.current?.click()}
-                className={`flex h-10 flex-1 cursor-pointer items-center justify-center rounded-full text-sm font-semibold ${photoChoice2 === 'custom' ? 'bg-plum text-white' : 'bg-lilac text-ink'}`}
+                className={`flex h-10 flex-1 cursor-pointer items-center justify-center rounded-full text-sm font-semibold ${photoChoice2 === 'custom' ? 'bg-[#E07A9B] text-white' : 'border border-white/20 text-white/80'}`}
               >
                 Escolher outra
               </button>
@@ -412,35 +412,35 @@ export function ArtEditor() {
             </div>
           </div>
           {(!rawPhotoUrl || !rawPhotoUrl2) && (
-            <div className="rounded-xl bg-gold-soft px-3 py-2 text-[13px] text-gold-ink">Escolha as duas fotos para continuar.</div>
+            <div className="rounded-xl border border-[#C9A15B]/30 bg-[#C9A15B]/15 px-3 py-2 text-[13px] text-[#E8C27E]">Escolha as duas fotos para continuar.</div>
           )}
         </div>
       )}
 
       {kind === 'menu' && (
-        <div className="flex flex-col gap-2.5 rounded-[20px] bg-white p-3.5">
-          <span className="text-[15px] font-semibold">Tabela de valores</span>
+        <div className="flex flex-col gap-2.5 rounded-[20px] border border-white/[0.1] bg-white/[0.05] p-3.5">
+          <span className="text-[15px] font-semibold text-white">Tabela de valores</span>
           {rows.map((r, i) => (
             <div key={i} className="flex items-center gap-2">
               <input
                 value={r[0]}
                 onChange={(e) => updateRow(i, 0, e.target.value)}
                 placeholder="Nome"
-                className="h-11 min-w-0 flex-1 rounded-[11px] bg-lilac px-3 text-sm outline-none"
+                className="h-11 min-w-0 flex-1 rounded-[11px] border border-white/[0.15] bg-white/[0.08] px-3 text-sm text-white outline-none placeholder:text-white/40"
               />
               <input
                 value={r[1]}
                 onChange={(e) => updateRow(i, 1, e.target.value)}
                 placeholder="R$ 0"
-                className="h-11 w-[96px] shrink-0 rounded-[11px] bg-lilac px-3 text-sm outline-none"
+                className="h-11 w-[96px] shrink-0 rounded-[11px] border border-white/[0.15] bg-white/[0.08] px-3 text-sm text-white outline-none placeholder:text-white/40"
               />
-              <button type="button" onClick={() => removeRow(i)} className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full bg-blush text-plum">
+              <button type="button" onClick={() => removeRow(i)} className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full bg-white/10 text-white/80">
                 ×
               </button>
             </div>
           ))}
           {rows.length < 6 && (
-            <button type="button" onClick={addRow} className="press flex h-10 cursor-pointer items-center justify-center rounded-full bg-lilac text-sm font-semibold text-plum">
+            <button type="button" onClick={addRow} className="press flex h-10 cursor-pointer items-center justify-center rounded-full border border-white/20 text-sm font-semibold text-white/85">
               + Adicionar item
             </button>
           )}
@@ -450,49 +450,49 @@ export function ArtEditor() {
       {kind === 'quote' && (
         <>
           <label className="flex flex-col gap-1.5">
-            <span className="text-[15px] font-semibold">Depoimento</span>
-            <textarea value={quoteText} onChange={(e) => setQuoteText(e.target.value)} rows={3} className="rounded-[13px] bg-white px-[14px] py-3 text-base outline-none" />
+            <span className="text-[15px] font-semibold text-white">Depoimento</span>
+            <textarea value={quoteText} onChange={(e) => setQuoteText(e.target.value)} rows={3} className="rounded-[13px] border border-white/[0.15] bg-white/[0.08] px-[14px] py-3 text-base text-white outline-none placeholder:text-white/40" />
           </label>
           <label className="flex flex-col gap-1.5">
-            <span className="text-[15px] font-semibold">Assinatura</span>
+            <span className="text-[15px] font-semibold text-white">Assinatura</span>
             <input
               value={authorText}
               onChange={(e) => setAuthorText(e.target.value)}
               placeholder="Nome da cliente"
-              className="h-[46px] rounded-[13px] bg-white px-[14px] text-base outline-none"
+              className="h-[46px] rounded-[13px] border border-white/[0.15] bg-white/[0.08] px-[14px] text-base text-white outline-none placeholder:text-white/40"
             />
           </label>
         </>
       )}
 
       {kind === 'bullets' && (
-        <div className="flex flex-col gap-2.5 rounded-[20px] bg-white p-3.5">
-          <span className="text-[15px] font-semibold">Tópicos</span>
+        <div className="flex flex-col gap-2.5 rounded-[20px] border border-white/[0.1] bg-white/[0.05] p-3.5">
+          <span className="text-[15px] font-semibold text-white">Tópicos</span>
           {bulletItems.map((t, i) => (
             <div key={i} className="flex items-center gap-1.5">
               <input
                 value={t}
                 onChange={(e) => updateBullet(i, e.target.value)}
-                className="h-11 min-w-0 flex-1 rounded-[11px] bg-lilac px-3 text-sm outline-none"
+                className="h-11 min-w-0 flex-1 rounded-[11px] border border-white/[0.15] bg-white/[0.08] px-3 text-sm text-white outline-none placeholder:text-white/40"
               />
-              <button type="button" disabled={i === 0} onClick={() => moveBullet(i, -1)} className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full bg-lilac text-ink disabled:opacity-30">
+              <button type="button" disabled={i === 0} onClick={() => moveBullet(i, -1)} className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full bg-white/10 text-white/80 disabled:opacity-30">
                 ↑
               </button>
               <button
                 type="button"
                 disabled={i === bulletItems.length - 1}
                 onClick={() => moveBullet(i, 1)}
-                className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full bg-lilac text-ink disabled:opacity-30"
+                className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full bg-white/10 text-white/80 disabled:opacity-30"
               >
                 ↓
               </button>
-              <button type="button" onClick={() => removeBullet(i)} className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full bg-blush text-plum">
+              <button type="button" onClick={() => removeBullet(i)} className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full bg-white/10 text-white/80">
                 ×
               </button>
             </div>
           ))}
           {bulletItems.length < 6 && (
-            <button type="button" onClick={addBullet} className="press flex h-10 cursor-pointer items-center justify-center rounded-full bg-lilac text-sm font-semibold text-plum">
+            <button type="button" onClick={addBullet} className="press flex h-10 cursor-pointer items-center justify-center rounded-full border border-white/20 text-sm font-semibold text-white/85">
               + Adicionar tópico
             </button>
           )}
@@ -500,29 +500,29 @@ export function ArtEditor() {
       )}
 
       {markers.length > 0 && (
-        <div className="flex flex-col gap-2.5 rounded-[20px] bg-white p-3.5">
-          <span className="text-[15px] font-semibold">Preencha os detalhes</span>
+        <div className="flex flex-col gap-2.5 rounded-[20px] border border-white/[0.1] bg-white/[0.05] p-3.5">
+          <span className="text-[15px] font-semibold text-white">Preencha os detalhes</span>
           {markers.map((m) => (
             <label key={m} className="flex flex-col gap-1.5">
-              <span className="text-[13px] font-semibold text-muted">{m.slice(1, -1)}</span>
+              <span className="text-[13px] font-semibold text-white/60">{m.slice(1, -1)}</span>
               <input
                 value={markerValues[m] ?? ''}
                 onChange={(e) => setMarkerValues((v) => ({ ...v, [m]: e.target.value }))}
                 placeholder={m}
-                className="h-11 rounded-[11px] bg-lilac px-3 text-sm outline-none"
+                className="h-11 rounded-[11px] border border-white/[0.15] bg-white/[0.08] px-3 text-sm text-white outline-none placeholder:text-white/40"
               />
             </label>
           ))}
         </div>
       )}
 
-      {formError && <div className="rounded-xl bg-blush px-3.5 py-2.5 text-sm font-medium text-plum">{formError}</div>}
+      {formError && <div className="rounded-xl border border-[#D1344C]/30 bg-[#D1344C]/15 px-3.5 py-2.5 text-sm font-medium text-[#FF93A8]">{formError}</div>}
 
       <div className="flex flex-col gap-2.5">
-        <button type="button" disabled={exporting} onClick={doExport} className="press flex h-[54px] cursor-pointer items-center justify-center gap-2 rounded-full bg-plum text-[17px] font-semibold text-white disabled:opacity-60">
+        <button type="button" disabled={exporting} onClick={doExport} className="press flex h-[54px] cursor-pointer items-center justify-center gap-2 rounded-full bg-[#E07A9B] text-[17px] font-semibold text-white disabled:opacity-60">
           {exporting ? 'Gerando…' : 'Compartilhar'}
         </button>
-        <SoftButton className="h-[54px] text-[17px]" disabled={exporting} onClick={doExport}>
+        <SoftButton className="h-[54px] text-[17px] !border !border-white/15 !bg-white/[0.08] !text-white" disabled={exporting} onClick={doExport}>
           {exporting ? 'Gerando…' : 'Salvar no celular'}
         </SoftButton>
       </div>

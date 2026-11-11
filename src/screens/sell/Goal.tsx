@@ -36,39 +36,39 @@ export function Goal() {
   useDebouncedTrack([meta, serv, manut, freq], () => track('calculadora_usada', { tipo: 'meta' }))
 
   return (
-    <div className="flex flex-1 flex-col gap-[18px] overflow-auto bg-lilac px-5 pt-6 pb-8">
+    <div className="flex flex-1 flex-col gap-[18px] overflow-auto bg-night px-5 pt-6 pb-8">
       <div className="flex items-center justify-between">
         <BackButton fallback="/vender" />
         <div className="w-[38px]" />
       </div>
 
-      <h1 className="text-[34px] font-bold tracking-tight">Meta do mês</h1>
-      <p className="-mt-2.5 text-[15px] leading-[1.4] text-muted">Descubra quantas clientes você precisa para chegar lá.</p>
+      <h1 className="text-[34px] font-bold tracking-tight text-white">Meta do mês</h1>
+      <p className="-mt-2.5 text-[15px] leading-[1.4] text-white/60">Descubra quantas clientes você precisa para chegar lá.</p>
 
       {FIELDS.map(([label, k]) => (
         <label key={k} className="flex flex-col gap-1.5">
-          <span className="text-[15px] font-semibold">{label}</span>
-          <div className="flex h-[54px] items-center gap-2 rounded-[18px] bg-white px-[16px]">
-            <span className="text-lg font-bold text-rose">R$</span>
+          <span className="text-[15px] font-semibold text-white">{label}</span>
+          <div className="flex h-[54px] items-center gap-2 rounded-[18px] border border-white/[0.15] bg-white/[0.08] px-[16px]">
+            <span className="text-lg font-bold text-[#E07A9B]">R$</span>
             <input
               value={values[k]}
               onChange={(e) => setters[k](e.target.value.replace(/\D/g, '').slice(0, 7))}
               inputMode="numeric"
-              className="min-w-0 flex-1 bg-transparent text-[20px] font-bold text-ink outline-none"
+              className="min-w-0 flex-1 bg-transparent text-[20px] font-bold text-white outline-none"
             />
           </div>
         </label>
       ))}
 
       <div className="flex flex-col gap-2">
-        <div className="text-[15px] font-semibold">Quantas manutenções cada cliente faz por mês?</div>
+        <div className="text-[15px] font-semibold text-white">Quantas manutenções cada cliente faz por mês?</div>
         <div className="grid grid-cols-5 gap-1.5">
           {FREQS.map((v) => (
             <button
               key={v}
               type="button"
               onClick={() => setFreq(v)}
-              className={`flex h-12 cursor-pointer items-center justify-center rounded-2xl text-lg font-bold ${freq === v ? 'bg-plum text-white' : 'bg-white text-ink'}`}
+              className={`flex h-12 cursor-pointer items-center justify-center rounded-2xl text-lg font-bold ${freq === v ? 'bg-[#E07A9B] text-white' : 'border border-white/20 text-white/80'}`}
             >
               {String(v).replace('.', ',')}
             </button>
