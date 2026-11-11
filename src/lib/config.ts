@@ -8,10 +8,10 @@ export const META_PIXEL_ID = '1514627327214218'
 
 /**
  * Link de checkout da assinatura (mensal/anual), usado no botão "Renovar assinatura" de
- * /assinatura-vencida. Mensal R$ 22,90, Anual R$ 149,00 (produto "LashBox" na Kiwify).
+ * /assinatura-vencida. Mensal R$ 19,90, Anual R$ 149,00 (produto "LashBox" na Kiwify).
  */
 export const KIWIFY_SUBSCRIPTION_CHECKOUT_URLS: Record<'mensal' | 'anual', string> = {
-  mensal: 'https://pay.kiwify.com.br/OYcIZPz',
+  mensal: 'https://pay.kiwify.com.br/bIhLmOy',
   anual: 'https://pay.kiwify.com.br/0oNpCfm',
 }
 

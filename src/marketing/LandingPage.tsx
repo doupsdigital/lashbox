@@ -372,7 +372,7 @@ export function LandingPage() {
               <div className="mt-2 text-[15px] leading-[1.5] text-[#6B5C66]">
                 Equivale a <b className="text-[#2A1E27]">R$ 12,42 por mês</b>
                 <br />
-                Você economiza R$ 125 no ano
+                Você economiza R$ 89 no ano
                 <br />
                 Ou em até 12x no cartão
               </div>
@@ -395,11 +395,11 @@ export function LandingPage() {
             <div className="text-[14px] font-bold tracking-[.08em] text-white/70 uppercase">Mensal</div>
             <div>
               <div className="text-[44px] leading-none font-extrabold tracking-[-.04em] text-white">
-                R$ 22,90<span className="text-[18px] font-semibold tracking-normal text-white/70">/mês</span>
+                R$ 19,90<span className="text-[18px] font-semibold tracking-normal text-white/70">/mês</span>
               </div>
               <div className="mt-2 text-[15px] text-white/75">Cancele quando quiser</div>
             </div>
-            <PlanButton plan="mensal" price={22.9} className="flex h-[54px] cursor-pointer items-center justify-center rounded-[27px] border-2 border-white text-[17px] font-bold text-white no-underline">
+            <PlanButton plan="mensal" price={19.9} className="flex h-[54px] cursor-pointer items-center justify-center rounded-[27px] border-2 border-white text-[17px] font-bold text-white no-underline">
               Assinar mensal
             </PlanButton>
             <div className="flex flex-col gap-2.5 pt-1.5">

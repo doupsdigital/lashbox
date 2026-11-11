@@ -27,7 +27,7 @@ export function Terms() {
       <h2>2. Assinatura e cobrança</h2>
       <ul>
         <li>
-          O LashBox é vendido por <b>assinatura</b>, nos planos <b>mensal (R$ 22,90)</b> ou <b>anual (R$ 149,00)</b>, com{' '}
+          O LashBox é vendido por <b>assinatura</b>, nos planos <b>mensal (R$ 19,90)</b> ou <b>anual (R$ 149,00)</b>, com{' '}
           <b>renovação automática</b> até você cancelar.
         </li>
         <li>O pagamento é feito pela Kiwify, por cartão de crédito, Pix (inclusive Pix Automático) ou boleto.</li>
