@@ -8,6 +8,14 @@ import { useLocation } from 'react-router-dom'
 const KEY = import.meta.env.VITE_POSTHOG_KEY as string | undefined
 const HOST = (import.meta.env.VITE_POSTHOG_HOST as string | undefined) || 'https://us.i.posthog.com'
 
+/** Nunca grava dados de testes locais (ex.: `npm run dev` em localhost) no projeto de produção do
+ * PostHog — a não ser que VITE_POSTHOG_TEST_MODE esteja ligado de propósito (scripts automatizados). */
+function disabledLocally() {
+  if (typeof window === 'undefined') return false
+  if (import.meta.env.VITE_POSTHOG_TEST_MODE) return false
+  return /^(localhost|127\.0\.0\.1|\[::1\])$/.test(window.location.hostname)
+}
+
 let ready = false
 // Chamadas feitas antes do init (comum: a /lp dispara lp_visualizada no mount, antes da janela
 // 'load' terminar) ficam na fila e são reproduzidas na ordem, assim que o init terminar — sem
@@ -15,7 +23,7 @@ let ready = false
 let queue: Array<() => void> = []
 
 function doInit() {
-  if (ready || !KEY) return
+  if (ready || !KEY || disabledLocally()) return
   posthog.init(KEY, {
     api_host: HOST,
     autocapture: false,
@@ -49,7 +57,7 @@ export function initAnalyticsDeferred() {
 
 /** Sem KEY, nunca enfileira (nada a disparar depois) — com KEY, enfileira até o init terminar. */
 function runOrQueue(fn: () => void) {
-  if (!KEY) return
+  if (!KEY || disabledLocally()) return
   if (ready) fn()
   else queue.push(fn)
 }
