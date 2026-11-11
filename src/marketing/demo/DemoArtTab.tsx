@@ -14,7 +14,7 @@ import '@fontsource/bodoni-moda/latin-400-italic.css'
 import '@fontsource/bodoni-moda/latin-500-italic.css'
 import '@fontsource/bodoni-moda/latin-600-italic.css'
 
-import { useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState, type ChangeEvent } from 'react'
 import { ScaledBoard } from '../../components/art/ScaledBoard'
 import { StoryBoard } from '../../components/art/StoryBoard'
 import { artKind, getAnyArt } from '../../content/lash'
@@ -22,9 +22,12 @@ import { track } from '../../lib/analytics'
 import type { PaletteId } from '../../lib/artPalettes'
 import { exportNodeToPng, shareOrDownloadPng } from '../../lib/exportBoard'
 import { studioFootStory } from '../../lib/studioFooter'
-import { applyStudioTokens } from '../../lib/studioTokens'
+import { applyGenericMarkers, applyStudioTokens } from '../../lib/studioTokens'
 import { emptyStudio, type Studio } from '../../state/studio'
 import { DEMO_ART_IDS } from './demoContent'
+
+const DEMO_ANTES_URL = '/lp/demo-antes.webp'
+const DEMO_DEPOIS_URL = '/lp/demo-depois.webp'
 
 const TEMPLATES = DEMO_ART_IDS.map((id) => getAnyArt(id)).filter((a): a is NonNullable<typeof a> => !!a)
 
@@ -39,12 +42,30 @@ export function DemoArtTab({ onWantApp }: { onWantApp: () => void }) {
   const [palette, setPalette] = useState<PaletteId>('rosa')
   const [studioName, setStudioName] = useState('')
   const [rows, setRows] = useState<[string, string][]>(() => (getAnyArt('tabela-valores')?.rows ?? []).slice(0, 3) as [string, string][])
-  const [quoteText, setQuoteText] = useState(getAnyArt('elogio-cliente')?.quote ?? '')
-  const [authorText, setAuthorText] = useState(getAnyArt('elogio-cliente')?.author ?? '')
-  const [horario, setHorario] = useState('Hoje · 15h30')
+  const [antesUrl, setAntesUrl] = useState(DEMO_ANTES_URL)
+  const [depoisUrl, setDepoisUrl] = useState(DEMO_DEPOIS_URL)
+  const [horariosText, setHorariosText] = useState('Hoje · 15h30')
   const [exporting, setExporting] = useState(false)
   const [justExported, setJustExported] = useState(false)
   const exportRef = useRef<HTMLDivElement>(null)
+  const antesInput = useRef<HTMLInputElement>(null)
+  const depoisInput = useRef<HTMLInputElement>(null)
+
+  useEffect(() => () => URL.revokeObjectURL(antesUrl), [antesUrl])
+  useEffect(() => () => URL.revokeObjectURL(depoisUrl), [depoisUrl])
+
+  const onPickAntes = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setAntesUrl(URL.createObjectURL(file))
+    e.target.value = ''
+  }
+  const onPickDepois = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setDepoisUrl(URL.createObjectURL(file))
+    e.target.value = ''
+  }
 
   const art = getAnyArt(templateId) ?? TEMPLATES[0]
   const kind = artKind(art)
@@ -55,25 +76,24 @@ export function DemoArtTab({ onWantApp }: { onWantApp: () => void }) {
   const resolvedArt = useMemo(
     () => ({
       ...art,
+      subline: kind === 'beforeAfter' ? applyGenericMarkers(art.subline, { '[estilo]': 'Volume brasileiro' }) : art.subline,
       note: art.note ? applyStudioTokens(art.note, studio) : art.note,
       rows: kind === 'menu' ? rows : art.rows,
-      quote: kind === 'quote' ? quoteText : art.quote,
-      author: kind === 'quote' ? authorText : art.author,
     }),
-    [art, kind, studio, rows, quoteText, authorText],
+    [art, kind, studio, rows],
   )
 
   const boardProps = {
     art: resolvedArt,
     palette,
     post: false,
-    photoOn: false,
-    photoUrl: null,
-    photoUrl2: null,
+    photoOn: kind === 'beforeAfter',
+    photoUrl: kind === 'beforeAfter' ? antesUrl : null,
+    photoUrl2: kind === 'beforeAfter' ? depoisUrl : null,
     photoPosY: 40,
     foot1: foot.foot1 || 'Seu estúdio',
     foot2: foot.foot2,
-    horarios: kind === 'list' ? [horario] : undefined,
+    horarios: kind === 'list' ? horariosText.split('\n').map((x) => x.trim()).filter(Boolean).slice(0, 5) : undefined,
   }
 
   function selectTemplate(id: string) {
@@ -129,47 +149,72 @@ export function DemoArtTab({ onWantApp }: { onWantApp: () => void }) {
         <div className="flex flex-col gap-2.5">
           <span className="text-[13px] font-semibold text-white/70">Seus valores</span>
           {rows.map((r, i) => (
-            <div key={i} className="flex items-center gap-2.5">
-              <span className="flex-1 text-[14.5px] text-white/85">{r[0]}</span>
+            <div key={i} className="flex items-center gap-2">
+              <input
+                value={r[0]}
+                onChange={(e) => setRows((rs) => rs.map((row, idx) => (idx === i ? [e.target.value, row[1]] : row)) as [string, string][])}
+                placeholder="Serviço"
+                className="h-11 min-w-0 flex-1 rounded-[12px] border border-white/[0.18] bg-white/[0.08] px-3 text-[14.5px] text-white placeholder:text-white/40 outline-none"
+              />
               <input
                 value={r[1]}
                 onChange={(e) => setRows((rs) => rs.map((row, idx) => (idx === i ? [row[0], e.target.value] : row)) as [string, string][])}
-                className="h-11 w-[110px] rounded-[12px] border border-white/[0.18] bg-white/[0.08] px-3 text-right text-[14.5px] text-white outline-none"
+                placeholder="R$"
+                className="h-11 w-[90px] shrink-0 rounded-[12px] border border-white/[0.18] bg-white/[0.08] px-3 text-right text-[14.5px] text-white placeholder:text-white/40 outline-none"
               />
+              <button
+                type="button"
+                onClick={() => setRows((rs) => rs.filter((_, idx) => idx !== i))}
+                aria-label="Remover"
+                className="press flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full bg-white/10 text-white/70"
+              >
+                ✕
+              </button>
             </div>
           ))}
+          {rows.length < 6 && (
+            <button
+              type="button"
+              onClick={() => setRows((rs) => [...rs, ['', '']])}
+              className="press cursor-pointer self-start text-[13.5px] font-semibold text-[#E07A9B] underline"
+            >
+              + Adicionar item
+            </button>
+          )}
         </div>
       )}
 
-      {kind === 'quote' && (
-        <div className="flex flex-col gap-3">
-          <label className="flex flex-col gap-1.5">
-            <span className="text-[13px] font-semibold text-white/70">O que a cliente disse</span>
-            <textarea
-              value={quoteText}
-              onChange={(e) => setQuoteText(e.target.value)}
-              rows={3}
-              className="rounded-[14px] border border-white/[0.18] bg-white/[0.08] px-4 py-3 text-[15px] text-white outline-none"
-            />
-          </label>
-          <label className="flex flex-col gap-1.5">
-            <span className="text-[13px] font-semibold text-white/70">Quem disse</span>
-            <input
-              value={authorText}
-              onChange={(e) => setAuthorText(e.target.value)}
-              className="h-12 rounded-[14px] border border-white/[0.18] bg-white/[0.08] px-4 text-[15px] text-white outline-none"
-            />
-          </label>
+      {kind === 'beforeAfter' && (
+        <div className="ph-no-capture flex flex-col gap-2.5">
+          <span className="text-[13px] font-semibold text-white/70">Suas fotos de antes e depois</span>
+          <div className="flex gap-3">
+            <div className="flex flex-1 flex-col items-center gap-2">
+              <img src={antesUrl} alt="Antes" className="h-20 w-20 rounded-2xl object-cover" />
+              <button type="button" onClick={() => antesInput.current?.click()} className="press cursor-pointer text-[12.5px] font-semibold text-[#E07A9B] underline">
+                Trocar "Antes"
+              </button>
+              <input ref={antesInput} type="file" accept="image/*" onChange={onPickAntes} className="hidden" />
+            </div>
+            <div className="flex flex-1 flex-col items-center gap-2">
+              <img src={depoisUrl} alt="Depois" className="h-20 w-20 rounded-2xl object-cover" />
+              <button type="button" onClick={() => depoisInput.current?.click()} className="press cursor-pointer text-[12.5px] font-semibold text-[#E07A9B] underline">
+                Trocar "Depois"
+              </button>
+              <input ref={depoisInput} type="file" accept="image/*" onChange={onPickDepois} className="hidden" />
+            </div>
+          </div>
         </div>
       )}
 
       {kind === 'list' && (
         <label className="flex flex-col gap-1.5">
-          <span className="text-[13px] font-semibold text-white/70">Horário livre hoje</span>
-          <input
-            value={horario}
-            onChange={(e) => setHorario(e.target.value)}
-            className="h-12 rounded-[14px] border border-white/[0.18] bg-white/[0.08] px-4 text-[15px] text-white outline-none"
+          <span className="text-[13px] font-semibold text-white/70">Horários livres (um por linha, até 5)</span>
+          <textarea
+            value={horariosText}
+            onChange={(e) => setHorariosText(e.target.value)}
+            rows={3}
+            placeholder={'Hoje · 15h30\nAmanhã · 10h'}
+            className="rounded-[14px] border border-white/[0.18] bg-white/[0.08] px-4 py-3 text-[15px] text-white placeholder:text-white/40 outline-none"
           />
         </label>
       )}
