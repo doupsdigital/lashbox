@@ -242,13 +242,17 @@ export function LandingPage() {
         </div>
         <div className="lp-hero-grid relative mx-auto grid max-w-[1120px] items-center gap-x-10 gap-y-9 px-5 pt-5 pb-10 md:pt-10 md:pb-24">
           <div className="lp-hero-headline flex min-w-0 flex-col items-center gap-3.5 md:items-start md:gap-6">
-            <div className="rounded-full border border-white/30 bg-white/10 px-5 py-2 text-[18px] font-bold tracking-[-.01em] text-white backdrop-blur-sm md:px-7 md:py-2.5 md:text-[28px]">
-              Ei, Lash Designer 👋
-            </div>
-            <h1 className="text-center leading-[1.03] font-extrabold tracking-[-.03em] text-white md:text-left">
-              <span className="block text-balance text-[clamp(42px,11vw,66px)]">Esqueça os templates do Canva.</span>
-              <span className="mt-1.5 block text-[clamp(22px,4.2vw,34px)] font-bold text-[#E07A9B] md:mt-3">Suas artes prontas, com seu nome, em segundos.</span>
+            <h1 className="text-center leading-[1.08] font-extrabold tracking-[-.025em] text-white md:text-left">
+              <span className="block text-balance text-[clamp(40px,10.5vw,64px)]">
+                O LashBox é o <span className="text-[#E07A9B]">App Exclusivo</span> da Lash Designer.
+              </span>
+              <span className="mt-4 block text-balance text-[clamp(19px,3.8vw,28px)] font-bold text-[#C9A15B] md:mt-5">
+                <span className="text-white">Adeus Canva:</span> crie suas artes do dia a dia de forma rápida e elegante.
+              </span>
             </h1>
+            <p className="text-center text-[15.5px] leading-[1.55] text-white/85 text-balance md:text-left">
+              Além disso: 💬 Mensagens prontas · 💰 Calculadora de custos · 📅 Dicas de planejamento... e muito mais ✨
+            </p>
           </div>
           <div className="lp-hero-image flex justify-center">
             <button type="button" onClick={() => openDemo('hero_imagem')} className="press relative w-full max-w-[300px] cursor-pointer md:max-w-[440px]" style={{ aspectRatio: '358/466' }}>
