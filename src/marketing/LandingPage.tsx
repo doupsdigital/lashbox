@@ -1,11 +1,15 @@
-import { useEffect, useRef, useState, type ReactNode, type SVGProps } from 'react'
+import { lazy, Suspense, useEffect, useRef, useState, type ReactNode, type SVGProps } from 'react'
 import { KIWIFY_SUBSCRIPTION_CHECKOUT_URLS } from '../lib/config'
 import { withForwardedParams } from '../lib/checkoutUrl'
 import { track, trackEventOnceVisible } from '../lib/analytics'
 import { trackAddToCart, trackViewContentOnceVisible } from './pixel'
 
-/** Mude para true quando public/lp/demo.mp4 existir de verdade. */
-const SHOW_VIDEO_SECTION = false
+/**
+ * Carregado só quando a visitante toca em "testar" — nunca no carregamento normal da /lp.
+ * É o único jeito de deixar testar o motor de artes de verdade (StoryBoard, html-to-image,
+ * conteúdo) sem pesar no que chega do anúncio.
+ */
+const DemoModal = lazy(() => import('./demo/DemoModal'))
 
 const ICONS: Record<string, string> = {
   spark: 'M12 3l2.2 5.8L20 11l-5.8 2.2L12 19l-2.2-5.8L4 11l5.8-2.2z',
@@ -28,27 +32,6 @@ function Icon({ d, ...rest }: { d: string } & SVGProps<SVGSVGElement>) {
     </svg>
   )
 }
-
-const STEPS = [
-  {
-    n: 1,
-    t: 'Escolha a arte',
-    d: 'Horário livre, valores, antes e depois, cuidados, depoimento… são 20 modelos para o dia a dia.',
-    ic: ICONS.spark,
-  },
-  {
-    n: 2,
-    t: 'Seus dados entram sozinhos',
-    d: 'Você preenche o seu estúdio uma vez. Nome, bairro, WhatsApp, Instagram e preços aparecem em todas as artes.',
-    ic: ICONS.user,
-  },
-  {
-    n: 3,
-    t: 'Poste',
-    d: 'Direto no Story, no feed ou no Status do WhatsApp.',
-    ic: ICONS.share,
-  },
-]
 
 const APP_FEATURES = [
   {
@@ -167,8 +150,7 @@ function PlanButton({ plan, price, className, children }: { plan: 'mensal' | 'an
 export function LandingPage() {
   const [past, setPast] = useState(false)
   const [open, setOpen] = useState(-1)
-  const [videoAvailable, setVideoAvailable] = useState(false)
-  const [playing, setPlaying] = useState(false)
+  const [demoOpen, setDemoOpen] = useState(false)
   const heroBtnRef = useRef<HTMLButtonElement>(null)
   const plansRef = useRef<HTMLDivElement>(null)
 
@@ -216,18 +198,18 @@ export function LandingPage() {
     }
   }, [])
 
-  useEffect(() => {
-    if (!SHOW_VIDEO_SECTION) return
-    let alive = true
-    fetch('/lp/demo.mp4', { method: 'HEAD' })
-      .then((r) => alive && setVideoAvailable(r.ok && (r.headers.get('content-type') ?? '').startsWith('video/')))
-      .catch(() => {})
-    return () => {
-      alive = false
-    }
-  }, [])
-
   const toPlans = () => plansRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+
+  const openDemo = (origem: 'hero_imagem' | 'link_texto') => {
+    track('demo_aberto', { origem })
+    setDemoOpen(true)
+  }
+
+  const onWantAppFromDemo = () => {
+    track('demo_cta_clique', { origem: 'pos_exportar' })
+    setDemoOpen(false)
+    toPlans()
+  }
 
   return (
     <div className="relative overflow-x-clip bg-[#5B2A4E] font-sans text-white">
@@ -265,9 +247,6 @@ export function LandingPage() {
               <span className="block text-balance text-[clamp(42px,11vw,66px)]">Esqueça os templates do Canva.</span>
               <span className="mt-1.5 block text-[clamp(22px,4.2vw,34px)] font-bold text-[#E07A9B] md:mt-3">O LashBox faz tudo por você.</span>
             </h1>
-            <p className="max-w-[460px] self-center text-pretty text-center text-[15px] leading-[1.42] text-[#F6E9F0] md:max-w-[560px] md:self-start md:text-left md:text-[21px] md:leading-[1.4]">
-              Seus posts prontos em 1 minuto, num app feito para lash designers.
-            </p>
             <button
               type="button"
               ref={heroBtnRef}
@@ -276,12 +255,15 @@ export function LandingPage() {
             >
               Quero o app LashBox
             </button>
-            <div className="self-center text-center text-[12.5px] whitespace-nowrap text-[#F0DDE8] md:self-start md:text-left md:text-[17px]">
-              A partir de R$ 12,42/mês · 7 dias de garantia
+            <div className="flex flex-col items-center gap-1.5 self-center text-center md:items-start md:text-left">
+              <div className="text-[12.5px] whitespace-nowrap text-[#F0DDE8] md:text-[17px]">A partir de R$ 12,42/mês · 7 dias de garantia</div>
+              <button type="button" onClick={() => openDemo('link_texto')} className="press cursor-pointer text-[13.5px] font-semibold text-[#E07A9B] underline md:text-[15px]">
+                ou teste agora, sem compromisso →
+              </button>
             </div>
           </div>
           <div className="flex min-w-0 flex-[1_1_300px] justify-center">
-            <div className="relative w-full max-w-[300px] md:max-w-[440px]" style={{ aspectRatio: '358/466' }}>
+            <button type="button" onClick={() => openDemo('hero_imagem')} className="press relative w-full max-w-[300px] cursor-pointer md:max-w-[440px]" style={{ aspectRatio: '358/466' }}>
               <div
                 className="absolute top-[6%] left-0 z-[1] w-[58%] overflow-hidden rounded-[22px] border-[6px] border-[#1d1519] bg-[#F6F2F4] shadow-[0_24px_50px_rgba(0,0,0,.45)]"
                 style={{ height: '94%', transform: 'rotate(-4deg)' }}
@@ -302,65 +284,22 @@ export function LandingPage() {
               <div className="absolute top-[78%] left-[53%] z-[3] text-[26px] leading-none font-bold text-white md:text-[34px]" style={{ fontFamily: 'Caveat, cursive' }}>
                 seu nome aqui ✨
               </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* 2. COMO FUNCIONA */}
-      <div style={{ background: '#4A2140' }}>
-        <div className="mx-auto flex max-w-[1120px] flex-col items-center gap-10 px-5 py-20">
-          <h2 className="text-center text-[clamp(28px,4.4vw,42px)] font-extrabold tracking-[-.03em] text-white">
-            Do zero ao post em 3 toques
-          </h2>
-          <div className="flex w-full flex-wrap items-center justify-center gap-9">
-            <div className="flex min-w-0 max-w-[620px] flex-1 flex-col gap-3.5">
-              {STEPS.map((s) => (
-                <div key={s.n} className="flex items-center gap-4 rounded-[26px] border border-white/[0.12] bg-white/[0.07] p-5">
-                  <div className="flex h-[54px] w-[54px] shrink-0 items-center justify-center rounded-[18px] bg-[#E07A9B]">
-                    <Icon d={s.ic} width={26} height={26} stroke="#fff" />
-                  </div>
-                  <div>
-                    <div className="text-[19px] font-bold text-white">
-                      <span className="mr-1.5 text-[#C9A15B]">{s.n}.</span>
-                      {s.t}
-                    </div>
-                    <div className="mt-[3px] text-[15.5px] leading-[1.4] text-white/75">{s.d}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-            {SHOW_VIDEO_SECTION && (
               <div
-                className="relative aspect-[9/16] w-[280px] max-w-full flex-[0_1_280px] cursor-pointer overflow-hidden rounded-[28px] bg-[#3B1932] shadow-[0_24px_50px_rgba(0,0,0,.4)]"
-                onClick={() => videoAvailable && setPlaying(true)}
+                className="pointer-events-none absolute top-1/2 left-1/2 z-[3] h-[80%] w-[80%] -translate-x-1/2 -translate-y-1/2 rounded-full"
+                style={{ background: 'radial-gradient(closest-side, rgba(20,8,14,.55), rgba(20,8,14,0) 72%)' }}
+              />
+              <span
+                className="absolute top-1/2 left-1/2 z-[4] flex -translate-x-1/2 -translate-y-1/2 items-center gap-1.5 rounded-full bg-[#E07A9B] px-5 py-2.5 text-[14px] font-bold whitespace-nowrap text-white shadow-[0_10px_28px_rgba(0,0,0,.45)] ring-2 ring-white/90"
+                style={{ animation: 'lp-demo-pulse 2.4s infinite ease-in-out' }}
               >
-                {playing && videoAvailable ? (
-                  <video src="/lp/demo.mp4" className="block h-full w-full object-cover" autoPlay muted playsInline controls>
-                    <track kind="captions" src="/lp/demo.vtt" srcLang="pt" label="Português" />
-                  </video>
-                ) : (
-                  <>
-                    <img src="/lp/screen-editor.webp" className="block h-full w-full object-cover object-top" style={{ filter: 'brightness(.82)' }} alt="Capa do vídeo" />
-                    {videoAvailable && (
-                      <div className="absolute top-1/2 left-1/2 flex h-[76px] w-[76px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white/92 shadow-[0_8px_24px_rgba(0,0,0,.25)]">
-                        <svg width="30" height="30" viewBox="0 0 24 24" fill="#5B2A4E" style={{ marginLeft: 4 }}>
-                          <path d="M7 4l13 8-13 8z" />
-                        </svg>
-                      </div>
-                    )}
-                  </>
-                )}
-              </div>
-            )}
-          </div>
-          <div className="rounded-full border border-white/[0.14] bg-white/[0.07] px-6 py-3 text-center text-[16px] md:text-[17px] font-semibold text-[#E07A9B]">
-            ✨ Tudo isso no celular, entre uma cliente e outra.
+                👉 Toque para testar
+              </span>
+            </button>
           </div>
         </div>
       </div>
 
-      {/* 3. O QUE TEM DENTRO DO APP */}
+      {/* 2. O QUE TEM DENTRO DO APP */}
       <div>
         <div className="mx-auto flex max-w-[1120px] flex-col gap-9 px-5 py-20">
           <h2 className="mx-auto max-w-[820px] text-pretty text-center text-[clamp(28px,4.4vw,42px)] font-extrabold tracking-[-.03em] text-white">
@@ -397,7 +336,7 @@ export function LandingPage() {
         </div>
       </div>
 
-      {/* 4. VITRINE DE ARTES */}
+      {/* 3. VITRINE DE ARTES */}
       <div style={{ background: '#4A2140' }}>
         <div className="mx-auto flex max-w-[1120px] flex-col gap-8 px-5 py-20">
           <h2 className="text-pretty text-center text-[clamp(28px,4.4vw,42px)] font-extrabold tracking-[-.03em] text-white">
@@ -416,7 +355,7 @@ export function LandingPage() {
         </div>
       </div>
 
-      {/* 5. PLANOS */}
+      {/* 4. PLANOS */}
       <div ref={plansRef} id="planos" className="relative mx-auto flex max-w-[1120px] flex-col gap-8 px-5 py-20">
         <div className="pointer-events-none absolute top-10 right-[6%] h-[280px] w-[280px] rounded-full bg-[#E07A9B]/22 blur-3xl" />
         <div className="flex flex-col items-center gap-3 text-center">
@@ -484,7 +423,7 @@ export function LandingPage() {
         </div>
       </div>
 
-      {/* 6. GARANTIA */}
+      {/* 5. GARANTIA */}
       <div className="mx-auto max-w-[820px] px-5 pb-20">
         <div className="flex flex-wrap items-center justify-center gap-5 rounded-[32px] border border-white/[0.14] bg-white/[0.07] p-[30px] text-left">
           <div
@@ -503,7 +442,7 @@ export function LandingPage() {
         </div>
       </div>
 
-      {/* 7. PERGUNTAS FREQUENTES */}
+      {/* 6. PERGUNTAS FREQUENTES */}
       <div style={{ background: '#4A2140' }}>
         <div className="mx-auto flex max-w-[760px] flex-col gap-7 px-5 pt-20 pb-10">
           <h2 className="text-center text-[clamp(28px,4.4vw,42px)] font-extrabold tracking-[-.03em] text-white">Perguntas frequentes</h2>
@@ -564,6 +503,18 @@ export function LandingPage() {
             Ver planos
           </button>
         </div>
+      )}
+
+      {demoOpen && (
+        <Suspense
+          fallback={
+            <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60">
+              <div className="rounded-full bg-white/10 px-6 py-3 text-[15px] font-semibold text-white">Carregando…</div>
+            </div>
+          }
+        >
+          <DemoModal onClose={() => setDemoOpen(false)} onWantApp={onWantAppFromDemo} />
+        </Suspense>
       )}
     </div>
   )
