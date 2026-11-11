@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Logo } from '../components/ui'
 import { track } from '../lib/analytics'
@@ -6,13 +6,20 @@ import { PRIVACY_URL, TERMS_URL } from '../lib/config'
 import { useAuth } from '../state/auth'
 
 export function Login() {
-  const { notice, clearNotice, requestLink, verifyCode } = useAuth()
+  const { status, notice, clearNotice, requestLink, verifyCode } = useAuth()
   const navigate = useNavigate()
   const [step, setStep] = useState<'email' | 'code'>('email')
   const [email, setEmail] = useState('')
   const [code, setCode] = useState('')
   const [error, setError] = useState<string | null>(notice)
   const [busy, setBusy] = useState(false)
+
+  // Depois de validar o código, o Supabase ainda confere a assinatura (has_access) antes do
+  // status virar 'ready' — navegar só aqui evita cair no "pega-tudo" do Gate (ver App.tsx),
+  // que manda pra /lp enquanto o status ainda é 'signedOut'.
+  useEffect(() => {
+    if (status === 'ready' || status === 'local') navigate('/inicio', { replace: true })
+  }, [status, navigate])
 
   const sendLink = async () => {
     clearNotice()
@@ -36,7 +43,7 @@ export function Login() {
       setBusy(false)
       if (r.ok) {
         track('login_concluido')
-        navigate('/inicio', { replace: true })
+        // navegação acontece no useEffect acima, quando o status virar 'ready'
       } else setError(r.message)
     }
   }
