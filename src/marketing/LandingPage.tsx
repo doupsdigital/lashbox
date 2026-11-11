@@ -238,31 +238,17 @@ export function LandingPage() {
           <div className="absolute inset-0" style={{ background: 'linear-gradient(160deg,rgba(91,42,78,.86),rgba(122,58,102,.8))' }} />
           <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg,rgba(91,42,78,.35),rgba(91,42,78,0) 35%,rgba(91,42,78,.45))' }} />
         </div>
-        <div className="relative mx-auto flex max-w-[1120px] flex-wrap items-center gap-x-10 gap-y-9 px-5 pt-5 pb-10 md:pt-10 md:pb-24">
-          <div className="flex min-w-0 flex-[1_1_420px] flex-col items-start gap-3.5 md:gap-6">
-            <div className="self-center rounded-full border border-white/30 bg-white/10 px-5 py-2 text-[18px] font-bold tracking-[-.01em] text-white backdrop-blur-sm md:self-start md:px-7 md:py-2.5 md:text-[28px]">
+        <div className="lp-hero-grid relative mx-auto grid max-w-[1120px] items-center gap-x-10 gap-y-9 px-5 pt-5 pb-10 md:pt-10 md:pb-24">
+          <div className="lp-hero-headline flex min-w-0 flex-col items-center gap-3.5 md:items-start md:gap-6">
+            <div className="rounded-full border border-white/30 bg-white/10 px-5 py-2 text-[18px] font-bold tracking-[-.01em] text-white backdrop-blur-sm md:px-7 md:py-2.5 md:text-[28px]">
               Ei, Lash Designer 👋
             </div>
             <h1 className="text-center leading-[1.03] font-extrabold tracking-[-.03em] text-white md:text-left">
               <span className="block text-balance text-[clamp(42px,11vw,66px)]">Esqueça os templates do Canva.</span>
-              <span className="mt-1.5 block text-[clamp(22px,4.2vw,34px)] font-bold text-[#E07A9B] md:mt-3">O LashBox faz tudo por você.</span>
+              <span className="mt-1.5 block text-[clamp(22px,4.2vw,34px)] font-bold text-[#E07A9B] md:mt-3">Suas artes prontas, com seu nome, em segundos.</span>
             </h1>
-            <button
-              type="button"
-              ref={heroBtnRef}
-              onClick={toPlans}
-              className="press flex h-[52px] cursor-pointer items-center self-center rounded-full bg-[#E07A9B] px-8 text-[17px] font-bold text-white shadow-[0_12px_30px_rgba(224,122,155,.45)] [text-shadow:0_1px_0_rgba(91,42,78,.35)] md:h-[68px] md:self-start md:px-10 md:text-[23px]"
-            >
-              Quero o app LashBox
-            </button>
-            <div className="flex flex-col items-center gap-1.5 self-center text-center md:items-start md:text-left">
-              <div className="text-[12.5px] whitespace-nowrap text-[#F0DDE8] md:text-[17px]">A partir de R$ 12,42/mês · 7 dias de garantia</div>
-              <button type="button" onClick={() => openDemo('link_texto')} className="press cursor-pointer text-[13.5px] font-semibold text-[#E07A9B] underline md:text-[15px]">
-                ou teste agora, sem compromisso →
-              </button>
-            </div>
           </div>
-          <div className="flex min-w-0 flex-[1_1_300px] justify-center">
+          <div className="lp-hero-image flex justify-center">
             <button type="button" onClick={() => openDemo('hero_imagem')} className="press relative w-full max-w-[300px] cursor-pointer md:max-w-[440px]" style={{ aspectRatio: '358/466' }}>
               <div
                 className="absolute top-[6%] left-0 z-[1] w-[58%] overflow-hidden rounded-[22px] border-[6px] border-[#1d1519] bg-[#F6F2F4] shadow-[0_24px_50px_rgba(0,0,0,.45)]"
@@ -296,6 +282,22 @@ export function LandingPage() {
               </span>
             </button>
           </div>
+          <div className="lp-hero-cta flex min-w-0 flex-col items-center gap-3.5 md:items-start md:gap-6">
+            <button
+              type="button"
+              ref={heroBtnRef}
+              onClick={toPlans}
+              className="press flex h-[52px] cursor-pointer items-center rounded-full bg-[#E07A9B] px-8 text-[17px] font-bold text-white shadow-[0_12px_30px_rgba(224,122,155,.45)] [text-shadow:0_1px_0_rgba(91,42,78,.35)] md:h-[68px] md:px-10 md:text-[23px]"
+            >
+              Quero o app LashBox
+            </button>
+            <div className="flex flex-col items-center gap-1.5 text-center md:items-start md:text-left">
+              <div className="text-[12.5px] whitespace-nowrap text-[#F0DDE8] md:text-[17px]">A partir de R$ 12,42/mês · 7 dias de garantia</div>
+              <button type="button" onClick={() => openDemo('link_texto')} className="press cursor-pointer text-[13.5px] font-semibold text-[#E07A9B] underline md:text-[15px]">
+                ou teste agora, sem compromisso →
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -323,14 +325,6 @@ export function LandingPage() {
             <Icon d={ICONS.spark} width={30} height={30} stroke="#C9A15B" strokeWidth={1.6} style={{ flex: 'none' }} />
             <div className="text-[18px] md:text-[19px] leading-[1.35] font-semibold">
               E todo dia, ao abrir o app, uma sugestão de "Para postar hoje" com a arte e a legenda prontas.
-            </div>
-          </div>
-          <div className="flex items-start justify-center gap-[clamp(14px,4vw,40px)] pt-2.5">
-            <div className="w-[min(44%,240px)] overflow-hidden rounded-[30px] border-[6px] border-[#1d1519] bg-[#F6F2F4] shadow-[0_24px_50px_rgba(0,0,0,.4)]" style={{ aspectRatio: '390/844' }}>
-              <img src="/lp/screen-galeria.webp" className="block h-full w-full object-cover object-top" alt="Galeria de modelos" loading="eager" />
-            </div>
-            <div className="mt-10 w-[min(44%,240px)] overflow-hidden rounded-[30px] border-[6px] border-[#1d1519] bg-[#F6F2F4] shadow-[0_24px_50px_rgba(0,0,0,.4)]" style={{ aspectRatio: '390/844' }}>
-              <img src="/lp/screen-vender.webp" className="block h-full w-full object-cover object-top" alt="Montador de ofertas" loading="eager" />
             </div>
           </div>
         </div>

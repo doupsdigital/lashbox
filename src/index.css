@@ -88,6 +88,27 @@ textarea::placeholder {
   animation: fade-up 0.25s ease-out;
 }
 
+/* Hero da /lp: no celular, título → mockup → botão/preço (nessa ordem); no desktop, volta ao
+   layout de 2 colunas (texto+botão à esquerda, mockup à direita, ocupando as 2 linhas). */
+.lp-hero-grid {
+  grid-template-areas: 'headline' 'image' 'cta';
+}
+@media (min-width: 768px) {
+  .lp-hero-grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas: 'headline image' 'cta image';
+  }
+}
+.lp-hero-headline {
+  grid-area: headline;
+}
+.lp-hero-image {
+  grid-area: image;
+}
+.lp-hero-cta {
+  grid-area: cta;
+}
+
 /* Selo "Toque para testar" sobre o mockup do Hero da /lp (demo interativo). */
 @keyframes lp-demo-pulse {
   0%,
