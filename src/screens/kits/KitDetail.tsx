@@ -99,8 +99,8 @@ export function KitDetail() {
           🎁
         </div>
         <div>
-          <h1 className="text-[23px] font-bold leading-[1.15] text-pretty">{kitFimDeAno.title}</h1>
-          <div className="mt-0.5 text-sm leading-[1.35] text-muted">{kitFimDeAno.subtitle}</div>
+          <h1 className="text-[23px] font-bold leading-[1.15] text-pretty">{catalog.title ?? kitFimDeAno.title}</h1>
+          <div className="mt-0.5 text-sm leading-[1.35] text-muted">{catalog.subtitle ?? kitFimDeAno.subtitle}</div>
         </div>
       </div>
 

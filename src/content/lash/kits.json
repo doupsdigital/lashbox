@@ -7,5 +7,18 @@
     "color1": "#5B2A4E",
     "color2": "#E07A9B",
     "icon": "gift"
+  },
+  {
+    "key": "black-friday",
+    "name": "Black Friday, Natal e Réveillon prontos",
+    "desc": "Ofertas de Black Friday com os seus preços",
+    "price": "R$ 14,90",
+    "color1": "#5B2A4E",
+    "color2": "#E07A9B",
+    "icon": "gift",
+    "hidden": true,
+    "aliasOf": "fim-de-ano",
+    "title": "Black Friday, Natal e Réveillon prontos",
+    "subtitle": "Ofertas de Black Friday, artes de Natal e o plano dia a dia até janeiro — tudo com os seus preços."
   }
 ]

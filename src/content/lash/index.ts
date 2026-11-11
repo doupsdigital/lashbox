@@ -71,8 +71,17 @@ export interface KitCatalogItem {
   color1: string
   color2: string
   icon: 'gift' | 'spark' | 'cal'
+  /** Não entra nas listagens genéricas (`kitsCatalog.filter(k => !k.hidden)`) — só acessível direto por `/kits/:key`. */
+  hidden?: boolean
+  /** Entrada cosmética: é a mesma compra de outra chave (mesmo preço, mesmo checkout, mesmo produto na Kiwify). */
+  aliasOf?: string
+  /** Título/subtítulo próprios pra tela de detalhes — sem isso, usa os do conteúdo do kit (`kitFimDeAno.title/subtitle`). */
+  title?: string
+  subtitle?: string
 }
 export const kitsCatalog = kitsRaw as KitCatalogItem[]
+/** Kits que aparecem nas listagens genéricas (Início, `/kits`) — exclui entradas cosméticas como `black-friday`. */
+export const visibleKitsCatalog = kitsCatalog.filter((k) => !k.hidden)
 
 export function getKitCatalog(key: string | undefined): KitCatalogItem | undefined {
   return kitsCatalog.find((k) => k.key === key)

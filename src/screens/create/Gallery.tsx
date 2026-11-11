@@ -5,6 +5,7 @@ import { StoryBoard } from '../../components/art/StoryBoard'
 import { track } from '../../lib/analytics'
 import { studioFootStory } from '../../lib/studioFooter'
 import { resolveArtPreview } from '../../lib/studioTokens'
+import { useDragScroll } from '../../lib/useDragScroll'
 import { useStudio } from '../../state/studio'
 import { ART_CATEGORIES, genericArts, kitFimDeAno } from '../../content/lash'
 
@@ -16,6 +17,7 @@ export function Gallery() {
   const [params] = useSearchParams()
   const [cat, setCat] = useState<string>(params.get('cat') ?? 'Todas')
   const foot = studioFootStory(studio)
+  const chipsDrag = useDragScroll<HTMLDivElement>()
 
   const arts = useMemo(() => {
     const base = [...genericArts, ...kitFimDeAno.arts.map((a) => ({ ...a, category: a.category ?? 'Fim de Ano' }))]
@@ -46,7 +48,7 @@ export function Gallery() {
         </svg>
       </button>
 
-      <div className="-mx-5 flex gap-2 overflow-x-auto px-5 pt-0.5">
+      <div ref={chipsDrag.ref} {...chipsDrag.bind} className="-mx-5 flex cursor-grab gap-2 overflow-x-auto px-5 pt-0.5 select-none">
         {CHIPS.map((c) => (
           <button
             key={c}

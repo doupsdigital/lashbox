@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect, useRef, useState, type ReactNode, type SVGPr
 import { KIWIFY_SUBSCRIPTION_CHECKOUT_URLS } from '../lib/config'
 import { withForwardedParams } from '../lib/checkoutUrl'
 import { track, trackEventOnceVisible } from '../lib/analytics'
+import { useDragScroll } from '../lib/useDragScroll'
 import { trackAddToCart, trackViewContentOnceVisible } from './pixel'
 
 /**
@@ -153,6 +154,7 @@ export function LandingPage() {
   const [demoOpen, setDemoOpen] = useState(false)
   const heroBtnRef = useRef<HTMLButtonElement>(null)
   const plansRef = useRef<HTMLDivElement>(null)
+  const vitrineDrag = useDragScroll<HTMLDivElement>()
 
   useEffect(() => {
     const check = () => {
@@ -336,7 +338,12 @@ export function LandingPage() {
           <h2 className="text-pretty text-center text-[clamp(28px,4.4vw,42px)] font-extrabold tracking-[-.03em] text-white">
             Artes de estúdio profissional. Com o seu nome.
           </h2>
-          <div className="flex gap-4.5 overflow-x-auto px-1 pt-1.5 pb-5" style={{ scrollSnapType: 'x mandatory' }}>
+          <div
+            ref={vitrineDrag.ref}
+            {...vitrineDrag.bind}
+            className="flex cursor-grab gap-4.5 overflow-x-auto px-1 pt-1.5 pb-5 select-none"
+            style={{ scrollSnapType: 'x mandatory' }}
+          >
             {VITRINE.map((v) => (
               <div key={v.alt} className="aspect-[9/16] flex-[0_0_min(62%,250px)] overflow-hidden rounded-2xl shadow-[0_14px_34px_rgba(0,0,0,.4)]" style={{ scrollSnapAlign: 'center' }}>
                 <img src={v.src} className="block h-full w-full object-cover" alt={v.alt} loading="lazy" />

@@ -23,6 +23,7 @@ import type { PaletteId } from '../../lib/artPalettes'
 import { exportNodeToPng, shareOrDownloadPng } from '../../lib/exportBoard'
 import { studioFootStory } from '../../lib/studioFooter'
 import { applyGenericMarkers, applyStudioTokens } from '../../lib/studioTokens'
+import { useDragScroll } from '../../lib/useDragScroll'
 import { emptyStudio, type Studio } from '../../state/studio'
 import { DEMO_ART_IDS } from './demoContent'
 
@@ -50,6 +51,7 @@ export function DemoArtTab({ onWantApp }: { onWantApp: () => void }) {
   const exportRef = useRef<HTMLDivElement>(null)
   const antesInput = useRef<HTMLInputElement>(null)
   const depoisInput = useRef<HTMLInputElement>(null)
+  const templatesDrag = useDragScroll<HTMLDivElement>()
 
   useEffect(() => () => URL.revokeObjectURL(antesUrl), [antesUrl])
   useEffect(() => () => URL.revokeObjectURL(depoisUrl), [depoisUrl])
@@ -120,7 +122,7 @@ export function DemoArtTab({ onWantApp }: { onWantApp: () => void }) {
 
   return (
     <div className="flex flex-col gap-5">
-      <div className="flex gap-2 overflow-x-auto pb-1">
+      <div ref={templatesDrag.ref} {...templatesDrag.bind} className="flex cursor-grab gap-2 overflow-x-auto pb-1 select-none">
         {TEMPLATES.map((t) => (
           <button
             key={t.id}

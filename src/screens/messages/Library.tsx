@@ -3,6 +3,7 @@ import { CopyButton, MessageText, useMessageResolver } from '../../components/Me
 import { track } from '../../lib/analytics'
 import { normalize } from '../../lib/text'
 import { whatsAppLinkTo } from '../../lib/studioTokens'
+import { useDragScroll } from '../../lib/useDragScroll'
 import { useVipList, type VipClient } from '../../lib/vipList'
 import { MESSAGE_CATEGORIES, messages } from '../../content/lash'
 
@@ -18,6 +19,7 @@ function MessagesTab() {
   const [cat, setCat] = useState<string>('Todas')
   const [q, setQ] = useState('')
   const resolve = useMessageResolver()
+  const chipsDrag = useDragScroll<HTMLDivElement>()
 
   const filtered = useMemo(() => {
     const qn = normalize(q.trim())
@@ -32,7 +34,7 @@ function MessagesTab() {
         </svg>
         <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Buscar mensagem" className="flex-1 bg-transparent text-[16px] text-ink outline-none" />
       </div>
-      <div className="-mx-5 flex gap-2 overflow-x-auto px-5">
+      <div ref={chipsDrag.ref} {...chipsDrag.bind} className="-mx-5 flex cursor-grab gap-2 overflow-x-auto px-5 select-none">
         {MESSAGE_CATEGORIES.map((c) => (
           <button
             key={c}

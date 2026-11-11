@@ -8,6 +8,11 @@ import { useAuth } from './auth'
 
 const ALL_KEYS = kitsCatalog.map((k) => k.key)
 
+/** Entradas cosméticas (ex.: `black-friday`) resolvem pra chave do produto de verdade comprado na Kiwify. */
+function realProductKey(key: string) {
+  return kitsCatalog.find((k) => k.key === key)?.aliasOf ?? key
+}
+
 /** Só em desenvolvimento: ?lockKits=1 força todos os kits bloqueados, mesmo no modo local (prints). */
 function devForceLocked() {
   return import.meta.env.DEV && new URLSearchParams(window.location.search).get('lockKits') === '1'
@@ -48,7 +53,7 @@ export function PurchasesProvider({ children }: { children: ReactNode }) {
   }, [status, refresh])
 
   return (
-    <PurchasesContext.Provider value={{ isUnlocked: (key) => unlocked.has(key), refresh, loading }}>
+    <PurchasesContext.Provider value={{ isUnlocked: (key) => unlocked.has(realProductKey(key)), refresh, loading }}>
       {children}
     </PurchasesContext.Provider>
   )

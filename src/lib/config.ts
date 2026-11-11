@@ -25,7 +25,12 @@ export const KIWIFY_SUBSCRIPTION_CHECKOUT_URLS: Record<'mensal' | 'anual', strin
  */
 export const KIWIFY_BUYER_AREA_URL = 'https://dashboard.kiwify.com.br'
 
-/** Link de checkout de cada kit sazonal pago (nenhum é bônus da assinatura). */
+/**
+ * Link de checkout de cada kit sazonal pago (nenhum é bônus da assinatura). `black-friday` é uma
+ * entrada cosmética do catálogo (ver content/lash/kits.json, `aliasOf`) — mesma compra, mesmo
+ * link do Kit Fim de Ano, nenhum produto novo na Kiwify.
+ */
 export const KIT_CHECKOUT_URLS: Record<string, string> = {
   'fim-de-ano': 'https://pay.kiwify.com.br/sdTkj2H',
+  'black-friday': 'https://pay.kiwify.com.br/sdTkj2H',
 }
